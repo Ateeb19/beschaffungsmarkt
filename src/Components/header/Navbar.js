@@ -21,7 +21,7 @@ const Navbar = () => {
                             <span>Home</span>
                             <span>Posting</span>
                             <span>Companies</span>
-                            <span>Out Service</span>
+                            <span>Our Service</span>
                             <span>Pricing</span>
                             <span>Contact</span>
                             <div className="d-flex align-items-center jusitfy-content-center gap-2 nav-buttons">
