@@ -422,8 +422,8 @@ input:focus {
 
 .pricing-offer{
     position: absolute;
-    margin-left: 82;
-    margin-top: -32px;
+    left: 82px;
+    top: -32px;
 }
 
 .pricing-content{
