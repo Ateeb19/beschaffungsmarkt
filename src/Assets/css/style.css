@@ -422,8 +422,14 @@ input:focus {
 
 .pricing-offer{
     position: absolute;
+    margin-left: 82;
+    margin-top: -32px;
 }
 
 .pricing-content{
     margin-top: 70px;
+}
+
+.form-switch{
+    margin-top: 20px !important;
 }

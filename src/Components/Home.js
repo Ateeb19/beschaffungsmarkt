@@ -328,7 +328,7 @@ const Home = () => {
                             <div className="d-flex justify-content-center align-items-center w-100 home-6-title text-center mt-3">
                                 <span>See below our main three plans for your business, for your startup and agency. It start from here! You can teach yourself what you really like.</span>
                             </div>
-                            <div className="d-flex justify-content-center align-items-center w-100 home-6-switch gap-3 mt-3 form-switch">
+                            <div className="d-flex justify-content-center align-items-center w-100 home-6-switch gap-3 form-switch">
                                 <div>Monthly</div>
                                 <Switch onChange={handleChange}
                                     onColor="#4097fb"
