@@ -5,6 +5,10 @@ import ScrollToTop from './ScrollToTop';
 import Home from './Components/Home';
 import Navbar from './Components/header/Navbar';
 import { AlertProvider } from "./Components/alert/Alert_message";
+import Service from './Components/Service';
+import Register from './Components/Register';
+import Companies from './Components/Companies';
+import Posting from './Components/Posting';
 
 const AppContent = () => {
   return (
@@ -12,6 +16,10 @@ const AppContent = () => {
       {/* <ScrollToTop /> */}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/service" element={<Service />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/companies" element={<Companies />} />
+        <Route path="/posting" element={<Posting />} />
       </Routes>
     </div>
   );

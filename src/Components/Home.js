@@ -9,6 +9,7 @@ import Form from 'react-bootstrap/Form';
 import Switch from "react-switch";
 import { FiCheckCircle } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
+import Footer from "../Footer/Footer";
 
 const Home = () => {
 
@@ -403,6 +404,10 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
+                </section>
+
+                <section className="footer-section w-100">
+                    <Footer/>
                 </section>
             </div>
         </>
