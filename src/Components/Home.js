@@ -369,7 +369,15 @@ const Home = () => {
                                 </div><div className="d-flex flex-column align-items-start justify-content-start pric-box-premium text-start gap-3">
                                     <span className="price-fee-premium">Premium</span>
                                     <span className="price-text-premium">Better for growing businesses that want more customers.</span>
-                                    <div className="d-flex align-items-center gap-2 price-doller-premium"><h1>$179</h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
+                                    <div className="d-flex align-items-center gap-2 price-doller-premium"><h1>$
+                                        {checked ? (
+                                            <>
+                                                <span className="old-price">2148</span> 1999
+                                            </>
+                                        ) : (
+                                            "179"
+                                        )}
+                                    </h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
                                     <button className="price-get-box-premium w-100">Get Premium</button>
                                     <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Full Features for Company Website</span></span>
                                     <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>2nd Priority for Listing</span></span>
@@ -387,7 +395,15 @@ const Home = () => {
                                 <div className="d-flex flex-column align-items-start justify-content-start pric-box-free text-start gap-3">
                                     <span className="price-fee">Premium +</span>
                                     <span className="price-text">Advanced features for pros who need more customization.</span>
-                                    <div className="d-flex align-items-center gap-2 price-doller"><h1>$249</h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
+                                    <div className="d-flex align-items-center gap-2 price-doller"><h1>$
+                                        {checked ? (
+                                            <>
+                                                <span className="old-price">2988</span> 2699
+                                            </>
+                                        ) : (
+                                            "249"
+                                        )}
+                                    </h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
                                     <button className="price-get-box w-100">Get Premium +</button>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Full Features for Company Website</span></span>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>1st Priority + Sponsored for Listing</span></span>
@@ -407,7 +423,7 @@ const Home = () => {
                 </section>
 
                 <section className="footer-section w-100">
-                    <Footer/>
+                    <Footer />
                 </section>
             </div>
         </>

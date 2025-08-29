@@ -9,6 +9,10 @@ import Service from './Components/Service';
 import Register from './Components/Register';
 import Companies from './Components/Companies';
 import Posting from './Components/Posting';
+import Pricing from './Components/Pricing';
+import Contact from './Components/Contact';
+import Career from './Components/Career';
+import Faq from './Components/Faq';
 
 const AppContent = () => {
   return (
@@ -20,6 +24,10 @@ const AppContent = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/companies" element={<Companies />} />
         <Route path="/posting" element={<Posting />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<Faq />} />
+        <Route path="/career" element={<Career />} />
       </Routes>
     </div>
   );

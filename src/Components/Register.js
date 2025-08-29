@@ -4,7 +4,7 @@ const Register = () => {
 
     return (
         <div>
-            <section className="signup-wrapper">
+            <section className="signup-wrapper text-start">
                 <div className="container">
                     <div className="row gx-5 gy-4">
                         <div className="col-xl-6 col-12 order-2 order-xl-1">

@@ -477,6 +477,7 @@ footer {
     padding: 10px 20px;
     border-radius: 8px;
     border: none;
+    margin-top: 0px;
     margin-right: 10px;
     width: 300px;
 }
@@ -1002,7 +1003,7 @@ input[type="password"]:focus {
     font-weight: 700;
 }
 
-.company-filter{
+.company-filter {
     padding: 0 20px;
 }
 
@@ -1048,28 +1049,239 @@ input[type="password"]:focus {
     padding: 0;
 }
 
-.category-list{
+.category-list {
     color: #4b5563;
     font-size: 17px;
 }
 
-.company-country span{
+.company-country span {
     color: #4b5563;
     font-size: 17px;
 }
 
-.company-data{
+.company-data {
     padding: 50px 0;
 }
 
-.company-pages{
+.company-pages {
     border-left: 1px solid #d1d5db;
     padding: 0 20px;
 }
 
-.company-page-data{
+.company-page-data {
     background-color: #fff;
     border: 1px solid #d1d5db;
     border-radius: 8px;
     margin-bottom: 25px;
+}
+
+.old-price {
+    opacity: 0.5;
+    text-decoration: line-through;
+    text-decoration-color: red;
+    margin-right: 6px;
+}
+
+
+
+/* career page css starts */
+
+.career-wrapper {
+    width: 100%;
+    padding-top: 50px;
+}
+
+.career-head h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #000;
+}
+
+.career-head p {
+    font-size: 16px;
+    font-weight: 400;
+    color: #5d5d5d;
+    line-height: 26px;
+    margin: 20px 0px;
+}
+
+.career-head ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+.career-head ul li {
+    list-style: none;
+    font-size: 16px;
+    font-weight: 400;
+    color: #5d5d5d;
+    line-height: 25px;
+    margin: 20px 0px;
+}
+
+.career-head ul li span {
+    font-weight: 600;
+    color: #000;
+}
+
+.career-form-wrap {
+    width: 100%;
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.career-form-wrap h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 25px;
+}
+
+/* career page css starts */
+
+/* Contact Us page starts */
+
+.contact-wrapper {
+    width: 100%;
+    padding: 50px 0 50px 0;
+}
+
+.contact-head h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #000;
+}
+
+.contact-head p {
+    font-size: 16px;
+    font-weight: 400;
+    color: #5d5d5d;
+    line-height: 26px;
+    margin: 15px 0px 25px 0px;
+}
+
+.contact-wrap {
+    width: 70%;
+    margin: 0 auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.contact-info {
+    width: 95%;
+    background-color: #fff;
+    padding: 30px 0;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.contact-info-detail h4 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #000;
+}
+
+.contact-info-detail p {
+    font-size: 16px;
+    font-weight: 400;
+    color: #5d5d5d;
+    line-height: 26px;
+    margin: 12px 0px;
+}
+
+.contact-icon {
+    margin-bottom: 20px;
+}
+
+.contact-icon svg {
+    font-size: 35px;
+    color: #868686;
+}
+
+@media(max-width : 767px) {
+    .contact-wrap {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .contact-head h2 {
+        font-size: 22px;
+    }
+
+    .contact-info {
+        width: 100%;
+        padding: 25px 0;
+    }
+}
+
+/* Contact page css ends */
+
+/* Faq page css starts */
+
+.faq-wrap .nav-pills .nav-link {
+    width: 92%;
+    background: 0 0;
+    border: 0;
+    border-radius: .25rem;
+    text-align: left;
+    color: #717171;
+    padding: 12px 16px;
+}
+
+.faq-wrap .nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #0d6efd;
+}
+
+.faq-wrap .accordion-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0px;
+    font-size: 18px;
+    color: #212529;
+    text-align: left;
+    background-color: #fff;
+    border: 0;
+    border-radius: 0;
+    overflow-anchor: none;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, border-radius .15s ease;
+    border-bottom: 1px solid #ccc;
+}
+
+.faq-wrap .accordion-body {
+    font-size: 16px;
+    color: #818b91;
+    padding: 16px 0px;
+}
+
+.faq-wrap .accordion-button:focus {
+    z-index: 3;
+    border-color: #ccc;
+    outline: 0;
+    box-shadow: none;
+}
+
+.faq-wrap svg {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.active-button-faq {
+    color: #fff !important;
+    background-color: #0d6efd !important;
+}
+
+.accordion-header {
+    font-size: 18px !important;
+    color: rgb(33, 37, 41) !important;
+}
+
+.text-area-input:focus{
+    border-color: #ccc !important;
+    box-shadow: none !important;
 }

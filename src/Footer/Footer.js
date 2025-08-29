@@ -1,8 +1,10 @@
 import React from "react";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
 
+    const navigate = useNavigate();
     return (
         <>
             <footer>
@@ -35,11 +37,11 @@ const Footer = () => {
                                 <div className="footer-menu">
                                     <h4>About Us</h4>
                                     <ul>
-                                        <li><a href="#">Beschaffungsmarkt</a></li>
-                                        <li><a href="#">Our Service</a></li>
-                                        <li><a href="#">FAQ</a></li>
-                                        <li><a href="#">Contact</a></li>
-                                        <li><a href="#">Career</a></li>
+                                        <li onClick={() => { navigate('/') }}><a href="#">Beschaffungsmarkt</a></li>
+                                        <li onClick={() => { navigate('/service') }}><a href="#">Our Service</a></li>
+                                        <li onClick={() => { navigate('/faq') }}><a href="#">FAQ</a></li>
+                                        <li onClick={() => { navigate('/contact') }}><a href="#">Contact</a></li>
+                                        <li onClick={() => { navigate('/career') }}><a href="#">Career</a></li>
                                     </ul>
                                 </div>
                             </div>
