@@ -1,9 +1,10 @@
 import React from "react";
+import Footer from "../Footer/Footer";
 
 const Register = () => {
 
     return (
-        <div>
+        <div className="service-div">
             <section className="signup-wrapper text-start">
                 <div className="container">
                     <div className="row gx-5 gy-4">
@@ -91,7 +92,9 @@ const Register = () => {
 
                 </div>
             </section>
-
+            <section className="footer-section w-100">
+                <Footer />
+            </section>
         </div>
     )
 }

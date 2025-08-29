@@ -30,7 +30,7 @@ const Service = () => {
                         </div>
                         <div className="col-xl-6">
                             <div className="overview-img">
-                                <img src="/beschaffungsmarkt_images/service-BxF0F7R8.png" alt="overview-img" />
+                                <img src="/beschaffungsmarkt_images/faq-DrMTnQFL.png" alt="overview-img" />
                             </div>
                         </div>
                     </div>

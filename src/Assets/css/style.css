@@ -1278,7 +1278,7 @@ input[type="password"]:focus {
 
 .accordion-header {
     font-size: 18px !important;
-    color: rgb(33, 37, 41) !important;
+    color: #4b5563 !important;
 }
 
 .text-area-input:focus{
