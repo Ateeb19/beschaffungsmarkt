@@ -16,6 +16,7 @@ import Faq from './Components/Faq';
 import Imprint from './Components/Imprint';
 import Privacy from './Components/Privacy';
 import Terms from './Components/Terms';
+import Login from './Components/Login';
 const AppContent = () => {
   return (
     <div className="App">
@@ -33,6 +34,7 @@ const AppContent = () => {
         <Route path="/imprint" element={<Imprint />} />
         <Route path="/privacy-policy" element={<Privacy />} />
         <Route path="/terms-of-service" element={<Terms />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   );

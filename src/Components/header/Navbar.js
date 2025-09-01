@@ -28,7 +28,7 @@ const Navbar = () => {
                             <span onClick={() => { navigate('/contact') }}>Contact</span>
                             <div className="d-flex align-items-center jusitfy-content-center gap-2 nav-buttons">
                                 <button onClick={() => { navigate('/register') }}>Sign Up</button>
-                                <button>Login</button>
+                                <button onClick={() => {navigate('/login')}}>Login</button>
                             </div>
                         </div>
                     </div>
