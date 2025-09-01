@@ -13,7 +13,9 @@ import Pricing from './Components/Pricing';
 import Contact from './Components/Contact';
 import Career from './Components/Career';
 import Faq from './Components/Faq';
-
+import Imprint from './Components/Imprint';
+import Privacy from './Components/Privacy';
+import Terms from './Components/Terms';
 const AppContent = () => {
   return (
     <div className="App">
@@ -28,6 +30,9 @@ const AppContent = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/career" element={<Career />} />
+        <Route path="/imprint" element={<Imprint />} />
+        <Route path="/privacy-policy" element={<Privacy />} />
+        <Route path="/terms-of-service" element={<Terms />} />
       </Routes>
     </div>
   );

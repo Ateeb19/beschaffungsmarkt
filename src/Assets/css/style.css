@@ -1285,3 +1285,72 @@ input[type="password"]:focus {
     border-color: #ccc !important;
     box-shadow: none !important;
 }
+
+.Legal-div{
+    background-color: #f3f4f6;
+}
+
+
+.imprint-inner-div{
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.imprint-inner-div h2{
+    color: #2563eb;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 32px;
+}
+
+.imprint-inner-div span{
+    color: #6b7280;
+    margin-bottom: 12px
+}
+
+.imprint-inner-div h4{
+    color: #000;
+    font-weight: 800;
+    font-size: 20px;
+    margin-bottom: 12px
+}
+
+.imprint-inner-div h3{
+    color: #172554;
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 36px;
+}
+
+.privacy-div{
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.privacy-inner-div {
+    color: #6b7280;
+    margin-bottom: 30px;
+}
+
+.privacy-inner-div h3{
+    color: #2563eb;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.privacy-inner-div h5{
+    font-size: 18px;
+    font-weight: bold;
+    margin: 8px 0 13px 0;
+}
+
+.privacy-inner-div h4{
+    color: #2563eb;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.privacy-inner-div span {
+    margin-bottom: 10px;
+}
+

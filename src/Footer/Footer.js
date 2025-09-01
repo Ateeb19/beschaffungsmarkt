@@ -49,9 +49,9 @@ const Footer = () => {
                                 <div className="footer-menu">
                                     <h4>Legal</h4>
                                     <ul>
-                                        <li><a href="#">Imprint</a></li>
-                                        <li><a href="#">Privacy Policy</a></li>
-                                        <li><a href="#">Terms of Service</a></li>
+                                        <li onClick={() => { navigate('/imprint') }}><a href="#">Imprint</a></li>
+                                        <li onClick={() => { navigate('/privacy-policy') }}><a href="#">Privacy Policy</a></li>
+                                        <li onClick={() => { navigate('/terms-of-service') }}><a href="#">Terms of Service</a></li>
                                     </ul>
                                 </div>
                             </div>
