@@ -1,8 +1,14 @@
-import React from "react";
-import { Outlet, NavLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 
 const Dashboard_layout = () => {
-
+    const navigate = useNavigate();
+    useEffect( () => {
+        const token = localStorage.getItem('token');
+        if(! token){
+            navigate('/');
+        }
+    },[])
     return (
         <>
             <div className="container-fluid">
