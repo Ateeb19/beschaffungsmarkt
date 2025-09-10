@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoSearch } from "react-icons/go";
 import { IoSearchSharp } from "react-icons/io5";
 import { GiClothes, GiCosmicEgg, GiElectricalResistance, GiLeatherArmor, GiMetalScales, GiRubberBoot } from "react-icons/gi";
@@ -10,6 +10,8 @@ import Switch from "react-switch";
 import { FiCheckCircle } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import Footer from "../Footer/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInfo } from "../redux/userSlice";
 
 const Home = () => {
 
@@ -21,6 +23,15 @@ const Home = () => {
         setChecked(nextChecked);
     };
 
+    // const dispatch = useDispatch();
+    // const { data, requestStatus, error } = useSelector((state) => state.user);
+    // useEffect(() => {
+    //     const token = localStorage.getItem("procurement_token");
+    //     if (token) {
+    //         dispatch(fetchUserInfo());
+    //     }
+    // }, [dispatch]);
+    // console.log(data);
     return (
         <>
             <div className="d-flex flex-column justify-content-center align-items-center">

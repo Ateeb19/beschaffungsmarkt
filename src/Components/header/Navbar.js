@@ -1,13 +1,62 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInfo } from "../../redux/userSlice";
+import { logoutUser } from "../../redux/userSlice";
+import { GoBellFill } from "react-icons/go";
+import { LuUser } from "react-icons/lu";
+import { MdLogout } from "react-icons/md";
+import axios from "axios";
+
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [open, setOpen] = useState(false);
+    const token = localStorage.getItem("token");
+    const isDashboard = location.pathname.startsWith("/dashboard");
 
+
+    const dispatch = useDispatch();
+    const { data, requestStatus, error } = useSelector((state) => state.user);
+    useEffect(() => {
+        const token = localStorage.getItem("procurement_token");
+        if (token) {
+            dispatch(fetchUserInfo());
+        }
+    }, [dispatch]);
+    console.log(data);
+    console.log('request-: ', requestStatus);
+
+    useEffect(() => {
+        setOpen(false);
+    }, [data, requestStatus]);
+
+    const handleLogout = async () => {
+        console.log('logou')
+        try {
+            const url = process.env.REACT_APP_API_URL;
+            console.log('logou')
+            const res = await axios.post(
+                `${url}/auth/logout`,
+                {},
+                {
+                    withCredentials: true,
+                }
+            );
+
+            dispatch(logoutUser());
+            localStorage.setItem('token', '');
+            navigate("/login");
+        } catch (err) {
+            console.error(err.response?.data || err.message);
+        }
+    };
     return (
         <>
             <div className="w-100 nav-bar-wrap">
-                <div className="container">
+                {/* <div className="container"> */}
+                <div className={isDashboard ? "container-fluid" : "container"}>
                     <div className="d-flex flex-row justify-content-between align-items-center">
                         <div className="d-flex align-items-center justify-content-start gap-3">
                             <div className="nav-image">
@@ -21,15 +70,48 @@ const Navbar = () => {
 
                         <div className="d-flex align-items-center justify-content-end nav-links gap-4">
                             <span onClick={() => { navigate('/') }}>Home</span>
-                            <span onClick={() => { navigate('/posting')}}>Posting</span>
+                            <span onClick={() => { navigate('/posting') }}>Posting</span>
                             <span onClick={() => { navigate('/companies') }}>Companies</span>
                             <span onClick={() => { navigate('/service') }}>Our Service</span>
                             <span onClick={() => { navigate('/pricing') }}>Pricing</span>
                             <span onClick={() => { navigate('/contact') }}>Contact</span>
-                            <div className="d-flex align-items-center jusitfy-content-center gap-2 nav-buttons">
-                                <button onClick={() => { navigate('/register') }}>Sign Up</button>
-                                <button onClick={() => {navigate('/login')}}>Login</button>
-                            </div>
+
+                            {requestStatus === 'fulfilled' ? (
+                                <>
+                                    <div className="d-flex align-items-center jusitfy-content-center gap-3 nav-buttons">
+                                        <div onClick={() => { navigate('/dashboard/message') }}><GoBellFill className="fs-4" /></div>
+                                        <div
+                                            className="user-initials d-flex flex-column gap-5 align-items-end justify-content-start"
+                                            onMouseEnter={() => setOpen(true)}
+                                            onMouseLeave={() => setOpen(false)}
+                                        >
+                                            <div className="rounded-circle d-flex gap- nav-f_l_name">
+                                                <span className="">
+                                                    {data.first_name.slice(0, 1).toUpperCase()}
+                                                </span>
+                                                <span className="">
+                                                    {data.last_name.slice(0, 1).toUpperCase()}
+                                                </span>
+                                            </div>
+
+                                            {open && (
+                                                <div className="dropdown-menu d-flex flex-column align-items-start justify-content-start gap-2 bg-black text-start">
+                                                    <button onClick={() => { navigate('/dashboard/home') }}>< LuUser className="fs-5 me-1" /> Dashboard</button>
+                                                    <button onClick={handleLogout}><MdLogout className="fs-5 me-1" /> Sign out</button>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="d-flex align-items-center jusitfy-content-center gap-2 nav-buttons">
+                                        <button onClick={() => { navigate('/register') }}>Sign Up</button>
+                                        <button onClick={() => { navigate('/login') }}>Login</button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

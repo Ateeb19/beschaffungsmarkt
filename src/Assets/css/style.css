@@ -1362,3 +1362,39 @@ input[type="password"]:focus {
     width: 100%;
     background-color: #fff;
 }
+
+.custom-progress-bar-red {
+    background: #e74c3c !important;
+    height: 5px;
+    border-radius: 2px;
+}
+
+.custom-progress-bar-green {
+    background: #07bc0c !important;
+    height: 5px;
+    border-radius: 2px;
+}
+
+.nav-f_l_name{
+    background-color: #9ca3af;
+    padding: 8px;
+}
+
+
+.dropdown-menu {
+    background-color: #0d111b;
+    /* background-color: #989fb1; */
+    margin-top: 36px;
+    padding: 5px 0px;
+    color: #fff;
+}
+
+.dropdown-menu button{
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+}
+
+.dropdown-menu button:hover{
+    color: #b6b6b6;
+}

@@ -5,10 +5,11 @@ import "react-toastify/dist/ReactToastify.css";
 const AlertContext = createContext();
 
 export const AlertProvider = ({ children }) => {
-  const showAlert = (message) => {
+  const showAlert = (message, type = "error") => {
     toast(message, {
-      autoClose: 2500, 
-      progressClassName: "custom-progress-bar",
+      autoClose: 2500,
+      progressClassName: type === "success" ? "custom-progress-bar-green" : "custom-progress-bar-red",
+      
     });
   };
   return (

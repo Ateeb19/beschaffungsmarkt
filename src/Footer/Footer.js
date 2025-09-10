@@ -17,7 +17,7 @@ const Footer = () => {
                                         <h3>Join Thousand of Happy Customers!</h3>
                                         <p>Subscribe our newsletter & get latest news and updation!</p>
                                         <form action="#" className="d-flex">
-                                            <input type="email" className="news-email" id="email_newsletter" placeholder="Enter your email address" autocomplete="on"/>
+                                            <input type="email" className="news-email" id="email_newsletter" placeholder="Enter your email address" autoComplete="on"/>
                                                 <button type="submit" className="news-btn">Get Started Free</button>
                                         </form>
                                     </div>
