@@ -4,7 +4,9 @@ const Das_Home = () => {
 
     return (
         <>
-            <h2>Dashboard Home</h2>
+            <div className="d-flex flex-column text-start align-items-start justify-content-start w-100 py-4">
+                <h5> Home</h5>
+            </div>
         </>
     )
 }

@@ -12,16 +12,98 @@ import { RxCross1 } from "react-icons/rx";
 import Footer from "../Footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserInfo } from "../redux/userSlice";
+import axios from "axios";
+
+import * as GiIcons from "react-icons/gi";
+import * as FaIcons from "react-icons/fa";
+import * as Fa6Icons from "react-icons/fa6";
+import * as AiIcons from "react-icons/ai";
+import * as PiIcons from "react-icons/pi";
+import * as SiIcons from "react-icons/si";
+import * as GrIcons from "react-icons/gr";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-
+    const Backend_URL = process.env.REACT_APP_API_URL;
     const [searchInput, setSearchInput] = useState('');
     const [category, setCategory] = useState("");
     const [checked, setChecked] = useState(false);
+    const navigate = useNavigate();
 
     const handleChange = (nextChecked) => {
         setChecked(nextChecked);
     };
+
+
+    const [sponsors, setSponsors] = useState([]);
+    const [premiumUser, setPremiumUser] = useState(false);
+
+    useEffect(() => {
+        const fetchSponsors = async () => {
+            try {
+                const response = await axios.get(`${Backend_URL}/users/random-sponsor-data`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                setSponsors(response.data.result);
+                setPremiumUser(response.data.premiumUser);
+            } catch (error) {
+                console.log(error)
+            }
+        };
+        fetchSponsors();
+    }, []);
+
+    const getIconComponent = (iconString) => {
+        if (!iconString) return null;
+
+        // Example: "GiIcons.GiClothes" → ["GiIcons", "GiClothes"]
+        const [libName, iconName] = iconString.split(".");
+
+        const libraries = {
+            GiIcons,
+            FaIcons,
+            Fa6Icons,
+            AiIcons,
+            PiIcons,
+            SiIcons,
+            GrIcons,
+        };
+
+        const lib = libraries[libName];
+        return lib ? lib[iconName] : null;
+    };
+    const [main_category, setMain_category] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await axios.get(`${Backend_URL}/categories/get-all-main-category`);
+                // console.log(res.data);
+                setMain_category(res.data);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        }
+        fetchCategories();
+    }, [])
+
+    const [random_category, setRandom_category] = useState([]);
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await axios.get(`${Backend_URL}/categories/random`);
+                setRandom_category(res.data);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        }
+        fetchCategories();
+    }, [])
+
+
 
     // const dispatch = useDispatch();
     // const { data, requestStatus, error } = useSelector((state) => state.user);
@@ -93,22 +175,30 @@ const Home = () => {
 
 
                             <div className="category-button mt-4">
-                                <div className="d-flex flex-row gap-3 align-items-center justify-content-center">
-                                    <div className=""><button><span><GiClothes className="fs-3" /> Fashion and Accessories</span></button></div>
-                                    <div className=""><button><span><GiLeatherArmor className="fs-3" /> Textiles & Leather</span></button></div>
-                                    <div className=""><button><span><GiRubberBoot className="fs-3" /> Shoes</span></button></div>
-                                    <div className=""><button><span><FaCarSide className="fs-3" /> Automotive</span></button></div>
-                                    <div className=""><button><span><GiMetalScales className="fs-3" /> Metals and Heavy Industry</span></button></div>
-                                    <div className=""><button><span><PiBowlFoodFill className="fs-3" /> Food and Beverages</span></button></div>
-                                    <div className=""><button><span><FaSheetPlastic className="fs-3" /> Plastics</span></button></div>
+                                <div className="d-flex flex-wrap gap-3 justify-content-center">
+                                    {main_category && (
+                                        <>
+                                            {main_category.map((cat, key) => (
+                                                <>
+                                                    <div className="text-center " onClick={() => navigate(`/companies?maincategory=${cat._id}`)}><button><span>
+                                                        {(() => {
+                                                            const Icon = getIconComponent(cat.icon);
+                                                            return Icon && <Icon className="fs-3" />;
+                                                        })()} {cat.label}</span></button>
+                                                    </div>
+                                                </>
+                                            ))}
+                                        </>
+                                    )}
+
                                 </div>
 
-                                <div className="d-flex flex-row gap-3 align-items-center justify-content-center mt-3">
+                                {/* <div className="d-flex flex-row gap-3 align-items-center justify-content-center mt-3">
                                     <div className=""><button ><span><FaChair className="fs-3" /> Furniture and Decor</span></button></div>
                                     <div className=""><button ><span><AiFillPrinter className="fs-3" /> Packaging and Printing</span></button></div>
                                     <div className=""><button ><span><GiElectricalResistance className="fs-3" /> Electrical and Electronics</span></button></div>
                                     <div className=""><button ><span><GiCosmicEgg className="fs-3" /> Cosmetics and Personal Care</span></button></div>
-                                </div>
+                                </div> */}
                             </div>
 
                         </div>
@@ -138,7 +228,25 @@ const Home = () => {
                             </div>
                         </div>
                         <div className="d-flex flex-row align-items-center justify-content-center gap-5 mt-5">
-                            <div className="d-flex flex-column align-items-center justify-content-center home-2-category-box">
+                            {random_category && (
+                                <>
+                                    {random_category.map((ram, key) => (
+                                        <>
+                                            <div className="d-flex flex-column align-items-center justify-content-center home-2-category-box"
+                                                onClick={() => navigate(`/companies?maincategory=${ram._id}`)}
+                                            >
+                                                {(() => {
+                                                    const Icon = getIconComponent(ram.icon);
+                                                    return Icon && <Icon className="text-primary mb-3" style={{ fontSize: '35px' }} />;
+                                                })()}
+                                                {/* <GiMetalScales className="text-primary mb-3" style={{ fontSize: '35px' }} /> */}
+                                                <span>{ram.label}</span>
+                                            </div>
+                                        </>
+                                    ))}
+                                </>
+                            )}
+                            {/* <div className="d-flex flex-column align-items-center justify-content-center home-2-category-box">
                                 <GiMetalScales className="text-primary mb-3" style={{ fontSize: '35px' }} />
                                 <span>Metals and Heavy Industry</span>
                             </div>
@@ -161,7 +269,7 @@ const Home = () => {
                             <div className="d-flex flex-column align-items-center justify-content-center home-2-category-box">
                                 <PiBowlFoodFill className="text-primary mb-3" style={{ fontSize: '35px' }} />
                                 <span>Food and Beverages</span>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </section>
@@ -321,11 +429,73 @@ const Home = () => {
                                 <span>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</span>
                             </div>
 
-                            <div className="d-flex flex-row align-items-center justify-content-center gap-5 mt-4">
-                                <div className="d-flex flex-column align-items-center justify-content-center home-6-authors-box">
+                            <div className="d-flex flex-row align-items-center justify-content-center gap-2 mt-4">
+                                {/* <div className="d-flex flex-column align-items-center justify-content-center home-6-authors-box"> */}
 
+                                {sponsors && (
+                                    <>
+                                        {sponsors.map((d, key) => (
+                                            <>
+                                                <div class="authors-wrapper">
+                                                    <div class="container">
+                                                        <div class="card-container">
+                                                            <div class="card text-start">
+                                                                {/* <div className="home-author-img-div"> */}
+                                                                <img
+                                                                    src={`http://localhost:5001/files/${d.company_logo}`}
+                                                                    alt="Turkish Export Solutions Logo"
+                                                                    className="logo"
+                                                                />
+                                                                {/* </div> */}
+                                                                <div class="profile-placeholder blur-text"></div>
+                                                                <div class="contact-name blur-text">Contact Person</div>
+                                                                <div class="contact-label blur-text">Position</div>
+                                                                <div class="company-name">
+                                                                    <svg
+                                                                        className="me-1"
+                                                                        stroke="currentColor"
+                                                                        fill="currentColor"
+                                                                        stroke-width="0"
+                                                                        version="1.2"
+                                                                        baseProfile="tiny"
+                                                                        viewBox="0 0 24 24"
+                                                                        height="1em"
+                                                                        width="1em"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                    >
+                                                                        <path
+                                                                            d="M12 2c-4.971 0-9 4.029-9 9s4.029 9 9 9 9-4.029 9-9-4.029-9-9-9zm0 6c0-.553.447-1 1-1s1 .447 1 1v3c-.552 0-1 .448-1 1s.448 1 1 1c.553 0 1-.448 1-1h1v-2l1 1-1 1c0 3 0 3-2 4 0-1-1-1-3-1v-2l-2-2v-2c-1 0-1 1-1 1l-.561-.561-1.652-1.651c1.167-2.247 3.512-3.788 6.213-3.788.688 0 1.353.104 1.981.29-.086.895-.579 1.71-1.481 1.71-1 0-1.5 1-1.5 2v3s1 0 1-3zm0 10c-3.859 0-7-3.14-7-7 0-.776.133-1.521.367-2.219l1.926 1.926 1 1 1.707 1.707v1.586c0 .552.447 1 1 1 .779 0 1.651 0 2.006.091.038.301.209.582.468.742.168.104.36.16.552.16.145 0 .289-.032.422-.098 2.348-1.174 2.539-1.644 2.552-4.479l.708-.708c.391-.391.391-1.023 0-1.414l-1-1c-.192-.192-.448-.294-.708-.294-.129 0-.259.025-.383.076-.373.155-.617.52-.617.924v-2c0-.689-.351-1.298-.883-1.658.421-.411.712-.995.826-1.685 2.392 1.115 4.057 3.535 4.057 6.343 0 3.86-3.141 7-7 7z"
+                                                                        ></path>
+                                                                    </svg>
+                                                                    {d.company_name}
+                                                                </div>
+                                                                <div class="address">
+                                                                    <svg
+                                                                        className="me-1"
+                                                                        stroke="currentColor"
+                                                                        fill="currentColor"
+                                                                        stroke-width="0"
+                                                                        viewBox="0 0 384 512"
+                                                                        height="1em"
+                                                                        width="1em"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                    >
+                                                                        <path
+                                                                            d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"
+                                                                        ></path>
+                                                                    </svg>
+                                                                    {d.street} {d.zipcode} {d.city} {d.country}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        ))}
+                                    </>
+                                )}
 
-                                </div>
+                                {/* </div> */}
                             </div>
                         </div>
                     </div>
@@ -340,7 +510,7 @@ const Home = () => {
                             <div className="d-flex justify-content-center align-items-center w-100 home-6-title text-center mt-3">
                                 <span>See below our main three plans for your business, for your startup and agency. It start from here! You can teach yourself what you really like.</span>
                             </div>
-                            <div className="d-flex justify-content-center align-items-center w-100 home-6-switch gap-3 form-switch">
+                            <div className="d-flex justify-content-center align-items-center w-100 home-6-switch gap-3 form-switch-pricing">
                                 <div>Monthly</div>
                                 <Switch onChange={handleChange}
                                     onColor="#4097fb"

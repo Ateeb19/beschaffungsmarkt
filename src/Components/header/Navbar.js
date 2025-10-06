@@ -13,7 +13,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [open, setOpen] = useState(false);
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("procurement_token");
     const isDashboard = location.pathname.startsWith("/dashboard");
 
 
@@ -25,8 +25,8 @@ const Navbar = () => {
             dispatch(fetchUserInfo());
         }
     }, [dispatch]);
-    console.log(data);
-    console.log('request-: ', requestStatus);
+    // console.log(data);
+    // console.log('request-: ', requestStatus);
 
     useEffect(() => {
         setOpen(false);

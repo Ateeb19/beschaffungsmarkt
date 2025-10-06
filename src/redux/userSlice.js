@@ -7,14 +7,15 @@ export const fetchUserInfo = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
         const url = process.env.REACT_APP_API_URL;
-      const token = localStorage.getItem("procurement_token");
+      const full_token = localStorage.getItem("procurement_token");
+      const token = full_token.replace("Bearer ", "").trim();
       if (!token) throw new Error("No token found");
 
       const res = await axios.get(`${url}/users/getuserinfo`, {
-        headers: { Authorization: `Bearer ${token}` },
+        // headers: { Cookie: `procurement_token=${token}` },
         withCredentials: true,
       });
-
+      // console.log('redux data ', res);
       return res.data; // backend response: user object
     } catch (err) {
       return rejectWithValue(err.response?.data || "Unable to fetch user info");

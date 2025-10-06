@@ -21,7 +21,17 @@ import Login from './Components/Login';
 import Dashboard_layout from './Components/Dashboard/Dashboard_layout';
 import Das_Home from './Components/Dashboard/Das_Home';
 import Das_Message from './Components/Dashboard/Das_Message';
-import Das_Profile from './Components/Dashboard/Das_Profile';
+import Das_Profile from './Components/Dashboard/Settings/Das_Profile';
+import Das_co_general from './Components/Dashboard/Company/Das_co_general';
+import Das_co_contact from './Components/Dashboard/Company/Das_co_contact';
+import Das_co_product from './Components/Dashboard/Company/Das_co_product';
+import Das_co_certificates from './Components/Dashboard/Company/Das_co_certificates';
+import Das_myPost from './Components/Dashboard/Post/Das_myPost';
+import Das_newPost from './Components/Dashboard/Post/Das_newPost';
+import Das_likePost from './Components/Dashboard/Post/Das_likePost';
+import Das_my_plane from './Components/Dashboard/Settings/Das_my_plan';
+import Das_notifications from './Components/Dashboard/Settings/Dash_notifications';
+import Company_details from './Components/Company_details';
 const AppContent = () => {
   return (
     <div className="App">
@@ -31,6 +41,7 @@ const AppContent = () => {
         <Route path="/service" element={<Service />} />
         <Route path="/register" element={<Register />} />
         <Route path="/companies" element={<Companies />} />
+        <Route path="/company/:companyId" element={<Company_details />} />
         <Route path="/posting" element={<Posting />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/contact" element={<Contact />} />
@@ -46,7 +57,16 @@ const AppContent = () => {
           <Route index element={<Das_Home />} />
           <Route path='home' element={<Das_Home />} />
           <Route path='message' element={<Das_Message />} />
+          <Route path='company/general-settings' element={<Das_co_general />} />
+          <Route path='company/contact-settings' element={<Das_co_contact />} />
+          <Route path='company/product-management' element={<Das_co_product />} />
+          <Route path='company/certificates' element={<Das_co_certificates />} />
+          <Route path='post/my-posts' element={<Das_myPost />} />
+          <Route path='post/new-post' element={<Das_newPost />} />
+          <Route path='post/like-posts' element={<Das_likePost />} />
           <Route path='profile' element={<Das_Profile />} />
+          <Route path='my-plan' element={<Das_my_plane />} />
+          <Route path='notifications' element={<Das_notifications />} />
         </Route>
 
       </Routes>

@@ -53,7 +53,7 @@ const Login = () => {
                 withCredentials: true, // so cookies are saved
             });
 
-            console.log("this is res-: ", res);
+            // console.log("this is res-: ", res);
 
             if (res.data.status) {
                 showAlert(res.data.msg, "success");
