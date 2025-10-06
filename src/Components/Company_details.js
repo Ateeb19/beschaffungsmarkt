@@ -98,7 +98,8 @@ const Company_details = () => {
 
                 <div className="d-flex align-items-start justify-content-start w-100 detail-company-name gap-4">
                     <div className="detail-image-div">
-                        <img src={company.company_logo ? (`http://localhost:5001/files/${company.company_logo}`) : ('/Images/download23.jpeg')} alt={company.company_name} />
+                        <img src={company.company_logo ? (`https://beschaffungsmarket-backend.onrender.com/files/${company.company_logo}`) : ('/Images/download23.jpeg')} alt={company.company_name} />
+                        {/* <img src={company.company_logo ? (`http://localhost:5001/files/${company.company_logo}`) : ('/Images/download23.jpeg')} alt={company.company_name} /> */}
                     </div>
 
                     <div className="d-flex flex-column align-items-start justify-content-start gap-2">
@@ -122,7 +123,8 @@ const Company_details = () => {
                                         {company.products.map((p, key) => (
                                             <>
                                                 <div className="export-product-div d-flex flex-column gap-2" key={key}>
-                                                    <img src={`http://localhost:5001/files/${p.image}`} alt={p.title} />
+                                                    <img src={`https://beschaffungsmarket-backend.onrender.com/files/${p.image}`} alt={p.title} />
+                                                    {/* <img src={`http://localhost:5001/files/${p.image}`} alt={p.title} /> */}
                                                     <span >{p.title}</span>
                                                 </div>
                                             </>
@@ -142,7 +144,8 @@ const Company_details = () => {
                                         {company.certificates.map((p, key) => (
                                             <>
                                                 <div className="export-product-div d-flex flex-column gap-2" key={key}>
-                                                    <img src={`http://localhost:5001/files/${p.image}`} alt={p.title} />
+                                                    <img src={`https://beschaffungsmarket-backend.onrender.com/files/${p.image}`} alt={p.title} />
+                                                    {/* <img src={`http://localhost:5001/files/${p.image}`} alt={p.title} /> */}
                                                     <span >{p.title}</span>
                                                 </div>
                                             </>

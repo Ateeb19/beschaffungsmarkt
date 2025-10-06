@@ -469,7 +469,8 @@ const Companies = () => {
                                         {companies.map((c) => {
 
                                             const productImages =
-                                                c.products?.map((p) => `http://localhost:5001/files/${p.image}`) || [];
+                                                c.products?.map((p) => `https://beschaffungsmarket-backend.onrender.com/files/${p.image}`) || [];
+                                                // c.products?.map((p) => `http://localhost:5001/files/${p.image}`) || [];
 
                                             return (
                                                 <div
@@ -482,7 +483,8 @@ const Companies = () => {
                                                         <div className="d-flex flex-row align-items-center justify-content-center gap-3 py-5">
                                                             <img
                                                                 className="comapny-list-logo"
-                                                                src={c.company_logo ? (`http://localhost:5001/files/${c.company_logo}`) : ('/Images/download23.jpeg')}
+                                                                src={c.company_logo ? (`https://beschaffungsmarket-backend.onrender.com/files/${c.company_logo}`) : ('/Images/download23.jpeg')}
+                                                                // src={c.company_logo ? (`http://localhost:5001/files/${c.company_logo}`) : ('/Images/download23.jpeg')}
                                                                 alt={c.company_name}
                                                             />
                                                             <div className="d-flex flex-column align-items-start justify-content-center text-start">

@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
     const Backend_URL = process.env.REACT_APP_API_URL;
+    const IMAGE = process.env.REACT_APP_API_IMAGE;
     const [searchInput, setSearchInput] = useState('');
     const [category, setCategory] = useState("");
     const [checked, setChecked] = useState(false);
@@ -442,7 +443,8 @@ const Home = () => {
                                                             <div class="card text-start">
                                                                 {/* <div className="home-author-img-div"> */}
                                                                 <img
-                                                                    src={`http://localhost:5001/files/${d.company_logo}`}
+                                                                    // src={`http://localhost:5001/files/${d.company_logo}`}
+                                                                    src={`https://beschaffungsmarket-backend.onrender.com/files/${d.company_logo}`}
                                                                     alt="Turkish Export Solutions Logo"
                                                                     className="logo"
                                                                 />
