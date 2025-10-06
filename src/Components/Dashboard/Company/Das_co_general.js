@@ -455,7 +455,7 @@ const Das_co_general = () => {
                                     <div className="d-flex flex-row align-item-end justify-content-end">
 
                                         <img
-                                            src={data.company_logo ? `https://beschaffungsmarket-backend.onrender.com/files/${selectedImage}` : selectedImage}
+                                            src={data.company_logo ? `https://api.beschaffungsmarkt.com/files/${selectedImage}` : selectedImage}
                                             // src={data.company_logo ? `http://localhost:5001/files/${selectedImage}` : selectedImage}
                                             alt="Selected"
                                             className="rounded-circle border border-1 border-dark image-div-das-image"
@@ -796,7 +796,7 @@ const Das_co_general = () => {
                                 <div className="d-flex align-items-start justify-content-end image-div-das-image-baner-outer-div ">
                                     <div className="px-5 py-4 image-div-das-image-baner-inner-div">
                                         <img
-                                            src={data.company_banner ? `https://beschaffungsmarket-backend.onrender.com/files/${selectedImage_banner}` : selectedImage_banner}
+                                            src={data.company_banner ? `https://api.beschaffungsmarkt.com/files/${selectedImage_banner}` : selectedImage_banner}
                                             // src={data.company_banner ? `http://localhost:5001/files/${selectedImage_banner}` : selectedImage_banner}
                                             alt="Selected"
                                             className="image-div-das-image-banner"

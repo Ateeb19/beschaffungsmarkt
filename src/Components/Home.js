@@ -444,7 +444,7 @@ const Home = () => {
                                                                 {/* <div className="home-author-img-div"> */}
                                                                 <img
                                                                     // src={`http://localhost:5001/files/${d.company_logo}`}
-                                                                    src={`https://beschaffungsmarket-backend.onrender.com/files/${d.company_logo}`}
+                                                                    src={`https://api.beschaffungsmarkt.com/files/${d.company_logo}`}
                                                                     alt="Turkish Export Solutions Logo"
                                                                     className="logo"
                                                                 />
