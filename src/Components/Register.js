@@ -114,7 +114,7 @@ import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 const Register = () => {
     const { showAlert } = useAlert();
     const [cityOptions, setCityOptions] = useState([]);
-    const url = process.env.REACT_APP_API_URL;
+    const Backend_URL = process.env.REACT_APP_API_URL;
     const { executeRecaptcha } = useGoogleReCaptcha();
 
     const navigate = useNavigate();
@@ -161,7 +161,7 @@ const Register = () => {
         }
 
         try {
-            const res = await axios.post(`${url}/auth/register`, {
+            const res = await axios.post(`${Backend_URL}/api/auth/register`, {
                 ...formData,
                  recaptchaToken: token,
             });

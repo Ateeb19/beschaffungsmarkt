@@ -20,7 +20,7 @@ const Login = () => {
         setShow_checked(!show_checked);
     }
     const { showAlert } = useAlert();
-    const url = process.env.REACT_APP_API_URL;
+    const Backend_URL = process.env.REACT_APP_API_URL;
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -46,7 +46,7 @@ const Login = () => {
         const token = await executeRecaptcha("login");
 
         try {
-            const res = await axios.post(`${url}/auth/login`, {
+            const res = await axios.post(`${Backend_URL}/api/auth/login`, {
                 ...formData,
                 recaptchaToken: token,
             }, {

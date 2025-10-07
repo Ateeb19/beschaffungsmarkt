@@ -12,7 +12,7 @@ import * as PiIcons from "react-icons/pi";
 import * as SiIcons from "react-icons/si";
 import * as GrIcons from "react-icons/gr";
 import { HiMiniArrowTurnDownRight } from "react-icons/hi2";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
@@ -29,15 +29,11 @@ const Companies = () => {
     useEffect(() => {
         window.scrollTo(0, 0); // Scroll to the top of the page when component mounts
     }, []);
-    const URL = process.env.REACT_APP_API_URL;
+    const Backend_URL = process.env.REACT_APP_API_URL;
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
-    // const [get_url] = useSearchParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const maincategory = searchParams.get("maincategory") || "";
     const subcategory = searchParams.get("subcategory") || "";
-    const location = useLocation();
-    // const page = parseInt(searchParams.get("page") || "1", 10);
-    // let pageParam = searchParams.get("page");
     const navigate = useNavigate();
 
     const [page, setPage] = useState(() => {
@@ -66,7 +62,7 @@ const Companies = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await axios.get(`${URL}/categories`);
+                const res = await axios.get(`${Backend_URL}/api/categories`);
                 setMainCategories(res.data.mainCategory);
                 setSubCategories(res.data.subCategory);
             } catch (error) {
@@ -126,6 +122,11 @@ const Companies = () => {
 
     useEffect(() => {
         const mainCategoryId = searchParams.get('maincategory');
+        const keyword = searchParams.get('keyword');
+        if (keyword) {
+            setValue(keyword);
+            // setTempValue(keyword);
+        }
         if (mainCategoryId) {
             const selectedCategory = mainCategories.find(
                 (cat) => cat._id === mainCategoryId
@@ -137,12 +138,13 @@ const Companies = () => {
     const handleSelectMainCategory = (cat) => {
         setCurrentMainCategory(cat);
         setCurrentSubCategory(null); // reset subcategory
-        setSearchParams({ maincategory: cat._id, page: 1 }); // page reset to 1
+        setSearchParams({ keyword: value, maincategory: cat._id, page: 1 }); // page reset to 1
     };
 
     const handleSelectSubCategory = (sub) => {
         setCurrentSubCategory(sub);
         setSearchParams({
+            keyword: value,
             maincategory: currentMainCategory._id,
             subcategory: sub._id,
             page: 1
@@ -150,25 +152,36 @@ const Companies = () => {
     };
 
     const handleSearchKeyword = () => {
+        setValue(tempValue);
+        setTempValue('');
         setSearchParams({
+            keyword: tempValue,
             maincategory: currentMainCategory?._id || '',
             subcategory: currentSubCategory?._id || '',
             page: 1
         });
-        setValue(tempValue);
-        setTempValue('');
     };
 
+    const clearKeyword = () => {
+        setValue('');
+        setTempValue('');
+        setSearchParams({
+            keyword: '',
+            maincategory: currentMainCategory?._id || '',
+            subcategory: currentSubCategory?._id || '',
+            page: 1
+        });
+    };
 
     const clearMainCategory = () => {
         setCurrentMainCategory(null);
         setCurrentSubCategory(null);
-        setSearchParams({ page: 1 });
+        setSearchParams({ keyword: value, page: 1 });
     };
 
     const clearSubCategory = () => {
         setCurrentSubCategory(null);
-        setSearchParams({ maincategory: currentMainCategory._id, page: 1 });
+        setSearchParams({ keyword: value, maincategory: currentMainCategory._id, page: 1 });
     };
 
 
@@ -178,7 +191,7 @@ const Companies = () => {
 
     const fetchCompanies = async () => {
         const body = {
-            filterKeyword: "",
+            filterKeyword: value,
             filterCountry: "",
             filterSubCategory: subcategory,
             filterMainCategory: maincategory,
@@ -186,7 +199,7 @@ const Companies = () => {
             currentPage: page
         };
 
-        const res = await fetch(`${URL}/users/get-companies`, {
+        const res = await fetch(`${Backend_URL}/api/users/get-companies`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
@@ -206,29 +219,15 @@ const Companies = () => {
 
     useEffect(() => {
         fetchCompanies();
-    }, [maincategory, subcategory, page]);
+    }, [value, maincategory, subcategory, page]);
 
     const handleMainCategoryChange = (id) => {
-        setSearchParams({ maincategory: id, page: 1 });
+        setSearchParams({ keyword: value, maincategory: id, page: 1 });
     };
 
     const handleSubCategoryChange = (id) => {
-        setSearchParams({ maincategory, subcategory: id, page: 1 });
+        setSearchParams({ keyword: value, maincategory, subcategory: id, page: 1 });
     };
-
-    // const handlePageChange = (newPage) => {
-    //     setSearchParams({ maincategory, subcategory, page: newPage });
-    // };
-
-    // const handlePageChange = (event, newPage) => {
-    //     if (!newPage) return; // protect against undefined
-
-    //     setSearchParams({
-    //         maincategory: maincategory || "",
-    //         subcategory: subcategory || "",
-    //         page: String(newPage)  // always string, never undefined
-    //     });
-    // };
 
     const handlePageChange = (newPage) => {
         if (!newPage) return;
@@ -237,20 +236,35 @@ const Companies = () => {
 
         // Update URL
         navigate(
-            `/companies?maincategory=${currentMainCategory}&subcategory=${currentSubCategory}&page=${newPage}`
+            `/companies?keyword=${value}&maincategory=${currentMainCategory}&subcategory=${currentSubCategory}&page=${newPage}`
         );
 
         // Fetch new data
         fetchCompanies({
+            value: value,
             maincategory: currentMainCategory,
             subcategory: currentSubCategory,
             page: newPage,
         });
     };
 
+    // useEffect(() => {
+    //     setThumbsSwiper(null);
+    // }, [companies]);
+
+    // useEffect(() => {
+    //     if (companies && companies.length > 0) {
+    //         setThumbsSwiper(null);
+    //     }
+    // }, [companies]);
+
     useEffect(() => {
-        setThumbsSwiper(null);
+        if (companies && companies.length > 0) {
+            const timeout = setTimeout(() => setThumbsSwiper(null), 150);
+            return () => clearTimeout(timeout);
+        }
     }, [companies]);
+
 
     const handleCompanyClick = (companyId) => {
         navigate(`/company/${companyId}`);
@@ -266,7 +280,7 @@ const Companies = () => {
                             }}
                                 aria-label="breadcrumb">
                                 <ol class="overview-breadcrumb breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item" onClick={() => navigate('/')}><a href="#">Home</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">Companies</li>
                                 </ol>
                             </nav>
@@ -300,7 +314,7 @@ const Companies = () => {
                                                 <>
                                                     <div className="w-100 text-start d-flex justify-content-between align-items-center " style={{ color: '#000' }}>
                                                         <span>{value}</span>
-                                                        <MdClose onClick={() => { setValue(null); setTempValue(null) }} style={{ cursor: 'pointer' }} />
+                                                        <MdClose onClick={() => { clearKeyword(); setValue(''); setTempValue('') }} style={{ cursor: 'pointer' }} />
                                                     </div>
                                                 </>
                                             )}
@@ -469,8 +483,8 @@ const Companies = () => {
                                         {companies.map((c) => {
 
                                             const productImages =
-                                                c.products?.map((p) => `https://api.beschaffungsmarkt.com/files/${p.image}`) || [];
-                                                // c.products?.map((p) => `http://localhost:5001/files/${p.image}`) || [];
+                                                c.products?.map((p) => `${Backend_URL}/files/${p.image}`) || [];
+                                            // c.products?.map((p) => `http://localhost:5001/files/${p.image}`) || [];
 
                                             return (
                                                 <div
@@ -483,7 +497,7 @@ const Companies = () => {
                                                         <div className="d-flex flex-row align-items-center justify-content-center gap-3 py-5">
                                                             <img
                                                                 className="comapny-list-logo"
-                                                                src={c.company_logo ? (`https://api.beschaffungsmarkt.com/files/${c.company_logo}`) : ('/Images/download23.jpeg')}
+                                                                src={c.company_logo ? (`${Backend_URL}/files/${c.company_logo}`) : ('/Images/download23.jpeg')}
                                                                 // src={c.company_logo ? (`http://localhost:5001/files/${c.company_logo}`) : ('/Images/download23.jpeg')}
                                                                 alt={c.company_name}
                                                             />
@@ -497,11 +511,15 @@ const Companies = () => {
                                                         <div className="company-data-box-image-slider">
                                                             {productImages.length > 0 && (
                                                                 <>
-                                                                    {/* Main Slider */}
+
                                                                     <Swiper
                                                                         spaceBetween={10}
-                                                                        // thumbs={{ swiper: thumbsSwiper }}
-                                                                        thumbs={thumbsSwiper && !thumbsSwiper.destroyed ? { swiper: thumbsSwiper } : undefined}
+                                                                        thumbs={{
+                                                                            swiper:
+                                                                                thumbsSwiper && !thumbsSwiper.destroyed
+                                                                                    ? thumbsSwiper
+                                                                                    : null,
+                                                                        }}
                                                                         modules={[FreeMode, Thumbs]}
                                                                         className="mySwiper2"
                                                                     >
@@ -516,7 +534,7 @@ const Companies = () => {
                                                                         ))}
                                                                     </Swiper>
 
-                                                                    {/* Thumbnail Slider */}
+
                                                                     <Swiper
                                                                         onSwiper={setThumbsSwiper}
                                                                         spaceBetween={10}

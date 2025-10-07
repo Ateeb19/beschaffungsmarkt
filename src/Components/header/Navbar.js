@@ -35,10 +35,10 @@ const Navbar = () => {
     const handleLogout = async () => {
         console.log('logou')
         try {
-            const url = process.env.REACT_APP_API_URL;
+            const Backend_URL = process.env.REACT_APP_API_URL;
             console.log('logou')
             const res = await axios.post(
-                `${url}/auth/logout`,
+                `${Backend_URL}/api/auth/logout`,
                 {},
                 {
                     withCredentials: true,

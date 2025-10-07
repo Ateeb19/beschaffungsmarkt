@@ -103,7 +103,7 @@ const Das_Profile = () => {
         }
 
         try {
-            const response = await axios.post(`${Backend_URL}/users/update-user-profile`, formData, {
+            const response = await axios.post(`${Backend_URL}/api/users/update-user-profile`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -153,7 +153,7 @@ const Das_Profile = () => {
             return;
         } else {
             try {
-                const response = await axios.post(`${Backend_URL}/users/change-password`,
+                const response = await axios.post(`${Backend_URL}/api/users/change-password`,
                     {
                         currentPassword: current_password,
                         newPassword: new_password,
@@ -196,7 +196,7 @@ const Das_Profile = () => {
                                 <div className="d-flex flex-row align-item-end justify-content-end">
 
                                     <img
-                                        src={!image_changed ? `https://api.beschaffungsmarkt.com/files/${selectedFile}` : selectedImage}
+                                        src={!image_changed ? `${Backend_URL}/files/${selectedFile}` : selectedImage}
                                         // src={!image_changed ? `http://localhost:5001/files/${selectedFile}` : selectedImage}
                                         // src={selectedImage}
                                         alt="Selected"

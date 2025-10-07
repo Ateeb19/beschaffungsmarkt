@@ -13,7 +13,7 @@ import * as SiIcons from "react-icons/si";
 import * as GrIcons from "react-icons/gr";
 
 const Company_details = () => {
-    const URL = process.env.REACT_APP_API_URL;
+    const Backend_URL = process.env.REACT_APP_API_URL;
     const { companyId } = useParams();
     const [company, setCompany] = useState(null);
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ const Company_details = () => {
     useEffect(() => {
         const fetchCompany = async () => {
             try {
-                const res = await axios.post(`${URL}/users/get-company-info`, {
+                const res = await axios.post(`${Backend_URL}/api/users/get-company-info`, {
                     companyId: companyId,
                 });
                 setCompany(res.data);
@@ -98,7 +98,7 @@ const Company_details = () => {
 
                 <div className="d-flex align-items-start justify-content-start w-100 detail-company-name gap-4">
                     <div className="detail-image-div">
-                        <img src={company.company_logo ? (`https://api.beschaffungsmarkt.com/files/${company.company_logo}`) : ('/Images/download23.jpeg')} alt={company.company_name} />
+                        <img src={company.company_logo ? (`${Backend_URL}/files/${company.company_logo}`) : ('/Images/download23.jpeg')} alt={company.company_name} />
                         {/* <img src={company.company_logo ? (`http://localhost:5001/files/${company.company_logo}`) : ('/Images/download23.jpeg')} alt={company.company_name} /> */}
                     </div>
 
@@ -123,7 +123,7 @@ const Company_details = () => {
                                         {company.products.map((p, key) => (
                                             <>
                                                 <div className="export-product-div d-flex flex-column gap-2" key={key}>
-                                                    <img src={`https://api.beschaffungsmarkt.com/files/${p.image}`} alt={p.title} />
+                                                    <img src={`${Backend_URL}/files/${p.image}`} alt={p.title} />
                                                     {/* <img src={`http://localhost:5001/files/${p.image}`} alt={p.title} /> */}
                                                     <span >{p.title}</span>
                                                 </div>
@@ -144,7 +144,7 @@ const Company_details = () => {
                                         {company.certificates.map((p, key) => (
                                             <>
                                                 <div className="export-product-div d-flex flex-column gap-2" key={key}>
-                                                    <img src={`https://api.beschaffungsmarkt.com/files/${p.image}`} alt={p.title} />
+                                                    <img src={`${Backend_URL}/files/${p.image}`} alt={p.title} />
                                                     {/* <img src={`http://localhost:5001/files/${p.image}`} alt={p.title} /> */}
                                                     <span >{p.title}</span>
                                                 </div>

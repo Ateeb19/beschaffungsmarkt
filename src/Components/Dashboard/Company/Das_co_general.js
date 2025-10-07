@@ -50,6 +50,9 @@ const Das_co_general = () => {
 
     const Backend_URL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
+    const [image_changed, setImage_changed] = useState(false);
+    const [image_changed_banner, setImage_changed_banner] = useState(false);
+
     const full_token = localStorage.getItem("procurement_token");
     const token = full_token.replace("Bearer ", "").trim();
     // console.log('this is token -:', token)
@@ -72,11 +75,13 @@ const Das_co_general = () => {
     const [selectedImage_banner, setSelectedImage_banner] = useState(null);
 
     const handleFileDrop = (file) => {
+        setImage_changed(true);
         setSelectedFile(file);
         setSelectedImage(URL.createObjectURL(file));
     };
 
     const handleFileDrop_banner = (file) => {
+        setImage_changed_banner(true);
         setSelectedFile_banner(file);
         setSelectedImage_banner(URL.createObjectURL(file));
     }
@@ -114,7 +119,7 @@ const Das_co_general = () => {
 
     const get_company_type = async () => {
         try {
-            const res = await axios.get(`${Backend_URL}/users/get-company-types`);
+            const res = await axios.get(`${Backend_URL}/api/users/get-company-types`);
             setCompany_type_data(res.data);
         }
         catch (err) {
@@ -124,7 +129,7 @@ const Das_co_general = () => {
 
     const get_company_segments = async () => {
         try {
-            const res = await axios.get(`${Backend_URL}/users/get-company-segments`);
+            const res = await axios.get(`${Backend_URL}/api/users/get-company-segments`);
             setCompany_segments_data(res.data);
         }
         catch (err) {
@@ -134,7 +139,7 @@ const Das_co_general = () => {
 
     const get_company_main_categories = async () => {
         try {
-            const res = await axios.get(`${Backend_URL}/users/get-company-main-categories`);
+            const res = await axios.get(`${Backend_URL}/api/users/get-company-main-categories`);
             setCompany_main_categories_data(res.data);
         }
         catch (err) {
@@ -144,7 +149,7 @@ const Das_co_general = () => {
 
     const get_company_sub_categories = async () => {
         try {
-            const res = await axios.get(`${Backend_URL}/users/get-company-sub-categories`);
+            const res = await axios.get(`${Backend_URL}/api/users/get-company-sub-categories`);
             setCompany_sub_categories_data(res.data);
         }
         catch (err) {
@@ -192,7 +197,7 @@ const Das_co_general = () => {
         console.log('this is Country - :', selected_country)
 
         try {
-            const res = await axios.post(`${Backend_URL}/users/get-cities`, {
+            const res = await axios.post(`${Backend_URL}/api/users/get-cities`, {
                 cityKeyword: keyword,
                 countryName: selected_country.value,
             });
@@ -262,7 +267,21 @@ const Das_co_general = () => {
 
     useEffect(() => {
         if (data) {
-            setSelectedImage(data.company_logo || "");
+            if (data.company_logo) {
+                setSelectedFile(data.company_logo || '');
+                setSelectedImage(data.company_logo || '');
+                setImage_changed(false);
+            } else {
+                setSelectedFile('');
+                setSelectedImage('');
+            }
+            if (data.company_banner) {
+                setSelectedFile_banner(data.company_banner || "");
+                setSelectedImage_banner(data.company_banner || "");
+                setImage_changed_banner(false);
+            } else {
+
+            }
             setSelectedImage_banner(data.company_banner || '')
             setSelected_company_name(data.company_name || "");
             setSelected_company_description(data.company_description || "");
@@ -400,20 +419,25 @@ const Das_co_general = () => {
         formData.append("employeeNumber", selected_number_employee || "");
         formData.append("keyword", JSON.stringify(selected_keyword));
 
-        if (selectedFile) {
-            formData.append("logo", selectedFile);
-        } else {
-            formData.append("logo", "false");
+
+        if (image_changed) {
+            if (selectedFile) {
+                formData.append("logo", selectedFile);
+            } else {
+                formData.append("logo", "false");
+            }
         }
 
-        if (selectedFile_banner) {
-            formData.append("banner", selectedFile_banner);
-        } else {
-            formData.append("banner", "false");
+        if (image_changed_banner) {
+            if (selectedFile_banner) {
+                formData.append("banner", selectedFile_banner);
+            } else {
+                formData.append("banner", "false");
+            }
         }
 
         try {
-            const res = await axios.post(`${Backend_URL}/users/update-company-profile`, formData, {
+            const res = await axios.post(`${Backend_URL}/api/users/update-company-profile`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
                 withCredentials: true,
             });
@@ -449,34 +473,29 @@ const Das_co_general = () => {
                     <div className="d-flex flex-row w-100 align-items-start justify-content-start text-start mb-4">
                         <div className="col-md-6 d-flex flex-column align-items-start justify-content-center">
                             <div className="image-div-das-general-form d-flex flex-column align-items-center justify-content-center w-100">
-
-
                                 {selectedImage ? (
                                     <div className="d-flex flex-row align-item-end justify-content-end">
 
                                         <img
-                                            src={data.company_logo ? `https://api.beschaffungsmarkt.com/files/${selectedImage}` : selectedImage}
-                                            // src={data.company_logo ? `http://localhost:5001/files/${selectedImage}` : selectedImage}
+                                            src={!image_changed ? `${Backend_URL}/files/${selectedFile}` : selectedImage}
+                                            // src={!image_changed ? `http://localhost:5001/files/${selectedFile}` : selectedImage}
+                                            // src={selectedImage}
                                             alt="Selected"
                                             className="rounded-circle border border-1 border-dark image-div-das-image"
                                         />
-                                        <RxCross2 style={{ cursor: 'pointer', fontSize: '20px' }} onClick={() => { setSelectedFile(''); setSelectedImage('') }} />
+                                        <RxCross2 style={{ cursor: 'pointer', fontSize: '20px' }} onClick={() => { setSelectedFile(''); setSelectedImage(''); setImage_changed(true) }} />
                                     </div>
                                 ) : (
                                     <>
                                         <DragAndDrop
                                             accept="image/*"
-                                            name="logo"
                                             onFileDrop={handleFileDrop}
                                             className="image-div-das-image-upload"
                                             label={
-                                                <div>
-                                                    <IoCloudUploadOutline className="fs-2 mb-3" />
-                                                    <p><b>Click to upload</b> or drag and drop</p>
-                                                    <p style={{ fontSize: '12px' }}> SVG, PNG, JPG or WEBP</p>
-                                                </div>
-                                            }
-                                        />
+                                                <>
+                                                    <IoCloudUploadOutline className="fs-2 mb-3" /> <p><b>Click to upload</b> or drag and drop</p> <p style={{ fontSize: '12px' }}> SVG, PNG, JPG or WEBP</p>
+                                                </>
+                                            } />
                                     </>
                                 )}
                             </div>
@@ -796,14 +815,14 @@ const Das_co_general = () => {
                                 <div className="d-flex align-items-start justify-content-end image-div-das-image-baner-outer-div ">
                                     <div className="px-5 py-4 image-div-das-image-baner-inner-div">
                                         <img
-                                            src={data.company_banner ? `https://api.beschaffungsmarkt.com/files/${selectedImage_banner}` : selectedImage_banner}
+                                            src={!image_changed_banner ? `${Backend_URL}/files/${selectedImage_banner}` : selectedImage_banner}
                                             // src={data.company_banner ? `http://localhost:5001/files/${selectedImage_banner}` : selectedImage_banner}
                                             alt="Selected"
                                             className="image-div-das-image-banner"
                                         />
                                     </div>
 
-                                    <RxCross2 style={{ cursor: 'pointer', fontSize: '20px' }} onClick={() => { setSelectedFile_banner(''); setSelectedImage_banner('') }} />
+                                    <RxCross2 style={{ cursor: 'pointer', fontSize: '20px' }} onClick={() => { setSelectedFile_banner(''); setSelectedImage_banner(''); setImage_changed_banner(true) }} />
                                 </div>
                             )}
                         </div>

@@ -6,12 +6,12 @@ export const fetchUserInfo = createAsyncThunk(
   "get/userinfo",
   async (_, { rejectWithValue }) => {
     try {
-        const url = process.env.REACT_APP_API_URL;
+        const Backend_URL = process.env.REACT_APP_API_URL;
       const full_token = localStorage.getItem("procurement_token");
       const token = full_token.replace("Bearer ", "").trim();
       if (!token) throw new Error("No token found");
 
-      const res = await axios.get(`${url}/users/getuserinfo`, {
+      const res = await axios.get(`${Backend_URL}/api/users/getuserinfo`, {
         // headers: { Cookie: `procurement_token=${token}` },
         withCredentials: true,
       });

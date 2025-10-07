@@ -26,10 +26,12 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
     const Backend_URL = process.env.REACT_APP_API_URL;
     const IMAGE = process.env.REACT_APP_API_IMAGE;
-    const [searchInput, setSearchInput] = useState('');
+    const [searchInput, setSearchInput] = useState(null);
     const [category, setCategory] = useState("");
     const [checked, setChecked] = useState(false);
     const navigate = useNavigate();
+
+    console.log('selected categroy',category);
 
     const handleChange = (nextChecked) => {
         setChecked(nextChecked);
@@ -42,7 +44,7 @@ const Home = () => {
     useEffect(() => {
         const fetchSponsors = async () => {
             try {
-                const response = await axios.get(`${Backend_URL}/users/random-sponsor-data`, {
+                const response = await axios.get(`${Backend_URL}/api/users/random-sponsor-data`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -81,7 +83,7 @@ const Home = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await axios.get(`${Backend_URL}/categories/get-all-main-category`);
+                const res = await axios.get(`${Backend_URL}/api/categories/get-all-main-category`);
                 // console.log(res.data);
                 setMain_category(res.data);
             } catch (error) {
@@ -95,7 +97,7 @@ const Home = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await axios.get(`${Backend_URL}/categories/random`);
+                const res = await axios.get(`${Backend_URL}/api/categories/random`);
                 setRandom_category(res.data);
             } catch (error) {
                 console.error("Error fetching categories:", error);
@@ -155,7 +157,12 @@ const Home = () => {
                                             <option value="" disabled hidden>
                                                 Please choose category
                                             </option>
-                                            <option value="fashion">Fashion and Accessories</option>
+                                            {main_category.map((cat, key) => (
+                                                <>
+                                                 <option value={cat._id}>{cat.label}</option>
+                                                </>
+                                            ))}
+                                            {/* <option value="fashion">Fashion and Accessories</option>
                                             <option value="textiles">Textiles & Leather</option>
                                             <option value="shoes">Shoes</option>
                                             <option value="automotive">Automotive</option>
@@ -165,11 +172,11 @@ const Home = () => {
                                             <option value="furniture">Furniture and Decor</option>
                                             <option value="packaging">Packaging and Printing</option>
                                             <option value="electronics">Electrical and Electronics</option>
-                                            <option value="cosmetics">Cosmetics and Personal Care</option>
+                                            <option value="cosmetics">Cosmetics and Personal Care</option> */}
                                         </select>
                                     </div>
                                     <div className="serch-btn">
-                                        <button className=""> <IoSearchSharp className="fs-5" /> Search Now</button>
+                                        <button className="" onClick={()=> navigate(`/companies?keyword=${searchInput}&maincategory=${category}&subcategory=&page=1`)}> <IoSearchSharp className="fs-5" /> Search Now</button>
                                     </div>
                                 </div>
                             </div>
@@ -444,7 +451,7 @@ const Home = () => {
                                                                 {/* <div className="home-author-img-div"> */}
                                                                 <img
                                                                     // src={`http://localhost:5001/files/${d.company_logo}`}
-                                                                    src={`https://api.beschaffungsmarkt.com/files/${d.company_logo}`}
+                                                                    src={`${Backend_URL}/files/${d.company_logo}`}
                                                                     alt="Turkish Export Solutions Logo"
                                                                     className="logo"
                                                                 />
