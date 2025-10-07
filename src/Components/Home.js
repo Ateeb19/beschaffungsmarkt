@@ -444,7 +444,7 @@ const Home = () => {
                                     <>
                                         {sponsors.map((d, key) => (
                                             <>
-                                                <div class="authors-wrapper">
+                                                <div class="authors-wrapper" onClick={()=> navigate(`/company/${d._id}`)}>
                                                     <div class="container">
                                                         <div class="card-container">
                                                             <div class="card text-start">

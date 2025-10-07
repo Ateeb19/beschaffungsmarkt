@@ -117,6 +117,7 @@ input:focus {
     line-height: 20px;
     color: #ffffff;
 }
+
 /* 
 .category-button button {
     background-color: #ffffff4d;
@@ -137,7 +138,7 @@ input:focus {
 } */
 
 
-.category-inner-div{
+.category-inner-div {
     width: 30% !important;
 }
 
@@ -1408,8 +1409,8 @@ input[type="password"]:focus {
     border-radius: 2px;
 }
 
-.custom-progress-bar-yellow{
-     background: rgb(255, 255, 42) !important;
+.custom-progress-bar-yellow {
+    background: rgb(255, 255, 42) !important;
     height: 5px;
     border-radius: 2px;
 }
@@ -1969,6 +1970,9 @@ input[type="password"]:focus {
     cursor: pointer;
 }
 
+.authors-wrapper{
+    cursor: pointer;
+}
 
 .authors-wrapper .card-container {
     display: grid;
@@ -2047,5 +2051,89 @@ input[type="password"]:focus {
     padding: 0.425rem 1.25rem;
     background-color: rgb(19 157 255 / var(--tw-bg-opacity, 1));
     border-radius: .5rem;
-    cursor: pointer;;
+    cursor: pointer;
+    ;
+}
+
+
+.company-card {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* ---------- VERIFIED PREMIUM BADGE ---------- */
+.verified-badge {
+    position: absolute;
+    top: -8px;
+    right: 0;
+    width: 100px;
+    padding: 0.2em 0;
+    background: linear-gradient(to right, #3b82f6, #1d4ed8, #3b82f6);
+    border-left: 0.5em solid rgba(0, 0, 0, 0.3);
+    border-bottom: 0.8em solid transparent;
+    z-index: 10;
+
+    /* Polygon shape exactly like Tailwind clip-path */
+    clip-path: polygon(0.5em 0,
+            100% 0,
+            100% 100%,
+            calc(50% + 0.25em) calc(100% - 0.8em),
+            0.5em 100%,
+            0.5em 0.5em,
+            0 0.5em);
+
+    border-top-right-radius: 0.4em;
+    text-align: center;
+}
+
+.verified-badge p {
+    margin: 0;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.verified-badge svg {
+    width: 1rem;
+    height: 1rem;
+    fill: #fff;
+    margin-top: 0.25rem;
+}
+
+/* Image and text */
+.company-logo {
+    width: 96px;
+    height: 96px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+}
+
+.company-content h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.company-content p {
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+/* Responsive height like xs:h-60 */
+@media (max-width: 576px) {
+    .company-card {
+        flex-direction: column;
+        align-items: center;
+    }
 }
