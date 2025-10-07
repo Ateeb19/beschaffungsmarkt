@@ -26,7 +26,7 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
     const Backend_URL = process.env.REACT_APP_API_URL;
     const IMAGE = process.env.REACT_APP_API_IMAGE;
-    const [searchInput, setSearchInput] = useState(null);
+    const [searchInput, setSearchInput] = useState('');
     const [category, setCategory] = useState("");
     const [checked, setChecked] = useState(false);
     const navigate = useNavigate();

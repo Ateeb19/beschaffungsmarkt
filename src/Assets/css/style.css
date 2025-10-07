@@ -1443,6 +1443,7 @@ input[type="password"]:focus {
     background-color: #ffffff;
     overflow-y: auto;
     overflow-x: auto;
+    position: relative;
 }
 
 .dashboard::-webkit-scrollbar {
@@ -1454,21 +1455,51 @@ input[type="password"]:focus {
     -ms-overflow-style: none;
 }
 
-
+/* 
 .dashboar-left-div {
     padding: 0px 0px;
-    width: 12%;
-    height: 895px;
+    width: 14%;
+    height: 100vh;
+    position: fixed;
     background-color: #0d111b;
     color: #ffffff;
+    z-index: 10;
 }
 
 .dashboard-right-div {
     padding: 20px;
     width: 88%;
-    height: 895px;
+    height: 895px;    
     background-color: #ffffff;
     overflow-y: auto;
+} */
+
+.dashboar-left-div {
+    padding: 0;
+    width: 14%;
+    height: 100vh;
+    position: fixed;
+    top: 50px;
+    /* Ensures it stays fixed to the top of the viewport */
+    left: 0;
+    /* Ensures it stays fixed to the left side of the viewport */
+    background-color: #0d111b;
+    color: #ffffff;
+    z-index: 10;
+}
+
+.dashboard-right-div {
+    padding: 20px;
+    margin-left: 14%;
+    /* Ensures the content starts after the sidebar */
+    width: 86%;
+    /* Makes the right side take the remaining space */
+    height: 93vh;
+    /* Ensures the content area takes the full height of the viewport */
+    background-color: #ffffff;
+    /* overflow-y: auto; */
+    /* Makes the right content scrollable if needed */
+    position: relative;
 }
 
 .dashboard-right-div::-webkit-scrollbar {
@@ -1501,7 +1532,7 @@ input[type="password"]:focus {
 }
 
 .dashboard-menue-list ul li {
-    padding: 10px 10px;
+    padding: 7px 10px;
 }
 
 .dashboard-menue-list ul li:hover {
@@ -1970,7 +2001,7 @@ input[type="password"]:focus {
     cursor: pointer;
 }
 
-.authors-wrapper{
+.authors-wrapper {
     cursor: pointer;
 }
 
