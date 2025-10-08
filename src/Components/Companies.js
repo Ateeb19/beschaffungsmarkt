@@ -34,6 +34,7 @@ const Companies = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const maincategory = searchParams.get("maincategory") || "";
     const subcategory = searchParams.get("subcategory") || "";
+    const [selectedCountry, setSelectedCountry] = useState('');
     const navigate = useNavigate();
 
     const [page, setPage] = useState(() => {
@@ -123,6 +124,7 @@ const Companies = () => {
     useEffect(() => {
         const mainCategoryId = searchParams.get('maincategory');
         const keyword = searchParams.get('keyword');
+        const country = searchParams.get('country');
         if (keyword) {
             setValue(keyword);
             // setTempValue(keyword);
@@ -133,12 +135,15 @@ const Companies = () => {
             );
             setCurrentMainCategory(selectedCategory);
         }
+        if (country) {
+            setSelectedCountry(country);
+        }
     }, [searchParams, mainCategories]);
 
     const handleSelectMainCategory = (cat) => {
         setCurrentMainCategory(cat);
         setCurrentSubCategory(null); // reset subcategory
-        setSearchParams({ keyword: value, maincategory: cat._id, page: 1 }); // page reset to 1
+        setSearchParams({ keyword: value, maincategory: cat._id, country: selectedCountry, page: 1 }); // page reset to 1
     };
 
     const handleSelectSubCategory = (sub) => {
@@ -147,6 +152,7 @@ const Companies = () => {
             keyword: value,
             maincategory: currentMainCategory._id,
             subcategory: sub._id,
+            country: selectedCountry,
             page: 1
         });
     };
@@ -158,9 +164,21 @@ const Companies = () => {
             keyword: tempValue,
             maincategory: currentMainCategory?._id || '',
             subcategory: currentSubCategory?._id || '',
+            country: selectedCountry,
             page: 1
         });
     };
+
+    const handleCountry = (count) => {
+        setSelectedCountry(count);
+        setSearchParams({
+            keyword: value,
+            maincategory: currentMainCategory?._id || '',
+            subcategory: currentSubCategory?._id || '',
+            country: count,
+            page: 1
+        });
+    }
 
     const clearKeyword = () => {
         setValue('');
@@ -169,6 +187,7 @@ const Companies = () => {
             keyword: '',
             maincategory: currentMainCategory?._id || '',
             subcategory: currentSubCategory?._id || '',
+            country: selectedCountry || '',
             page: 1
         });
     };
@@ -176,13 +195,25 @@ const Companies = () => {
     const clearMainCategory = () => {
         setCurrentMainCategory(null);
         setCurrentSubCategory(null);
-        setSearchParams({ keyword: value, page: 1 });
+        setSearchParams({ keyword: value, country: selectedCountry || '', page: 1 });
     };
 
     const clearSubCategory = () => {
         setCurrentSubCategory(null);
-        setSearchParams({ keyword: value, maincategory: currentMainCategory._id, page: 1 });
+        setSearchParams({ keyword: value, maincategory: currentMainCategory._id, country: selectedCountry || '', page: 1 });
     };
+
+    const clearCountry = () => {
+        setSelectedCountry('');
+        setSearchParams({
+            keyword: value,
+            maincategory: currentMainCategory?._id || '',
+            subcategory: currentSubCategory?._id || '',
+            country: '',
+            page: 1
+        });
+
+    }
 
 
     const [companies, setCompanies] = useState([]);
@@ -192,7 +223,7 @@ const Companies = () => {
     const fetchCompanies = async () => {
         const body = {
             filterKeyword: value,
-            filterCountry: "",
+            filterCountry: selectedCountry,
             filterSubCategory: subcategory,
             filterMainCategory: maincategory,
             itemsPerPage: 10,
@@ -219,14 +250,14 @@ const Companies = () => {
 
     useEffect(() => {
         fetchCompanies();
-    }, [value, maincategory, subcategory, page]);
+    }, [value, maincategory, subcategory, selectedCountry, page]);
 
     const handleMainCategoryChange = (id) => {
-        setSearchParams({ keyword: value, maincategory: id, page: 1 });
+        setSearchParams({ keyword: value, maincategory: id, country: selectedCountry, page: 1 });
     };
 
     const handleSubCategoryChange = (id) => {
-        setSearchParams({ keyword: value, maincategory, subcategory: id, page: 1 });
+        setSearchParams({ keyword: value, maincategory, subcategory: id, country: selectedCountry, page: 1 });
     };
 
     const handlePageChange = (newPage) => {
@@ -236,7 +267,7 @@ const Companies = () => {
 
         // Update URL
         navigate(
-            `/companies?keyword=${value}&maincategory=${currentMainCategory}&subcategory=${currentSubCategory}&page=${newPage}`
+            `/companies?keyword=${value}&maincategory=${currentMainCategory}&subcategory=${currentSubCategory}&country${selectedCountry}&page=${newPage}`
         );
 
         // Fetch new data
@@ -244,6 +275,7 @@ const Companies = () => {
             value: value,
             maincategory: currentMainCategory,
             subcategory: currentSubCategory,
+            country: selectedCountry,
             page: newPage,
         });
     };
@@ -305,7 +337,7 @@ const Companies = () => {
                 <div className="container w-100 text-start">
                     <div className="d-flex flex-row align-items-start justify-content-center w-100">
                         <div className="col-md-3 company-filter d-flex flex-column align-items-start justify-content-start gap-4">
-                            {currentMainCategory && currentMainCategory._id || value ? (
+                            {currentMainCategory && currentMainCategory._id || value || selectedCountry ? (
                                 <>
                                     <div className="d-flex flex-column align-items-start justify-content-end w-100 company-filter-div gap-3 mb-2">
                                         <h5>Filter</h5>
@@ -358,38 +390,53 @@ const Companies = () => {
                                                     </div>
                                                 </>
                                             ) : null}
+                                            {selectedCountry && (
+                                                <>
+                                                    <div className="w-100 text-start d-flex justify-content-between align-items-center " style={{ color: '#000' }}>
+                                                        <span>
+                                                            <img src={selectedCountry === 'Turkey' ? '/Images/turkey.png' : '/Images/germany.png'} width="25px" className="me-2" />
+                                                            {/* <img src="/Images/germany.png" width="25px" className="me-2" /> */}
+                                                            {/* <img src="/Images/turkey.png" width="25px" className="me-2" /> */}
+                                                            {selectedCountry}</span>
+                                                        <MdClose onClick={() => { clearCountry(); setSelectedCountry(''); }} style={{ cursor: 'pointer' }} />
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </>
                             ) : null}
 
+                            {value ? (null) : (
+                                <>
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
+                                        <h5>Keyword</h5>
+                                        <div className="search-container w-100">
+                                            <input
+                                                type="text"
+                                                placeholder="Search for keyword!"
+                                                className="search-input"
+                                                value={tempValue}
+                                                onChange={(e) => setTempValue(e.target.value)} // <- update tempValue
+                                            />
 
-                            <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
-                                <h5>Keyword</h5>
-                                <div className="search-container w-100">
-                                    <input
-                                        type="text"
-                                        placeholder="Search for keyword!"
-                                        className="search-input"
-                                        value={tempValue}
-                                        onChange={(e) => setTempValue(e.target.value)} // <- update tempValue
-                                    />
-
-                                    <div className="search-actions">
-                                        {tempValue && (
-                                            <button className="clear-button" onClick={() => setTempValue("")}>
-                                                <MdClose />
-                                            </button>
-                                        )}
-                                        <button
-                                            className="search-button"
-                                            onClick={() => { handleSearchKeyword() }}
-                                        >
-                                            <IoSearch />
-                                        </button>
+                                            <div className="search-actions">
+                                                {tempValue && (
+                                                    <button className="clear-button" onClick={() => setTempValue("")}>
+                                                        <MdClose />
+                                                    </button>
+                                                )}
+                                                <button
+                                                    className="search-button"
+                                                    onClick={() => { handleSearchKeyword() }}
+                                                >
+                                                    <IoSearch />
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                </>
+                            )}
 
                             {currentMainCategory ? (
                                 <>
@@ -468,11 +515,17 @@ const Companies = () => {
                                 </>)}
                             </div>
 
-                            <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-2 gap-3 company-country">
-                                <h5>COUNTRIES</h5>
-                                <div className="d-flex-align-items-start text-start">  <img src="/Images/germany.png" width="25px" className="me-2" /><span>Germany</span></div>
-                                <div className="d-flex-align-items-start text-start">  <img src="/Images/turkey.png" width="25px" className="me-2" /><span>Turkey</span></div>
-                            </div>
+                            {selectedCountry ? (
+                                <></>
+                            ) : (
+                                <>
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-2 gap-3 company-country">
+                                        <h5>COUNTRIES</h5>
+                                        <div onClick={() => handleCountry('Germany')} className="d-flex-align-items-start text-start w-100 company-country-inner-div">  <img src="/Images/germany.png" width="25px" className="me-2" />Germany</div>
+                                        <div onClick={() => handleCountry('Turkey')} className="d-flex-align-items-start text-start w-100 company-country-inner-div">  <img src="/Images/turkey.png" width="25px" className="me-2" />Turkey</div>
+                                    </div>
+                                </>
+                            )}
 
                         </div>
 
