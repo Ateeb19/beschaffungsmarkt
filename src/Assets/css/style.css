@@ -1425,7 +1425,7 @@ input[type="password"]:focus {
 }
 
 .custom-progress-bar-yellow {
-    background: rgb(255, 255, 42) !important;
+    background: #ffc107 !important;
     height: 5px;
     border-radius: 2px;
 }
@@ -2174,6 +2174,11 @@ input[type="password"]:focus {
 .company-content p {
     font-size: 0.9rem;
     color: #374151;
+}
+
+.notification-control{
+    font-weight: 500;
+    font-size: 16px;
 }
 
 /* Responsive height like xs:h-60 */
