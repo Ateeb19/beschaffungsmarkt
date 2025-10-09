@@ -122,7 +122,7 @@ const Das_newPost = () => {
     showAlert(
       <>
         <FaExclamationTriangle className="me-2 fs-2 text-warning" />
-        Please upgrade your membership to upload product
+        Please upgrade your membership to add new post
       </>,
       "warning"
     );
