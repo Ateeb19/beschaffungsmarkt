@@ -29,10 +29,10 @@ const Pricing = () => {
     const handlePayment = async (plan) => {
         try {
             // You can get the user's email from localStorage, context, or your logged-in state
-            const userEmail = localStorage.getItem("userEmail"); // Example
+            const userEmail = data.email; // Example
 
             if (!userEmail) {
-                alert("Please login first to continue payment.");
+                showAlert("Please login first to continue payment.",'success');
                 return;
             }
 
@@ -47,7 +47,7 @@ const Pricing = () => {
 
         } catch (error) {
             console.error("Payment initiation failed:", error);
-            alert("Payment initiation failed. Please try again.");
+            showAlert("Payment initiation failed. Please try again.", 'danger');
         }
     };
 
