@@ -1,17 +1,54 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import { FiCheckCircle } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import Switch from "react-switch";
+import { useAlert } from "./alert/Alert_message";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInfo } from "../redux/userSlice";
+import axios from "axios";
 
 const Pricing = () => {
 
+    const Backend_URL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const [checked, setChecked] = useState(false);
 
     const handleChange = (nextChecked) => {
         setChecked(nextChecked);
+    };
+    const { showAlert } = useAlert();
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const { data, requestStatus, error } = useSelector((state) => state.user);
+    useEffect(() => {
+        dispatch(fetchUserInfo());
+    }, [dispatch, location]);
+
+    const handlePayment = async (plan) => {
+        try {
+            // You can get the user's email from localStorage, context, or your logged-in state
+            const userEmail = localStorage.getItem("userEmail"); // Example
+
+            if (!userEmail) {
+                alert("Please login first to continue payment.");
+                return;
+            }
+
+            const response = await axios.post(`${Backend_URL}/api/payments/create-checkout-session`, {
+                email: userEmail,
+                plan: plan,
+            });
+
+            // Redirect user to Stripe checkout
+            // window.location.href = response.data.url;
+            navigate(response.data.url);
+
+        } catch (error) {
+            console.error("Payment initiation failed:", error);
+            alert("Payment initiation failed. Please try again.");
+        }
     };
 
     return (
@@ -105,7 +142,7 @@ const Pricing = () => {
                                         "179"
                                     )}
                                 </h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
-                                <button className="price-get-box-premium w-100">Get Premium</button>
+                                <button className="price-get-box-premium w-100" onClick={() => checked ? handlePayment(1999): handlePayment(179)} >Get Premium</button>
                                 <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Full Features for Company Website</span></span>
                                 <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>2nd Priority for Listing</span></span>
                                 <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Unlimited Messaging for Communication</span></span>
@@ -131,7 +168,7 @@ const Pricing = () => {
                                         "249"
                                     )}
                                 </h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
-                                <button className="price-get-box w-100">Get Premium +</button>
+                                <button className="price-get-box w-100" onClick={() => checked ? handlePayment(2699): handlePayment(249)}>Get Premium +</button>
                                 <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Full Features for Company Website</span></span>
                                 <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>1st Priority + Sponsored for Listing</span></span>
                                 <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Unlimited Messaging for Communication</span></span>

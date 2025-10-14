@@ -32,6 +32,9 @@ import Das_likePost from './Components/Dashboard/Post/Das_likePost';
 import Das_my_plane from './Components/Dashboard/Settings/Das_my_plan';
 import Das_notifications from './Components/Dashboard/Settings/Dash_notifications';
 import Company_details from './Components/Company_details';
+import PaymentButton from './Components/Payment/PaymentButton';
+import PaymentSuccess from './Components/Payment/PaymentSuccess';
+import PaymentCancel from './Components/Payment/PaymentCancel';
 const AppContent = () => {
   return (
     <div className="App">
@@ -51,6 +54,9 @@ const AppContent = () => {
         <Route path="/privacy-policy" element={<Privacy />} />
         <Route path="/terms-of-service" element={<Terms />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/payment" element={<PaymentButton />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-cancel" element={<PaymentCancel/>} />
 
 
         <Route path='/dashboard' element={<Dashboard_layout />}>
