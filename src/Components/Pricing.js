@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import { FiCheckCircle } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
@@ -20,16 +20,16 @@ const Pricing = () => {
     };
     const { showAlert } = useAlert();
     const dispatch = useDispatch();
-    const location = useLocation();
     const { data, requestStatus, error } = useSelector((state) => state.user);
     useEffect(() => {
         dispatch(fetchUserInfo());
-    }, [dispatch, location]);
+    }, [dispatch]);
 
+    console.log('this is email-: ', data?.email);
     const handlePayment = async (plan) => {
         try {
             // You can get the user's email from localStorage, context, or your logged-in state
-            const userEmail = data.email; // Example
+            const userEmail = data?.email; // Example
 
             if (!userEmail) {
                 showAlert("Please login first to continue payment.",'success');
