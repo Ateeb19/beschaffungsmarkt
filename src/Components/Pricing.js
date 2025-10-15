@@ -39,6 +39,7 @@ const Pricing = () => {
             const response = await axios.post(`${Backend_URL}/api/payments/create-checkout-session`, {
                 email: userEmail,
                 plan: plan,
+                time: checked ? 'yearly':'monthly',
             });
 
             // Redirect user to Stripe checkout
