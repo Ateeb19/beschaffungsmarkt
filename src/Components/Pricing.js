@@ -43,7 +43,7 @@ const Pricing = () => {
 
             // Redirect user to Stripe checkout
             // window.location.href = response.data.url;
-            navigate(response.data.url);
+            window.open(response.data.url, "_blank");
 
         } catch (error) {
             console.error("Payment initiation failed:", error);
