@@ -8,7 +8,11 @@ import { useAlert } from "../../alert/Alert_message";
 import { RxCross2 } from "react-icons/rx";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { FaExclamationTriangle } from "react-icons/fa";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { fetchUserInfo } from "../../../redux/userSlice";
+import axios from "axios";
+import { IoMdCheckmarkCircle } from "react-icons/io";
 const DragAndDrop = ({ accept, onFileDrop, label, className }) => {
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -41,12 +45,21 @@ const DragAndDrop = ({ accept, onFileDrop, label, className }) => {
 
 const Das_newPost = () => {
   const Backend_URL = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
   const { showAlert } = useAlert();
 
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { data, requestStatus, error } = useSelector((state) => state.user);
+  useEffect(() => {
+    dispatch(fetchUserInfo());
+  }, [dispatch, location]);
+  // console.log('user data -: ', data);
+
   //details
-  const [postType, setPostType] = useState('buying');
+  const [postType, setPostType] = useState('buy');
   const [Current_title, setCurrent_title] = useState('');
   const [Current_detail, setCurrent_detail] = useState('');
   const [errors, setErrors] = useState({});
@@ -74,19 +87,19 @@ const Das_newPost = () => {
   };
 
   const tabData = {
-    buying: {
+    buy: {
       title: "I want to import poplin fabric",
       details: "We are a manufacturer of women's clothing in the Netherlands. We want to purchase poplin fabric to be used in production."
     },
-    selling: {
-      title: "We are selling organic cotton fabric",
+    sell: {
+      title: "We are sell organic cotton fabric",
       details: "Our company provides high-quality organic cotton fabric. We are looking for long-term buyers across Europe."
     },
     cooperation: {
       title: "Looking for business cooperation",
       details: "We are looking for partners to expand our textile business and co-develop sustainable clothing lines."
     },
-    transport: {
+    transportation: {
       title: "Need transportation service for fabric",
       details: "We are searching for reliable transportation partners to ship fabrics from Turkey to the Netherlands."
     }
@@ -112,20 +125,73 @@ const Das_newPost = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  // console.log(Current_title);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("type", postType);
+    formData.append("title", Current_title);
+    formData.append("description", Current_detail);
+    if (selectedFiles_banner && selectedFiles_banner.length > 0) {
+      selectedFiles_banner.forEach((file) => {
+        formData.append("file", file);
+      });
+    }
+
     if (!validateFields()) {
       return;
     }
+    if (data.is_premium === 0) {
+      showAlert(
+        <>
+          <FaExclamationTriangle className="me-2 fs-2 text-warning" />
+          Please upgrade your membership to add new post
+        </>,
+        "warning"
+      );
+    } else
+    // if (data.is_premium === 1) 
+    {
+      try {
+        const res = await axios.post(`${Backend_URL}/api/posts/create`, formData, {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        // console.log(res.data);
+        if (res.data.status === true) {
 
-    // if valid, continue
-    showAlert(
-      <>
-        <FaExclamationTriangle className="me-2 fs-2 text-warning" />
-        Please upgrade your membership to add new post
-      </>,
-      "warning"
-    );
+          showAlert(
+            <>
+              <IoMdCheckmarkCircle className="me-2 fs-2 text-success" />
+              {res.data.msg}
+            </>,
+            "success"
+          );
+          navigate('/dashboard/post/my-posts')
+        } else {
+          showAlert(
+            <>
+              <FaExclamationTriangle className="me-2 fs-2 text-warning" />
+              {res.data.msg || "Something went wrong"}
+            </>,
+            "warning"
+          );
+        }
+      } catch (err) {
+        console.error(err);
+        const backendMsg = err.response?.data?.msg;
+        showAlert(
+          <>
+            <FaExclamationTriangle className="me-2 fs-2 text-warning" />
+            {backendMsg || "An unexpected error occurred while creating the post"}
+          </>,
+          "warning"
+        );
+      }
+    }
   };
   return (
     <div className="add-post-wrapper text-start">
@@ -140,19 +206,19 @@ const Das_newPost = () => {
               </label>
               <div className="d-flex flex-wrap w-100 tab-container">
                 <label
-                  className={`post-tab ${postType === 'buying' ? 'active' : ''} flex-fill text-center shadow`}
-                  data-type="buying"
-                  onClick={() => handleTabClick('buying')}
+                  className={`post-tab ${postType === 'buy' ? 'active' : ''} flex-fill text-center shadow`}
+                  data-type="buy"
+                  onClick={() => handleTabClick('buy')}
                 >
-                  <input type="radio" name="postType" checked={postType === 'buying'} readOnly />
+                  <input type="radio" name="postType" checked={postType === 'buy'} readOnly />
                   <span><LiaBuysellads /> Buying Post</span>
                 </label>
                 <label
-                  className={`post-tab ${postType === 'selling' ? 'active' : ''} flex-fill text-center shadow`}
-                  data-type="selling"
-                  onClick={() => handleTabClick('selling')}
+                  className={`post-tab ${postType === 'sell' ? 'active' : ''} flex-fill text-center shadow`}
+                  data-type="sell"
+                  onClick={() => handleTabClick('sell')}
                 >
-                  <input type="radio" name="postType" checked={postType === 'selling'} readOnly />
+                  <input type="radio" name="postType" checked={postType === 'sell'} readOnly />
                   <span><LiaSellcast /> Selling Offer</span>
                 </label>
                 <label
@@ -164,11 +230,11 @@ const Das_newPost = () => {
                   <span><GiLinkedRings /> Cooperation</span>
                 </label>
                 <label
-                  className={`post-tab ${postType === 'transport' ? 'active' : ''} flex-fill text-center shadow`}
-                  data-type="transport"
-                  onClick={() => handleTabClick('transport')}
+                  className={`post-tab ${postType === 'transportation' ? 'active' : ''} flex-fill text-center shadow`}
+                  data-type="transportation"
+                  onClick={() => handleTabClick('transportation')}
                 >
-                  <input type="radio" name="postType" checked={postType === 'transport'} readOnly />
+                  <input type="radio" name="postType" checked={postType === 'transportation'} readOnly />
                   <span> <MdOutlineEmojiTransportation /> Transportation</span>
                 </label>
               </div>

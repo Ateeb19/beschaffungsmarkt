@@ -3,7 +3,7 @@ import { Modal, Button } from "react-bootstrap";
 
 const ConfirmationModal = ({ show, message, onConfirm, onCancel }) => {
   return (
-    <Modal show={show} onHide={onCancel} centered>
+    <Modal show={show} onHide={onCancel} centered  backdropClassName="custom-backdrop">
       <Modal.Header closeButton>
         <Modal.Title>Confirmation</Modal.Title>
       </Modal.Header>

@@ -17,6 +17,8 @@ import * as PiIcons from "react-icons/pi";
 import * as SiIcons from "react-icons/si";
 import * as GrIcons from "react-icons/gr";
 import { HiMiniArrowTurnDownRight } from "react-icons/hi2";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const Posting = () => {
 
@@ -44,6 +46,8 @@ const Posting = () => {
     const [categoryValue, setCategoryValue] = useState("");
     const [currentMainCategory, setCurrentMainCategory] = useState(null);
     const [currentSubCategory, setCurrentSubCategory] = useState(null);
+    const [postType, setPostType] = useState("");
+    const [selectedCountry, setSelectedCountry] = useState('');
 
     const handleClear_category = () => {
         setCategoryValue("");
@@ -116,9 +120,18 @@ const Posting = () => {
     useEffect(() => {
         const mainCategoryId = searchParams.get('maincategory');
         const keyword = searchParams.get('keyword');
+        const type = searchParams.get("postType");
+        const country = searchParams.get("country");
+
         if (keyword) {
             setValue(keyword);
             // setTempValue(keyword);
+        }
+        if (type) {
+            setPostType(type);
+        }
+        if (country) {
+            setSelectedCountry(country);
         }
         if (mainCategoryId) {
             const selectedCategory = mainCategories.find(
@@ -128,18 +141,45 @@ const Posting = () => {
         }
     }, [searchParams, mainCategories]);
 
+    // const POST_TYPES = [
+    //     { label: "Buying Post", value: "buy", icon: <LiaBuysellads className="me-3 fs-4" /> },
+    //     { label: "Selling Offer", value: "sell", icon: <LiaSellcast className="me-3 fs-4" /> },
+    //     { label: "Cooperation", value: "cooperation", icon: <MdOutlineEmojiTransportation className="me-3 fs-4" /> },
+    //     { label: "Transportation", value: "transportation", icon: <FaCarSide className="me-3 fs-4" /> },
+    // ];
+    const POST_TYPES = [
+        { label: "Buying Post", value: "buy", icon: LiaBuysellads },
+        { label: "Selling Offer", value: "sell", icon: LiaSellcast },
+        { label: "Cooperation", value: "cooperation", icon: MdOutlineEmojiTransportation },
+        { label: "Transportation", value: "transportation", icon: FaCarSide },
+    ];
+    const selectedPostType = POST_TYPES.find((type) => type.value === postType);
+
+    const getDaysAgo = (createdTime) => {
+        const createdDate = new Date(createdTime);
+        const currentDate = new Date();
+        const diffTime = currentDate - createdDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays <= 0) return "Today";
+        if (diffDays === 1) return "a day ago";
+        return `${diffDays} days ago`;
+    };
+
     const handleSelectMainCategory = (cat) => {
         setCurrentMainCategory(cat);
         setCurrentSubCategory(null); // reset subcategory
-        setSearchParams({ keyword: value, maincategory: cat._id, page: 1 }); // page reset to 1
+        setSearchParams({ keyword: value, posttype: postType, maincategory: cat._id, country: selectedCountry, page: 1 }); // page reset to 1
     };
 
     const handleSelectSubCategory = (sub) => {
         setCurrentSubCategory(sub);
         setSearchParams({
             keyword: value,
+            posttype: postType,
             maincategory: currentMainCategory._id,
             subcategory: sub._id,
+            country: selectedCountry,
             page: 1
         });
     };
@@ -149,35 +189,75 @@ const Posting = () => {
         setTempValue('');
         setSearchParams({
             keyword: tempValue,
+            posttype: postType,
             maincategory: currentMainCategory?._id || '',
             subcategory: currentSubCategory?._id || '',
+            country: selectedCountry,
             page: 1
         });
     };
+
+    const handleCountry = (count) => {
+        setSelectedCountry(count);
+        setSearchParams({
+            keyword: value,
+            posttype: postType,
+            maincategory: currentMainCategory?._id || '',
+            subcategory: currentSubCategory?._id || '',
+            country: count,
+            page: 1
+        });
+    }
 
     const clearKeyword = () => {
         setValue('');
         setTempValue('');
         setSearchParams({
             keyword: '',
+            posttype: postType,
             maincategory: currentMainCategory?._id || '',
             subcategory: currentSubCategory?._id || '',
+            country: selectedCountry,
             page: 1
+        });
+    };
+
+    const handlePostTypeFilter = (type) => {
+        // const newType = postType === type ? "" : type; // toggle off if clicked again
+        const newType = type.value;
+        setPostType(newType);
+        setSearchParams({
+            keyword: value,
+            postType: newType,
+            maincategory: currentMainCategory?._id || "",
+            subcategory: currentSubCategory?._id || "",
+            country: selectedCountry,
+            page: 1,
         });
     };
 
     const clearMainCategory = () => {
         setCurrentMainCategory(null);
         setCurrentSubCategory(null);
-        setSearchParams({ keyword: value, page: 1 });
+        setSearchParams({ keyword: value, posttype: postType, country: selectedCountry, page: 1 });
     };
 
     const clearSubCategory = () => {
         setCurrentSubCategory(null);
-        setSearchParams({ keyword: value, maincategory: currentMainCategory._id, page: 1 });
+        setSearchParams({ keyword: value, posttype: postType, maincategory: currentMainCategory._id, country: selectedCountry, page: 1 });
     };
 
+    const clearCountry = () => {
+        setSelectedCountry('');
+        setSearchParams({
+            keyword: value,
+            maincategory: currentMainCategory?._id || '',
+            subcategory: currentSubCategory?._id || '',
+            country: '',
+            page: 1
+        });
 
+    }
 
     //featch companies
 
@@ -188,14 +268,16 @@ const Posting = () => {
     const fetchCompanies = async () => {
         const body = {
             filterKeyword: value,
-            filterCountry: "",
+            // filterCountry: 'Germany',
+            filterCountry: selectedCountry,
+            filterPostType: postType,
             filterSubCategory: subcategory,
             filterMainCategory: maincategory,
             itemsPerPage: 10,
             currentPage: page
         };
 
-        const res = await fetch(`${Backend_URL}/api/users/get-companies`, {
+        const res = await fetch(`${Backend_URL}/api/posts/all`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
@@ -204,25 +286,26 @@ const Posting = () => {
         const data = await res.json();
 
         // Merge companyList and sponsorList
-        const mergedList = [...(data.companyList || []), ...(data.sponsorList || [])];
+        // const mergedList = [...(data.companyList || []), ...(data.sponsorList || [])];
 
-        setCompanies(mergedList);
+        setCompanies(data.results);
         setTotalCount(data.totalDataCount);
 
-        console.log("Merged companies & sponsors:", mergedList);
+        // console.log("Posting-:", data);
     };
 
+    console.log('the data -: ', companies)
 
     useEffect(() => {
         fetchCompanies();
-    }, [value, maincategory, subcategory, page]);
+    }, [value, maincategory, subcategory, postType, selectedCountry, page]);
 
     const handleMainCategoryChange = (id) => {
-        setSearchParams({ keyword: value, maincategory: id, page: 1 });
+        setSearchParams({ keyword: value, posttype: postType, maincategory: id, country: selectedCountry, page: 1 });
     };
 
     const handleSubCategoryChange = (id) => {
-        setSearchParams({ keyword: value, maincategory, subcategory: id, page: 1 });
+        setSearchParams({ keyword: value, posttype: postType, maincategory, subcategory: id, country: selectedCountry, page: 1 });
     };
 
     const handlePageChange = (newPage) => {
@@ -238,8 +321,10 @@ const Posting = () => {
         // Fetch new data
         fetchCompanies({
             value: value,
+            posttype: postType,
             maincategory: currentMainCategory,
             subcategory: currentSubCategory,
+            country: selectedCountry,
             page: newPage,
         });
     };
@@ -262,8 +347,8 @@ const Posting = () => {
     // }, [companies]);
 
 
-    const handleCompanyClick = (companyId) => {
-        navigate(`/company/${companyId}`);
+    const handle_post_click = (postID) => {
+        navigate(`/posting/${postID}`);
     };
     return (
         <div className="companies-main-div">
@@ -299,9 +384,9 @@ const Posting = () => {
 
             <section className="company-data">
                 <div className="container w-100 text-start">
-                    <div className="d-flex flex-row align-items-center justify-content-center w-100">
+                    <div className="d-flex flex-row align-items-start justify-content-start w-100">
                         <div className="col-md-3 company-filter d-flex flex-column align-items-start justify-content-start gap-4">
-                            {currentMainCategory && currentMainCategory._id || value ? (
+                            {currentMainCategory && currentMainCategory._id || value || selectedCountry || selectedPostType ? (
                                 <>
                                     <div className="d-flex flex-column align-items-start justify-content-end w-100 company-filter-div gap-3 mb-2">
                                         <h5>Filter</h5>
@@ -314,6 +399,35 @@ const Posting = () => {
                                                     </div>
                                                 </>
                                             )}
+
+                                            {selectedPostType && (
+                                                <div
+                                                    key={selectedPostType.value}
+                                                    className="d-flex align-items-start justify-content-center w-100 company-filter-inner-div"
+                                                >
+                                                    <div className="d-flex align-items-start justify-content-start w-100">
+                                                        <selectedPostType.icon className="me-3 fs-4" />
+                                                        <span>{selectedPostType.label}</span>
+                                                    </div>
+                                                    <div className="d-flex align-items-center pt-1 justify-content-center">
+                                                        <MdClose
+                                                            onClick={() => {
+                                                                setPostType('');
+                                                                setSearchParams({
+                                                                    keyword: value,
+                                                                    posttype: '',
+                                                                    maincategory: currentMainCategory?._id || '',
+                                                                    subcategory: currentSubCategory?._id || '',
+                                                                    country: selectedCountry,
+                                                                    page: 1,
+                                                                });
+                                                            }}
+                                                            style={{ cursor: 'pointer' }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
+
 
                                             {currentMainCategory && currentMainCategory._id ? (
                                                 <>
@@ -354,6 +468,18 @@ const Posting = () => {
                                                     </div>
                                                 </>
                                             ) : null}
+                                            {selectedCountry && (
+                                                <>
+                                                    <div className="w-100 text-start d-flex justify-content-between align-items-center " style={{ color: '#000' }}>
+                                                        <span>
+                                                            <img src={selectedCountry === 'Turkey' ? '/Images/turkey.png' : '/Images/germany.png'} width="25px" className="me-2" />
+                                                            {/* <img src="/Images/germany.png" width="25px" className="me-2" /> */}
+                                                            {/* <img src="/Images/turkey.png" width="25px" className="me-2" /> */}
+                                                            {selectedCountry}</span>
+                                                        <MdClose onClick={() => { clearCountry(); setSelectedCountry(''); }} style={{ cursor: 'pointer' }} />
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </>
@@ -388,12 +514,32 @@ const Posting = () => {
                                 <h5>Post Type</h5>
                             </div>
 
-                            <div className="d-flex flex-column align-items-start justify-content-start w-100 category-list gap-3">
+                            {/* <div className="d-flex flex-column align-items-start justify-content-start w-100 category-list gap-3">
                                 <div className="d-flex-align-items-start text-start">  <LiaBuysellads className="me-3 fs-4" /><span>Buying Post</span></div>
                                 <div className="d-flex-align-items-start text-start">  <LiaSellcast className="me-3 fs-4" /><span>Selling offer</span></div>
                                 <div className="d-flex-align-items-start text-start">  <MdOutlineEmojiTransportation className="me-3 fs-4" /><span>Cooperation</span></div>
                                 <div className="d-flex-align-items-start text-start">  <FaCarSide className="me-3 fs-4" /><span>Transportation</span></div>
+                            </div> */}
+                            <div className="d-flex flex-column align-items-start justify-content-start w-100 category-list gap-3">
+                                {[
+                                    { label: "Buying Post", value: "buy", icon: <LiaBuysellads className="me-3 fs-4" /> },
+                                    { label: "Selling Offer", value: "sell", icon: <LiaSellcast className="me-3 fs-4" /> },
+                                    { label: "Cooperation", value: "cooperation", icon: <MdOutlineEmojiTransportation className="me-3 fs-4" /> },
+                                    { label: "Transportation", value: "transportation", icon: <FaCarSide className="me-3 fs-4" /> },
+                                ].map((type) => (
+                                    <div
+                                        key={type.value}
+                                        // className={`d-flex align-items-center text-start w-100 p-2 rounded category-list-inner-div ${postType === type.value ? "bg-primary text-white" : "bg-light text-dark"}`}
+                                        className="d-flex-align-items-start text-start w-100"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => handlePostTypeFilter(type)}
+                                    >
+                                        {type.icon}
+                                        <span>{type.label}</span>
+                                    </div>
+                                ))}
                             </div>
+
 
                             {currentMainCategory ? (
                                 <>
@@ -471,27 +617,59 @@ const Posting = () => {
                                 </>)}
                             </div>
 
-                           <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-2 gap-3 company-country">
+                            <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-2 gap-3 company-country">
                                 <h5>COUNTRIES</h5>
-                                <div className="d-flex-align-items-start text-start">  <img src="/Images/germany.png" width="25px" className="me-2" /><span>Germany</span></div>
-                                <div className="d-flex-align-items-start text-start">  <img src="/Images/turkey.png" width="25px" className="me-2" /><span>Turkey</span></div>
+                                <div onClick={() => handleCountry('Germany')} className="d-flex-align-items-start text-start">  <img src="/Images/germany.png" width="25px" className="me-2" /><span>Germany</span></div>
+                                <div onClick={() => handleCountry('Turkey')} className="d-flex-align-items-start text-start">  <img src="/Images/turkey.png" width="25px" className="me-2" /><span>Turkey</span></div>
                             </div>
 
                         </div>
 
                         <div className="col-md-9 company-pages">
-                            <div className="d-flex flex-row w-100 text-start py-5 company-page-data">
-                                <div className="col-md-2">
-
-                                </div>
-
-                                <div className="col-md-7">
-
-                                </div>
-
-                                <div className="col-md-3">
-
-                                </div>
+                            {companies.length > 0 ? (
+                                <>
+                                    {companies.map((c) => {
+                                        const matchedType = POST_TYPES.find((type) => type.value === c.type);
+                                        return (
+                                            <>
+                                                <div className="d-flex flex-column w-100 text-start align-items-start justify-content-start company-page-data" style={{height: '15rem', padding: '1.5rem'}} onClick={() => handle_post_click(c._id)}>
+                                                    <div className="d-flex align-items-start justify-content-between w-100">
+                                                        <div className="d-flex align-items-start justify-content-start gap-3">
+                                                            <div className="posting-country d-flex aligm-items-center justify-content-center">
+                                                                <img src={c.user.country === 'Germany' ? "/Images/germany.png" : "/Images/turkey.png"} width="20px" className="me-2" />
+                                                                <span>{c.user.country.charAt(0).toUpperCase() + c.user.country.slice(1)}</span>
+                                                            </div>
+                                                            <div className="posting-country d-flex aligm-items-center justify-content-center">
+                                                                {matchedType && (
+                                                                    <div className="posting-type d-flex align-items-center">
+                                                                        <matchedType.icon className="me-1 fs-5" />
+                                                                        <span className="fw-bold">{matchedType.label}</span>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <span>{getDaysAgo(c.created_time)}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-3 post-title">
+                                                        <h2>{c.title}</h2>
+                                                        <p>{c.description}</p>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )
+                                    })}
+                                </>
+                            ) : (null)}
+                            <div className="d-flex justify-content-center mt-4">
+                                <Stack spacing={2}>
+                                    <Pagination
+                                        count={Math.ceil(totalCount / 10)}
+                                        page={page}
+                                        onChange={(event, value) => handlePageChange(value)}
+                                        color="primary"
+                                        shape="rounded"
+                                    />
+                                </Stack>
                             </div>
                         </div>
                     </div>

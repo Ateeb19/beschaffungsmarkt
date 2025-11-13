@@ -128,14 +128,14 @@ const Register = () => {
         firstName: "",
         lastName: "",
         companyName: "",
-        country: "germany",
+        country: "",
         city: "",
         street: "",
         zipcode: "",
         email: "",
         password: "",
         confirmPassword: "",
-        recaptchaToken: "test-token" // for now you can hardcode, later integrate real reCAPTCHA
+        // recaptchaToken: "test-token" // for now you can hardcode, later integrate real reCAPTCHA
     });
 
     const [message, setMessage] = useState("");
@@ -198,7 +198,7 @@ const Register = () => {
     useEffect(() => {
         if (formData.country) {
             const countryCode =
-                formData.country === "germany" ? "DE" : formData.country === "turkey" ? "TR" : "";
+                formData.country === "Germany" ? "DE" : formData.country === "Turkey" ? "TR" : "";
 
             if (!countryCode) return;
 
@@ -290,8 +290,8 @@ const Register = () => {
                                                     value={formData.country}
                                                     onChange={handleChange}
                                                 >
-                                                    <option value="germany">Germany</option>
-                                                    <option value="turkey">Turkey</option>
+                                                    <option value="Germany">Germany</option>
+                                                    <option value="Turkey">Turkey</option>
                                                 </select>
                                                 {errors.country && <div className="invalid-feedback">{errors.country}</div>}
                                             </div>

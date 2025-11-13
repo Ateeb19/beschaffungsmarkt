@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Footer from "../Footer/Footer";
@@ -11,12 +11,22 @@ import * as AiIcons from "react-icons/ai";
 import * as PiIcons from "react-icons/pi";
 import * as SiIcons from "react-icons/si";
 import * as GrIcons from "react-icons/gr";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInfo } from "../redux/userSlice";
 
 const Company_details = () => {
     const Backend_URL = process.env.REACT_APP_API_URL;
     const { companyId } = useParams();
     const [company, setCompany] = useState(null);
     const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const { data, requestStatus, error } = useSelector((state) => state.user);
+    // console.log(data);
+    useEffect(() => {
+        dispatch(fetchUserInfo());
+    }, [dispatch, location]);
 
     useEffect(() => {
         const fetchCompany = async () => {
@@ -34,6 +44,7 @@ const Company_details = () => {
         fetchCompany();
     }, [companyId]);
 
+    console.log('company-: ', company);
 
     const asArray = (v) => {
         if (v === undefined || v === null) return [];
@@ -75,11 +86,18 @@ const Company_details = () => {
             <p>Premium: {company.is_premium}</p> */}
 
             <div className="container d-flex flex-column align-items-center justify-content-center w-100 mt-5 gap-4">
-                {company.premiumUser ? (null) : (<>
+                {data ? (
+                    <>
+                        {data.is_premium === 0 ? (
+                            <div className="d-flex text-center align-items-center justify-content-center w-100 company-details-primium-div">
+                                <span>Please upgrade your membership to view all contact information. <b onClick={() => navigate('/pricing')}>Here</b></span>
+                            </div>) : (null)}
+                    </>
+                ) : (
                     <div className="d-flex text-center align-items-center justify-content-center w-100 company-details-primium-div">
                         <span>Please upgrade your membership to view all contact information. <b onClick={() => navigate('/pricing')}>Here</b></span>
                     </div>
-                </>)}
+                )}
 
                 <div className="d-flex align-items-start justify-content-start w-100">
                     <nav
@@ -98,24 +116,24 @@ const Company_details = () => {
 
                 <div className="d-flex align-items-start justify-content-start w-100 detail-company-name gap-4 company-card">
                     {company.is_premium === 2 && (
-                                                        <>
-                                                            <div class="verified-badge">
-                                                                <p>Verified</p>
-                                                                <p>Premium</p>
-                                                                <div class="d-flex justify-content-center">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                                                        <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 
+                        <>
+                            <div class="verified-badge">
+                                <p>Verified</p>
+                                <p>Premium</p>
+                                <div class="d-flex justify-content-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                        <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 
             3.8-36.7 36.1-17.7 54.6l105.7 103-25 
             145.5c-4.5 26.3 23.2 46 46.4 
             33.7L288 439.6l130.7 68.7c23.2 
             12.2 50.9-7.4 46.4-33.7l-25-145.5 
             105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 
             150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" />
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                        </>
-                                                    )}
+                                    </svg>
+                                </div>
+                            </div>
+                        </>
+                    )}
                     <div className="detail-image-div">
                         <img src={company.company_logo ? (`${Backend_URL}/files/${company.company_logo}`) : ('/Images/download23.jpeg')} alt={company.company_name} />
                         {/* <img src={company.company_logo ? (`http://localhost:5001/files/${company.company_logo}`) : ('/Images/download23.jpeg')} alt={company.company_name} /> */}
@@ -178,7 +196,7 @@ const Company_details = () => {
                         {company.company_category.length > 0 && (
                             <div className="detail-company-2 w-100 d-flex flex-column align-items-start justify-content-start">
                                 <h5>Categories</h5>
-                                <div className="d-flex align-items-start justify-content-start gap-4">
+                                <div className="d-flex flex-wrap gap-4">
                                     {company.company_category?.map((c, k1) => {
                                         const categories = asArray(c.category); // handle object OR array
 
@@ -189,12 +207,12 @@ const Company_details = () => {
 
                                                     return mains.map((main, k3) => (
                                                         <>
-                                                            <div key={`${k1}-${k2}-${k3}`} className="me-2 category-detail-company">
-                                                                <span style={{ fontSize: '20px' }} className="me-1">{getIconComponent(main.icon)}</span>
+                                                            <div key={`${k1}-${k2}-${k3}`} className="me-2 d-flex align-items-start justify-content-start gap-1 category-detail-company">
+                                                                <span style={{ fontSize: '18px' }} className="me-1">{getIconComponent(main.icon)}</span>
                                                                 <span>{main?.label ?? cat?.label ?? "—"}</span>
                                                             </div>
-                                                            <div className="ms-4 mt-2">
-                                                                <span style={{ fontSize: '20px' }} className="me-1">{getIconComponent(cat.icon)}</span>
+                                                            <div className="ms-4 d-flex align-items-start justify-content-start gap-1">
+                                                                <span style={{ fontSize: '16px' }} className="me-1">{getIconComponent(cat.icon)}</span>
                                                                 <span>{cat?.label ?? cat?.label ?? "—"}</span>
                                                             </div>
                                                         </>

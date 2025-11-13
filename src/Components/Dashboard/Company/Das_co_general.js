@@ -68,7 +68,7 @@ const Das_co_general = () => {
     console.log('user data -: ', data);
     console.log('user data requestStatus-: ', requestStatus);
     console.log('user data error-: ', error);
-
+    const isPremium = data?.is_premium;
 
 
     const [selectedFile_banner, setSelectedFile_banner] = useState(null);
@@ -171,6 +171,10 @@ const Das_co_general = () => {
     const [selected_main_category, setSelected_main_category] = useState([]);
     const [selected_sub_category, setSelected_sub_category] = useState([]);
     const [selected_category, setSelected_category] = useState([]);
+    // const [isLocked, setIsLocked] = useState(false);
+
+    // const maxCategories = 5;
+    const maxCategories = isPremium === 1 || isPremium === 2 ? 5 : 1;
     const [selected_country, setSelected_country] = useState({
         value: '',
         label: ''
@@ -188,8 +192,49 @@ const Das_co_general = () => {
     const [selected_Founded_year, setSelected_Founded_year] = useState(null);
     const [selected_number_employee, setSelected_number_employee] = useState(null);
     const [selected_keyword, setSelected_keyword] = useState([]);
+    const [keyword, setKeyword] = useState("");
+    const [keywords, setKeywords] = useState([]);
+    const [error_keyword, setError_keyword] = useState("");
 
+    const handleAddKeyword = () => {
+        // Reset error initially
+        setError_keyword("");
 
+        // Empty field check
+        if (!keyword.trim()) {
+            setError_keyword("Keyword is required.");
+            return;
+        }
+
+        // If not premium
+        if (isPremium === 0) {
+            setError_keyword("You cannot add keyword. Please upgrade user's membership.");
+            return;
+        }
+
+        // Premium user limits
+        const limit = isPremium === 1 ? 50 : 100;
+
+        if (keywords.length >= limit) {
+            setError_keyword(`You can add up to ${limit} keywords only.`);
+            return;
+        }
+
+        // Add keyword if not duplicate
+        if (keywords.includes(keyword.trim())) {
+            setError_keyword("This keyword is already added.");
+            return;
+        }
+
+        setKeywords([...keywords, keyword.trim()]);
+        setKeyword(""); // clear input
+    };
+
+    const handleRemoveKeyword = (index) => {
+        const newKeywords = [...keywords];
+        newKeywords.splice(index, 1);
+        setKeywords(newKeywords);
+    };
 
 
     const get_city = async (keyword) => {
@@ -347,6 +392,9 @@ const Das_co_general = () => {
             setSelected_Founded_year(data.founded_year || "");
             setSelected_number_employee(data.employee_number || "");
             setSelected_keyword(data.keyword || []);
+            if(data.keyword){
+                setKeywords(data.keyword)
+            }
         }
     }, [data, company_type_data]);
 
@@ -360,21 +408,31 @@ const Das_co_general = () => {
         setSelected_sub_category(selected);
 
         if (selected_main_category && selected) {
-            setSelected_category([
-                {
-                    main: selected_main_category,
-                    sub: selected,
-                },
+            setSelected_category((prev) => [
+                ...prev,
+                { main: selected_main_category, sub: selected },
             ]);
-            setIsLocked(true); // lock after selection
+            setSelected_main_category(null);
+            setSelected_sub_category(null);
+            // setSelected_category([
+            //     {
+            //         main: selected_main_category,
+            //         sub: selected,
+            //     },
+            // ]);
+            if (selected_category.length + 1 >= maxCategories) {
+                setIsLocked(true);
+            }
+            // setIsLocked(true); 
         }
     };
 
-    const handle_remove_category = () => {
-        setSelected_category([]);
-        setSelected_main_category(null);
-        setSelected_sub_category(null);
-        setIsLocked(false); // unlock selectors again
+    const handle_remove_category = (indexToRemove) => {
+        // setSelected_category([]);
+        setSelected_category((prev) => prev.filter((_, index) => index !== indexToRemove));
+        // setSelected_main_category(null);
+        // setSelected_sub_category(null);
+        setIsLocked(false);
     };
 
 
@@ -417,7 +475,7 @@ const Das_co_general = () => {
         formData.append("hscode", selected_Hscode || "");
         formData.append("foundedYear", selected_Founded_year || "");
         formData.append("employeeNumber", selected_number_employee || "");
-        formData.append("keyword", JSON.stringify(selected_keyword));
+        formData.append("keyword", JSON.stringify(keywords));
 
 
         if (image_changed) {
@@ -597,7 +655,8 @@ const Das_co_general = () => {
                                         options={company_main_categories_data}
                                         onChange={handleMainCategoryChange}
                                         value={selected_main_category}
-                                        isDisabled={isLocked || selected_category.length > 0}
+                                        // isDisabled={isLocked || selected_category.length > 0}
+                                        isDisabled={isLocked}
                                     />
                                     {/* <select name="main_category" id="main_category">
                                         <option value="0" selected disabled>Select Main Category</option>
@@ -625,37 +684,51 @@ const Das_co_general = () => {
                                         options={filteredSubCategories}
                                         onChange={handleSubCategoryChange}
                                         value={selected_sub_category}
-                                        isDisabled={isLocked || !selected_main_category || selected_category.length > 0}
+                                        // isDisabled={isLocked || !selected_main_category || selected_category.length > 0}
+                                        isDisabled={isLocked || !selected_main_category}
 
                                     />
 
                                     {selected_category.length > 0 && (
-                                        <div className="d-flex align-items-start justify-content-start w-100">
-                                            <div className="mt-3 general-category-selected d-flex align-items-start justify-content-start">
-                                                <div className="d-flex flex-column align-items-start">
-                                                    <span className=" general-category-span-1">
-                                                        {(() => {
-                                                            const Icon = getIconComponent(selected_category[0].main.icon);
-                                                            return Icon && <Icon className="me-1 fs-4" />;
-                                                        })()}
-                                                        {selected_category[0].main.label}
-                                                    </span>
-                                                    <span className="ms-3 general-category-span-2">
-                                                        <span className="me-1"> <HiMiniArrowTurnDownRight /> </span>
-                                                        {(() => {
-                                                            const Icon = getIconComponent(selected_category[0].sub.icon);
-                                                            return Icon && <Icon className="me-1 fs-6" />;
-                                                        })()}
-                                                        {selected_category[0].sub.label}
-                                                    </span>
+                                        <div className="mt-3 d-flex flex-wrap gap-2 ">
+                                            {selected_category.map((pair, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="position-relative border general-category-selected px-3 py-2 d-inline-flex align-items-center "
+                                                    style={{
+                                                        flex: "0 0 auto"
+                                                    }}
+                                                >
+
+                                                    <button
+                                                        type="button"
+                                                        className="btn-close position-absolute top-0 end-0 me-1 mt-1"
+                                                        // style={{ scale: "0.8" }}
+                                                        aria-label="Remove"
+                                                        onClick={() => handle_remove_category(index)}
+                                                    ></button>
+                                                    <div className="d-flex flex-column">
+                                                        {/* Main category */}
+                                                        <div className="d-flex align-items-center gap-1 text-sm">
+                                                            {(() => {
+                                                                const Icon = getIconComponent(pair.main.icon);
+                                                                return Icon && <Icon size={18} />;
+                                                            })()}
+                                                            <span className="fw-semibold">{pair.main.label}</span>
+                                                        </div>
+
+                                                        {/* Sub category */}
+                                                        <div className="d-flex align-items-center gap-1 ps-3 small">
+                                                            <HiMiniArrowTurnDownRight />
+                                                            {(() => {
+                                                                const Icon = getIconComponent(pair.sub.icon);
+                                                                return Icon && <Icon size={14} />;
+                                                            })()}
+                                                            <span>{pair.sub.label}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <button
-                                                    type="button"
-                                                    className="btn-close btn-close-sm ms-2"
-                                                    aria-label="Remove"
-                                                    onClick={handle_remove_category}
-                                                ></button>
-                                            </div>
+                                            ))}
                                         </div>
                                     )}
                                 </div>
@@ -788,10 +861,54 @@ const Das_co_general = () => {
 
                             <div className="w-100">
                                 <label for="website">Keyword</label>
-                                <div className="d-flex align-items-between jusdify-content-between w-100 gap-3">
+                                {/* <div className="d-flex align-items-between jusdify-content-between w-100 gap-3">
                                     <input type="text" class="form-control" id="website" aria-describedby="website" placeholder="Keyword"></input>
                                     <button className='das-control-key-add'>Add</button>
+                                </div> */}
+                                <div className="d-flex align-items-between justify-content-between w-100 gap-3">
+                                    <input
+                                        type="text"
+                                        className={`form-control ${error_keyword ? "border-danger" : ""}`}
+                                        id="website"
+                                        aria-describedby="website"
+                                        placeholder="Keyword"
+                                        value={keyword}
+                                        onChange={(e) => setKeyword(e.target.value)}
+                                    />
+                                    <button
+                                        className="das-control-key-add"
+                                        type="button"
+                                        onClick={handleAddKeyword}
+                                    >
+                                        Add
+                                    </button>
                                 </div>
+
+                                {error_keyword && <span className="text-danger d-block" style={{ fontSize: '14px' }}><i>{error_keyword}</i></span>}
+
+                                {/* Keyword display section */}
+                                {keywords.length > 0 && (
+                                    <div className="mt-3 d-flex flex-wrap gap-2">
+                                        {keywords.map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className="position-relative border general-category-selected px-3 py-2 d-inline-flex align-items-center "
+                                                style={{
+                                                    flex: "0 0 auto"
+                                                }}
+                                            // className="px-3 py-1 bg-light border rounded-pill d-flex align-items-center"
+                                            >
+                                                <button
+                                                    type="button"
+                                                    className="btn-close position-absolute top-0 end-0 me-1 mt-1"
+                                                    aria-label="Remove"
+                                                    onClick={() => handleRemoveKeyword(index)}
+                                                ></button>
+                                                <span className="me-2">{item}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -2176,15 +2176,265 @@ input[type="password"]:focus {
     color: #374151;
 }
 
-.notification-control{
+.notification-control {
     font-weight: 500;
     font-size: 16px;
 }
+
+.product_edit_btn {
+    background-color: #1d4ed8;
+    color: #ffff;
+    padding: 0.25rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: .5rem;
+    cursor: pointer;
+}
+
+.product_edit_btn:hover {
+    background-color: #1e40af;
+    color: #fff;
+}
+
+.product_delete_btn {
+    background-color: #b91c1c;
+    color: #ffff;
+    padding: 0.25rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: .5rem;
+    cursor: pointer;
+}
+
+.product_delete_btn:hover {
+    background-color: #991b1b;
+    color: #fff;
+}
+
+.custom-backdrop {
+    background-color: #0000007a;
+}
+
+.post-live {
+    color: #16a34a;
+    border: 1px solid #16a34a;
+    border-radius: .375rem;
+    padding: 0.25rem 0.75rem;
+}
+
+.post-delete {
+    background-color: #b91c1c;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: .875rem;
+    padding: 0.25rem 1.25rem;
+    border-radius: .5rem;
+    cursor: pointer;
+    border: none;
+}
+
+.post-delete:hover {
+    background-color: #991b1b;
+    color: #ffffff;
+    border: none;
+}
+
+.post_show_image {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    /* similar to gap-3 in Tailwind */
+    margin-top: 1rem;
+}
+
+/* Each image container */
+.post_show_image .image-box {
+    position: relative;
+    width: 280px;
+    height: 190px;
+    padding: 8px;
+    border: 1px solid #dee2e6;
+    /* Bootstrap's border color */
+    border-radius: 0.5rem;
+    background-color: #fff;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.post_show_image .image-box:hover {
+    opacity: 0.75;
+    transform: scale(1.02);
+}
+
+/* The actual image */
+.post_show_image .image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.posting-country {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+}
+
+.post-title h2 {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #000;
+}
+
+.post-title p {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: #000;
+}
+
+.post-company {
+    padding: 0.5rem 0.75rem;
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #000;
+}
+
+.post-info-display h2 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #000;
+}
+
+.post-info-display p {
+    margin-top: 20px;
+    color: #4b5563;
+}
+
+.post-contact-btn {
+    color: #fff;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(to right, #3b82f6, #1d4ed8, #3b82f6);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    border: none;
+}
+
+.post-company-btn {
+    color: #9ca3af;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    cursor: pointer;
+    border: 1px solid #9ca3af;
+}
+
+.post-atach-file {
+    padding: 0.5rem;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    margin-bottom: 0.25rem;
+}
+
+.post-atach-file img {
+    width: 9rem;
+    height: 9rem;
+    display: block;
+    object-position: center;
+    object-fit: cover;
+}
+
+.post-atach-file img:hover {
+    opacity: 0.6;
+}
+
+.post-atach-file-heading span {
+    font-weight: 500;
+}
+
+.post-contact-person {
+    font-weight: 500;
+}
+
+.post-contact-person span {
+    color: rgb(107 114 128);
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.post-display-category-main {
+    color: rgb(59 130 246);
+    font-weight: 500;
+    padding: .375rem;
+
+}
+
+.post-display-category-sub {
+    padding: .25rem;
+    margin-left: 1.25rem;
+}
+
+.post-sponsor span {
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.post-sponsor {
+    color: rgb(255 255 255);
+    padding: 0.5rem;
+    background: linear-gradient(to right, #3b82f6, #1d4ed8, #3b82f6);
+    border-radius: 0.5rem;
+}
+
+.comapny-list-logo-post {
+    object-fit: cover;
+    border-radius: 8px;
+    width: 80px;
+    height: 80px;
+}
+
+.post-sponsor-category{
+    font-size: .75rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 9999px;
+}
+
+.company-card-post {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
 
 /* Responsive height like xs:h-60 */
 @media (max-width: 576px) {
     .company-card {
         flex-direction: column;
         align-items: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .post_show_image .image-box {
+        width: 100%;
+        height: auto;
+    }
+
+    .post_show_image .image-box img {
+        height: auto;
     }
 }
