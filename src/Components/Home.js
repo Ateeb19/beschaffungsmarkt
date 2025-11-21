@@ -22,6 +22,7 @@ import * as PiIcons from "react-icons/pi";
 import * as SiIcons from "react-icons/si";
 import * as GrIcons from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "./alert/Alert_message";
 
 const Home = () => {
     const Backend_URL = process.env.REACT_APP_API_URL;
@@ -31,7 +32,7 @@ const Home = () => {
     const [checked, setChecked] = useState(false);
     const navigate = useNavigate();
 
-    console.log('selected categroy',category);
+    console.log('selected categroy', category);
 
     const handleChange = (nextChecked) => {
         setChecked(nextChecked);
@@ -106,7 +107,39 @@ const Home = () => {
         fetchCategories();
     }, [])
 
+    const { showAlert } = useAlert();
+    const dispatch = useDispatch();
+    const { data, requestStatus, error } = useSelector((state) => state.user);
+    useEffect(() => {
+        dispatch(fetchUserInfo());
+    }, [dispatch]);
 
+    console.log('this is email-: ', data?.email);
+    const handlePayment = async (plan) => {
+        try {
+            // You can get the user's email from localStorage, context, or your logged-in state
+            const userEmail = data?.email; // Example
+
+            if (!userEmail) {
+                showAlert("Please login first to continue payment.", 'warning');
+                return;
+            }
+
+            const response = await axios.post(`${Backend_URL}/api/payments/create-checkout-session`, {
+                email: userEmail,
+                plan: plan,
+                time: checked ? 'yearly' : 'monthly',
+            });
+
+            // Redirect user to Stripe checkout
+            // window.location.href = response.data.url;
+            window.open(response.data.url, "_blank");
+
+        } catch (error) {
+            console.error("Payment initiation failed:", error);
+            showAlert("Payment initiation failed. Please try again.", 'danger');
+        }
+    };
 
     // const dispatch = useDispatch();
     // const { data, requestStatus, error } = useSelector((state) => state.user);
@@ -159,7 +192,7 @@ const Home = () => {
                                             </option>
                                             {main_category.map((cat, key) => (
                                                 <>
-                                                 <option value={cat._id}>{cat.label}</option>
+                                                    <option value={cat._id}>{cat.label}</option>
                                                 </>
                                             ))}
                                             {/* <option value="fashion">Fashion and Accessories</option>
@@ -176,7 +209,7 @@ const Home = () => {
                                         </select>
                                     </div>
                                     <div className="serch-btn">
-                                        <button className="" onClick={()=> navigate(`/companies?keyword=${searchInput}&maincategory=${category}&subcategory=&page=1`)}> <IoSearchSharp className="fs-5" /> Search Now</button>
+                                        <button className="" onClick={() => navigate(`/companies?keyword=${searchInput}&maincategory=${category}&subcategory=&page=1`)}> <IoSearchSharp className="fs-5" /> Search Now</button>
                                     </div>
                                 </div>
                             </div>
@@ -444,7 +477,7 @@ const Home = () => {
                                     <>
                                         {sponsors.map((d, key) => (
                                             <>
-                                                <div class="authors-wrapper" onClick={()=> navigate(`/company/${d._id}`)}>
+                                                <div class="authors-wrapper" onClick={() => navigate(`/company/${d._id}`)}>
                                                     <div class="container">
                                                         <div class="card-container">
                                                             <div class="card text-start">
@@ -568,7 +601,7 @@ const Home = () => {
                                             "179"
                                         )}
                                     </h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
-                                    <button className="price-get-box-premium w-100">Get Premium</button>
+                                    <button className="price-get-box-premium w-100" onClick={() => checked ? handlePayment(1999): handlePayment(179)}>Get Premium</button>
                                     <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Full Features for Company Website</span></span>
                                     <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>2nd Priority for Listing</span></span>
                                     <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Unlimited Messaging for Communication</span></span>
@@ -594,7 +627,7 @@ const Home = () => {
                                             "249"
                                         )}
                                     </h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
-                                    <button className="price-get-box w-100">Get Premium +</button>
+                                    <button className="price-get-box w-100" onClick={() => checked ? handlePayment(2699): handlePayment(249)}>Get Premium +</button>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Full Features for Company Website</span></span>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>1st Priority + Sponsored for Listing</span></span>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Unlimited Messaging for Communication</span></span>

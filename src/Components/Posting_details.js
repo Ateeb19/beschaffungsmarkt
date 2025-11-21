@@ -15,13 +15,16 @@ import { LiaBuysellads, LiaSellcast } from "react-icons/lia";
 import { MdOutlineEmojiTransportation } from "react-icons/md";
 import { FaCarSide } from "react-icons/fa6";
 import { SlEye } from "react-icons/sl";
-import { IoMdThumbsUp } from "react-icons/io";
+import { IoIosCheckmarkCircle, IoMdThumbsUp } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
 import { IoIosCall } from "react-icons/io";
 import { MdLocationPin } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserInfo } from "../redux/userSlice";
+import { useAlert } from "./alert/Alert_message";
+import { TiWarning } from "react-icons/ti";
+import { RxCross2 } from "react-icons/rx";
 
 const POST_TYPES = [
     { label: "Buying Post", value: "buy", icon: LiaBuysellads },
@@ -35,6 +38,7 @@ const Posting_details = () => {
     const { postID } = useParams();
     const [post, setPost] = useState(null);
     const navigate = useNavigate();
+    const { showAlert } = useAlert();
 
     const dispatch = useDispatch();
     const location = useLocation();
@@ -43,6 +47,9 @@ const Posting_details = () => {
     useEffect(() => {
         dispatch(fetchUserInfo());
     }, [dispatch, location]);
+
+    const [contact_company, setContact_company] = useState(false);
+    const [contect_message, setContect_message] = useState('');
     // console.log('user data -: ', data);
 
     useEffect(() => {
@@ -54,16 +61,16 @@ const Posting_details = () => {
                     withCredentials: true,
                 });
                 setPost(res.data);
-                console.log(res.data);
+                // console.log(res.data);
             } catch (err) {
                 console.error("Error fetching company info:", err);
             }
         };
 
         fetchCompany();
-    }, [postID]);
+    }, [postID, data]);
 
-    console.log('company-: ', post);
+    // console.log('company-: ', post);
 
     if (!post?.postInfoData) return <p>Loading...</p>;
 
@@ -105,6 +112,79 @@ const Posting_details = () => {
         return IconComponent ? <IconComponent /> : null;
     };
 
+    const isLiked = data?.like_posts?.some((item) => item.post === post.postInfoData._id);
+
+    const handle_add_fav = async (id) => {
+        if (data) {
+            try {
+                const res = await axios.post(`${Backend_URL}/api/users/add-like-post`, {
+                    postId: id,
+                }, {
+                    withCredentials: true,
+                })
+
+                console.log(res.data);
+                if (res.data.status) {
+                    showAlert(<div className="d-flex align-items-center justify-content-start gap-1">
+                        <IoIosCheckmarkCircle className="text-success fs-3" />
+                        {res.data.msg}
+                    </div>, 'success');
+                }
+            } catch (e) {
+                showAlert(e.msg, 'danger')
+                console.log('error message -: ', e.response.msg);
+            }
+            dispatch(fetchUserInfo());
+        } else {
+            showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
+                <TiWarning className="text-warning fs-3" />
+                <span>Please Sign In first.</span>
+            </div>, 'warning')
+        }
+    }
+
+    const handle_contact = () => {
+        setContact_company(true);
+    }
+
+    const handleClose = () => {
+        setContact_company(false);
+        setContect_message('')
+    }
+
+    const handle_send_message = async () => {
+        try {
+            const res = await axios.post(`${Backend_URL}/api/chats/create`, {
+                message: contect_message,
+                receiverId: post.postInfoData.user._id,
+                title: post.postInfoData.title,
+            }, {
+                withCredentials: true,
+            })
+
+            if (res.data.status) {
+                showAlert(<div className="d-flex align-items-center justify-content-start gap-1">
+                    <IoIosCheckmarkCircle className="text-success fs-3" />
+                    {res.data.msg}
+                </div>, 'success');
+                handleClose();
+            }
+        } catch (e) {
+            const errorMessage =
+                e.response?.data?.msg ||
+                e.response?.data?.error ||
+                e.message ||
+                "Something went wrong";
+
+            showAlert(
+                <div className="d-flex align-items-center justify-content-start gap-1">
+                    <IoIosCheckmarkCircle className="text-danger fs-3" />
+                    {errorMessage}
+                </div>,
+                "danger"
+            );
+        }
+    }
 
     if (!post) return <p>Loading...</p>;
 
@@ -115,12 +195,12 @@ const Posting_details = () => {
                     <>
                         {data.is_premium === 0 ? (
                             <div className="d-flex text-center align-items-center justify-content-center w-100 company-details-primium-div">
-                                <span>Please upgrade your membership to view all contact information. <b onClick={() => navigate('/pricing')}>Here</b></span>
+                                <span>Please upgrade your membership to view all contact information. <b onClick={() => navigate('/pricing')} style={{ cursor: 'pointer' }}>Here</b></span>
                             </div>) : (null)}
                     </>
                 ) : (
                     <div className="d-flex text-center align-items-center justify-content-center w-100 company-details-primium-div">
-                        <span>Please upgrade your membership to view all contact information. <b onClick={() => navigate('/pricing')}>Here</b></span>
+                        <span>Please upgrade your membership to view all contact information. <b onClick={() => navigate('/pricing')} style={{ cursor: 'pointer' }}>Here</b></span>
                     </div>
                 )}
 
@@ -163,7 +243,8 @@ const Posting_details = () => {
                                 </div>
 
                                 <div className="d-flex align-items-end justify-content-end">
-                                    <IoMdThumbsUp className="fs-4" />
+                                    <IoMdThumbsUp onClick={(e) => { e.stopPropagation(); handle_add_fav(post.postInfoData._id) }}
+                                        className={`fs-4 ${isLiked ? "posting-thumsup-yes" : "posting-thumsup-no"}`} />
                                 </div>
                             </div>
                             <div className="d-flex flex-column align-items-start justify-content-start w-75 text-start post-info-display">
@@ -174,7 +255,7 @@ const Posting_details = () => {
                                 <>
                                     {data.is_premium !== 0 ? (<>
                                         <div className="d-flex gap-3 align-items-start justify-content-start">
-                                            <button className="post-contact-btn">Contact Company <FiMessageSquare className="fs-4" /></button>
+                                            <button className="post-contact-btn" onClick={handle_contact}>Contact Company <FiMessageSquare className="fs-4" /></button>
                                             <button className="post-company-btn" onClick={() => navigate(`/company/${post.postInfoData.user._id}`)}>Go To Company Detail Page</button>
                                         </div>
 
@@ -198,6 +279,64 @@ const Posting_details = () => {
                                     )}
                                 </>
                             )}
+
+                            {contact_company && (
+                                <>
+                                    <div
+                                        className="popup-overlay"
+                                        style={{
+                                            position: "fixed",
+                                            top: 0,
+                                            left: 0,
+                                            width: "100vw",
+                                            height: "100vh",
+                                            backgroundColor: "rgba(0, 0, 0, 0.6)",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            zIndex: 9999,
+                                        }}
+                                    >
+                                        <div
+                                            className="popup-box bg-white rounded shadow-lg position-relative p-0"
+                                            style={{
+                                                width: "900px",
+                                                maxWidth: "90%",
+                                                cursor: 'default'
+                                            }}
+                                        >
+                                            <button
+                                                onClick={handleClose}
+                                                className="btn  position-absolute"
+                                                style={{ top: "10px", right: "10px" }}
+                                            >
+                                                <RxCross2 />
+                                            </button>
+
+                                            <div className="d-flex flex-column align-items-start justify-content-start w-100">
+                                                <div className="d-flex w-100 border-bottom border-1 px-4 pb-2 pt-3 pop-up-post-head">
+                                                    <h3>Contact Company</h3>
+                                                </div>
+                                                <div className="d-flex flex-column align-items-start justify-content-start w-100 px-4 py-3 gap-4  border-bottom border-1">
+                                                    <div className="d-flex flex-column align-items-start justify-conttent-start w-100 gap-1">
+                                                        <label>Title <span className="text-danger">*</span></label>
+                                                        <input readOnly value={post.postInfoData.title} className="form-control bg-light" />
+                                                    </div>
+                                                    <div className="d-flex flex-column align-items-start justify-conttent-start w-100 gap-1">
+                                                        <label>Message <span className="text-danger">*</span></label>
+                                                        <textarea className="form-control" rows={6} value={contect_message} onChange={(e) => setContect_message(e.target.value)} />
+                                                    </div>
+                                                </div>
+                                                <div className="d-flex align-items-end justify-content-end w-100 gap-3 p-4">
+                                                    <button className="das-button-end save-button" onClick={handle_send_message}>Send</button>
+                                                    <button className="das-button-end cancel-button" onClick={handleClose}>Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
 
 
                         </div>
@@ -401,6 +540,9 @@ const Posting_details = () => {
 
 
             </div>
+            <section className="footer-section w-100">
+                <Footer />
+            </section>
         </div>
     )
 }

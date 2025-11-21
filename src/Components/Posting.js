@@ -5,9 +5,9 @@ import { FaCarSide, FaChair, FaSheetPlastic } from "react-icons/fa6";
 import { PiBowlFoodFill } from "react-icons/pi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdClose, MdOutlineEmojiTransportation, MdOutlineSearch } from "react-icons/md";
-import { IoSearch } from "react-icons/io5";
+import { IoSearch, IoWarning } from "react-icons/io5";
 import { LiaBuysellads, LiaSellcast } from "react-icons/lia";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import * as GiIcons from "react-icons/gi";
 import * as FaIcons from "react-icons/fa";
@@ -19,6 +19,11 @@ import * as GrIcons from "react-icons/gr";
 import { HiMiniArrowTurnDownRight } from "react-icons/hi2";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { IoIosCheckmarkCircle, IoMdThumbsUp } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInfo } from "../redux/userSlice";
+import { useAlert } from "./alert/Alert_message";
+import { TiWarning } from "react-icons/ti";
 
 const Posting = () => {
 
@@ -30,6 +35,14 @@ const Posting = () => {
     const maincategory = searchParams.get("maincategory") || "";
     const subcategory = searchParams.get("subcategory") || "";
     const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const { data, requestStatus, error } = useSelector((state) => state.user);
+    // console.log(data);
+    useEffect(() => {
+        dispatch(fetchUserInfo());
+    }, [dispatch, location]);
 
     const [page, setPage] = useState(() => {
         const pageParam = searchParams.get("page");
@@ -345,11 +358,57 @@ const Posting = () => {
     //         return () => clearTimeout(timeout);
     //     }
     // }, [companies]);
+    const { showAlert } = useAlert();
 
+    const isLiked = (postId) => {
+        if (!data || !data.like_posts) return false;
+        return data.like_posts.some((lp) => lp.post === postId);
+    };
 
     const handle_post_click = (postID) => {
         navigate(`/posting/${postID}`);
     };
+
+    const handle_add_fav = async (id) => {
+        if (data) {
+            try {
+                const res = await axios.post(`${Backend_URL}/api/users/add-like-post`, {
+                    postId: id,
+                }, {
+                    withCredentials: true,
+                })
+
+                console.log(res.data);
+                if (res.data.status) {
+                    showAlert(<div className="d-flex align-items-center justify-content-start gap-1">
+                        <IoIosCheckmarkCircle className="text-success fs-3" />
+                        {res.data.msg}
+                    </div>, 'success');
+                }
+            } catch (e) {
+                const errorMessage =
+                    e.response?.data?.msg ||
+                    e.response?.data?.error ||
+                    e.message ||
+                    "Something went wrong";
+
+                showAlert(
+                    <div className="d-flex align-items-center justify-content-start gap-1">
+                        <IoIosCheckmarkCircle className="text-danger fs-3" />
+                        {errorMessage}
+                    </div>,
+                    "danger"
+                );
+            }
+            dispatch(fetchUserInfo());
+            fetchCompanies();
+        } else {
+            showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
+                <TiWarning className="text-warning fs-3" />
+                <span>Please Sign In first.</span>
+            </div>, 'warning')
+        }
+    }
     return (
         <div className="companies-main-div">
             <section class="overview-wrapper">
@@ -484,61 +543,66 @@ const Posting = () => {
                                     </div>
                                 </>
                             ) : null}
-                            <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
-                                <h5>Keyword</h5>
-                                <div className="search-container w-100">
-                                    <input
-                                        type="text"
-                                        placeholder="Search for keyword!"
-                                        className="search-input"
-                                        value={tempValue}
-                                        onChange={(e) => setTempValue(e.target.value)} // <- update tempValue
-                                    />
 
-                                    <div className="search-actions">
-                                        {tempValue && (
-                                            <button className="clear-button" onClick={() => setTempValue("")}>
-                                                <MdClose />
-                                            </button>
-                                        )}
-                                        <button
-                                            className="search-button"
-                                            onClick={() => { handleSearchKeyword() }}
-                                        >
-                                            <IoSearch />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
-                                <h5>Post Type</h5>
-                            </div>
+                            {value ? (null) : (
+                                <>
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
+                                        <h5>Keyword</h5>
+                                        <div className="search-container w-100">
+                                            <input
+                                                type="text"
+                                                placeholder="Search for keyword!"
+                                                className="search-input"
+                                                value={tempValue}
+                                                onChange={(e) => setTempValue(e.target.value)} // <- update tempValue
+                                            />
 
-                            {/* <div className="d-flex flex-column align-items-start justify-content-start w-100 category-list gap-3">
-                                <div className="d-flex-align-items-start text-start">  <LiaBuysellads className="me-3 fs-4" /><span>Buying Post</span></div>
-                                <div className="d-flex-align-items-start text-start">  <LiaSellcast className="me-3 fs-4" /><span>Selling offer</span></div>
-                                <div className="d-flex-align-items-start text-start">  <MdOutlineEmojiTransportation className="me-3 fs-4" /><span>Cooperation</span></div>
-                                <div className="d-flex-align-items-start text-start">  <FaCarSide className="me-3 fs-4" /><span>Transportation</span></div>
-                            </div> */}
-                            <div className="d-flex flex-column align-items-start justify-content-start w-100 category-list gap-3">
-                                {[
-                                    { label: "Buying Post", value: "buy", icon: <LiaBuysellads className="me-3 fs-4" /> },
-                                    { label: "Selling Offer", value: "sell", icon: <LiaSellcast className="me-3 fs-4" /> },
-                                    { label: "Cooperation", value: "cooperation", icon: <MdOutlineEmojiTransportation className="me-3 fs-4" /> },
-                                    { label: "Transportation", value: "transportation", icon: <FaCarSide className="me-3 fs-4" /> },
-                                ].map((type) => (
-                                    <div
-                                        key={type.value}
-                                        // className={`d-flex align-items-center text-start w-100 p-2 rounded category-list-inner-div ${postType === type.value ? "bg-primary text-white" : "bg-light text-dark"}`}
-                                        className="d-flex-align-items-start text-start w-100"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => handlePostTypeFilter(type)}
-                                    >
-                                        {type.icon}
-                                        <span>{type.label}</span>
+                                            <div className="search-actions">
+                                                {tempValue && (
+                                                    <button className="clear-button" onClick={() => setTempValue("")}>
+                                                        <MdClose />
+                                                    </button>
+                                                )}
+                                                <button
+                                                    className="search-button"
+                                                    onClick={() => { handleSearchKeyword() }}
+                                                >
+                                                    <IoSearch />
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
+                                </>
+                            )}
+
+
+                            {selectedPostType ? (null) : (
+                                <>
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
+                                        <h5>Post Type</h5>
+                                    </div>
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 category-list gap-3">
+                                        {[
+                                            { label: "Buying Post", value: "buy", icon: <LiaBuysellads className="me-3 fs-4" /> },
+                                            { label: "Selling Offer", value: "sell", icon: <LiaSellcast className="me-3 fs-4" /> },
+                                            { label: "Cooperation", value: "cooperation", icon: <MdOutlineEmojiTransportation className="me-3 fs-4" /> },
+                                            { label: "Transportation", value: "transportation", icon: <FaCarSide className="me-3 fs-4" /> },
+                                        ].map((type) => (
+                                            <div
+                                                key={type.value}
+                                                // className={`d-flex align-items-center text-start w-100 p-2 rounded category-list-inner-div ${postType === type.value ? "bg-primary text-white" : "bg-light text-dark"}`}
+                                                className="d-flex-align-items-start text-start w-100"
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() => handlePostTypeFilter(type)}
+                                            >
+                                                {type.icon}
+                                                <span>{type.label}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+
 
 
                             {currentMainCategory ? (
@@ -617,11 +681,15 @@ const Posting = () => {
                                 </>)}
                             </div>
 
-                            <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-2 gap-3 company-country">
-                                <h5>COUNTRIES</h5>
-                                <div onClick={() => handleCountry('Germany')} className="d-flex-align-items-start text-start">  <img src="/Images/germany.png" width="25px" className="me-2" /><span>Germany</span></div>
-                                <div onClick={() => handleCountry('Turkey')} className="d-flex-align-items-start text-start">  <img src="/Images/turkey.png" width="25px" className="me-2" /><span>Turkey</span></div>
-                            </div>
+                            {selectedCountry ? (null) : (
+                                <>
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-2 gap-3 company-country">
+                                        <h5>COUNTRIES</h5>
+                                        <div onClick={() => handleCountry('Germany')} className="d-flex-align-items-start text-start">  <img src="/Images/germany.png" width="25px" className="me-2" /><span>Germany</span></div>
+                                        <div onClick={() => handleCountry('Turkey')} className="d-flex-align-items-start text-start">  <img src="/Images/turkey.png" width="25px" className="me-2" /><span>Turkey</span></div>
+                                    </div>
+                                </>
+                            )}
 
                         </div>
 
@@ -630,9 +698,11 @@ const Posting = () => {
                                 <>
                                     {companies.map((c) => {
                                         const matchedType = POST_TYPES.find((type) => type.value === c.type);
+                                        const liked = isLiked(c._id);
+
                                         return (
                                             <>
-                                                <div className="d-flex flex-column w-100 text-start align-items-start justify-content-start company-page-data" style={{height: '15rem', padding: '1.5rem'}} onClick={() => handle_post_click(c._id)}>
+                                                <div className="d-flex flex-column w-100 text-start align-items-start justify-content-start company-page-data" style={{ height: '15rem', padding: '1.5rem' }} onClick={() => handle_post_click(c._id)}>
                                                     <div className="d-flex align-items-start justify-content-between w-100">
                                                         <div className="d-flex align-items-start justify-content-start gap-3">
                                                             <div className="posting-country d-flex aligm-items-center justify-content-center">
@@ -648,6 +718,10 @@ const Posting = () => {
                                                                 )}
                                                             </div>
                                                             <span>{getDaysAgo(c.created_time)}</span>
+                                                        </div>
+                                                        <div className="d-flex">
+                                                            <IoMdThumbsUp onClick={(e) => { e.stopPropagation(); handle_add_fav(c._id) }}
+                                                                className={`fs-4 ${liked ? "posting-thumsup-yes" : "posting-thumsup-no"}`} />
                                                         </div>
                                                     </div>
                                                     <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-3 post-title">

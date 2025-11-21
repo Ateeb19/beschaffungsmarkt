@@ -32,7 +32,7 @@ const Pricing = () => {
             const userEmail = data?.email; // Example
 
             if (!userEmail) {
-                showAlert("Please login first to continue payment.",'success');
+                showAlert("Please login first to continue payment.",'warning');
                 return;
             }
 
