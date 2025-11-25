@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserChats } from "../../redux/userChatSlice";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,7 +9,41 @@ import axios from "axios";
 import { GrAttachment } from "react-icons/gr";
 import { FaRegFolder } from "react-icons/fa";
 import { TiWarning } from "react-icons/ti";
+import { MdError } from "react-icons/md";
+import { useDropzone } from "react-dropzone";
+import { IoCloudUploadOutline } from "react-icons/io5";
 
+
+
+const DragAndDrop = ({ accept, onFileDrop, label, className }) => {
+    const onDrop = useCallback(
+        (acceptedFiles) => {
+            if (acceptedFiles.length > 0) {
+                const file = acceptedFiles[0];
+                onFileDrop(file);
+            }
+        },
+        [onFileDrop]
+    );
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept,
+        multiple: false,
+    });
+
+    return (
+        <div
+            {...getRootProps()}
+            className={`d-flex flex-column align-items-center justify-content-center text-center ${className}`}
+        >
+            <div>
+                <input {...getInputProps()} />
+                <p>{label}</p>
+            </div>
+        </div>
+    );
+};
 const Das_Message = () => {
 
     const Backend_URL = process.env.REACT_APP_API_URL;
@@ -40,6 +74,15 @@ const Das_Message = () => {
     }, [dispatch, location]);
     // console.log('chates-: ', chatData);
     // console.log('user data-: ', data);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleFileDrop_banner = (file) => {
+        // setImage_changed_banner(true);
+        setSelectedFile(file);
+        setSelectedImage(URL.createObjectURL(file));
+    }
+
 
     const [ws, setWs] = useState(null);
     const [socket, setSocket] = useState(null);
@@ -98,6 +141,7 @@ const Das_Message = () => {
                 chat_info: c,
                 messages: res.data
             });
+            console.log(selected_chat);
 
             // CLOSE OLD SOCKET IF EXISTS
             if (socket) {
@@ -113,7 +157,7 @@ const Das_Message = () => {
 
             showAlert(
                 <div className="d-flex align-items-center justify-content-start gap-1">
-                    <IoIosCheckmarkCircle className="text-danger fs-3" />
+                    <MdError className="text-danger fs-3" />
                     {errorMessage}
                 </div>,
                 "danger"
@@ -129,7 +173,7 @@ const Das_Message = () => {
         setSocket(ws);
 
         ws.onopen = () => {
-            console.log("WebSocket Connected");
+            // console.log("WebSocket Connected");
 
             // authenticate immediately after connection
             ws.send(JSON.stringify({
@@ -162,13 +206,15 @@ const Das_Message = () => {
         const isMessageEmpty = !messageText || messageText.trim() === "";
         if (isMessageEmpty) {
             showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
-                            <TiWarning className="text-warning fs-5" />
-                            <span>Write a message!</span> </div>, "warning")
+                <TiWarning className="text-warning fs-5" />
+                <span>Write a message!</span> </div>, "warning")
             return;
         }
 
         if (!socket || socket.readyState !== WebSocket.OPEN) {
-            alert("WebSocket not connected");
+            showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
+                <TiWarning className="text-warning fs-5" />
+                <span>Something went wrong!</span> </div>, "warning")
             return;
         }
 
@@ -184,7 +230,9 @@ const Das_Message = () => {
         }));
 
         setMessageText("");
-        handle_chate(selected_chat.chat_info);
+        setTimeout(() => {
+            handle_chate(selected_chat.chat_info);
+        }, 0.2);
     };
 
     useEffect(() => {
@@ -227,8 +275,8 @@ const Das_Message = () => {
     return (
         <div className="d-flex flex-column align-items-start justify-content-start w-100 p-1">
             <div className="d-flex align-items-start justify-content-start w-100 dash-message"><h2>Your Messages</h2></div>
-            <div className="row w-100 dash-message-box mt-1 p-1 dash-message-outter-div">
-                <div className="col-4 dash-message-box-left">
+            <div className="row w-100 dash-message-box h-100 mt-1 p-1">
+                <div className="col-4 dash-message-box-left h-100">
                     <div className="w-100 py-1 px-2">
                         <input className="form-control w-100 message-search" placeholder="Search..." />
                     </div>
@@ -264,7 +312,7 @@ const Das_Message = () => {
                         )}
                     </div>
                 </div>
-                <div className="col-8 dash-message-box-right">
+                <div className="col-8 dash-message-box-right h-100">
                     {selected_chat && (
                         <>
                             <div className="d-flex flex-column align-items-start justify-content-start w-100 p-1 dash-chat-outer-div">
@@ -289,9 +337,9 @@ const Das_Message = () => {
                                             <>
                                                 <div className="chat-inner-box w-100 d-flex flex-column align-items-start justify-content-start">
                                                     <div className="chat-box-profile d-flex flex-row align-items-start justify-content-start gap-2">
-                                                        <img src={chat.sender ? selected_chat.chat_info.sender.contact_img ? `${Backend_URL}/files/${selected_chat.chat_info.sender.contact_img}` : '/Images/user-avatar-CZ6R_fL7.webp' : selected_chat.chat_info.receiver.contact_img ? `${Backend_URL}/files/${selected_chat.chat_info.receiver.contact_img}` : '/Images/user-avatar-CZ6R_fL7.webp'} alt="" />
+                                                        <img src={chat.sender === selected_chat.chat_info.sender._id ? selected_chat.chat_info.sender.contact_img ? `${Backend_URL}/files/${selected_chat.chat_info.sender.contact_img}` : '/Images/user-avatar-CZ6R_fL7.webp' : selected_chat.chat_info.receiver.contact_img ? `${Backend_URL}/files/${selected_chat.chat_info.receiver.contact_img}` : '/Images/user-avatar-CZ6R_fL7.webp'} alt="" />
                                                         <div className="chat-inner-box-id d-flex flex-column align-items-start justify-content-start">
-                                                            {chat.sender ? selected_chat.chat_info.sender.contact_first_name ? <>
+                                                            {chat.sender === selected_chat.chat_info.sender._id ? selected_chat.chat_info.sender.contact_first_name ? <>
                                                                 <label>{selected_chat.chat_info.sender.contact_first_name} {selected_chat.chat_info.sender.contact_last_name}</label>
                                                                 <span>{selected_chat.chat_info.sender.contact_email}</span>
                                                             </> : <>
@@ -337,7 +385,7 @@ const Das_Message = () => {
                                         ))}
                                 </div>
 
-                                <div className="dash-right-msg-chat-input w-100 d-flex flex-column align-items-start justify-content-start py-3 gap-3">
+                                <div className="dash-right-msg-chat-input w-100 d-flex flex-column align-items-start justify-content-start py-2 gap-3">
                                     <textarea
                                         rows={3}
                                         className="form-control w-100"
@@ -347,7 +395,17 @@ const Das_Message = () => {
                                     />
 
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100 px-2">
-                                        <GrAttachment className="fs-4 text-secondary" />
+                                        <DragAndDrop
+                                            accept="image/*"
+                                            name="banner"
+                                            onFileDrop={handleFileDrop_banner}
+                                            className="dash-mesg-attetch p-0"
+                                            label={
+                                                <>
+                                                    <GrAttachment className="fs-4 text-secondary" />
+                                                </>
+                                            } />
+
 
                                         <button
                                             className="das-button-end save-button"

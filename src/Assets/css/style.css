@@ -2440,19 +2440,20 @@ input[type="password"]:focus {
 }
 
 .dash-message-box {
+    display: flex;
     border: 1px solid #e5e7eb;
     border-radius: 0.375rem;
-}
-
-.dash-message-outter-div {
     height: calc(100vh - 150px);
+    overflow: hidden;
 }
 
 .dash-message-box-left {
+    display: flex;
+    flex-direction: column;
     background-color: #f9fafb;
     padding: 0.75rem 0rem 0rem 0rem;
     overflow-y: auto;
-    height: 100%;
+    min-height: 0;
 }
 
 .message-search {
@@ -2505,14 +2506,19 @@ input[type="password"]:focus {
 }
 
 .dash-chat-outer-div {
-    height: calc(100vh - 150px);
+    /* height: calc(100vh - 150px);
     display: flex;
     flex-direction: column;
+    min-height: 0; */
+    flex: 1 1 auto;
     min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .dash-right-msg-top {
-    flex-shrink: 0;
+    flex: 0 0 auto;
 }
 
 .dash-right-msg-top h1 {
@@ -2522,9 +2528,23 @@ input[type="password"]:focus {
 }
 
 .dash-message-box-right {
+    /* display: flex;
+    flex-direction: column; */
     display: flex;
     flex-direction: column;
+    flex: 1 1 auto;
     min-height: 0;
+}
+
+.dash-right-msg-chat-box {
+    /* height: calc(100vh - 220px);
+    overflow-y: auto;
+    overflow-x: hidden; */
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* padding: 1rem 0.5rem; */
 }
 
 .dash-right-msg-top button {
@@ -2537,6 +2557,7 @@ input[type="password"]:focus {
 
 .dash-right-msg-chat-input {
     background-color: #f9fafb;
+    flex: 0 0 auto;
     --tw-bg-opacity: 1;
     border: 1px solid #e5e7eb;
     border-radius: .75rem;
@@ -2558,12 +2579,6 @@ input[type="password"]:focus {
 
 .dash-right-msg-chat-input textarea:focus {
     box-shadow: none !important;
-}
-
-.dash-right-msg-chat-box {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
 }
 
 .dash-right-msg-chat-input {
