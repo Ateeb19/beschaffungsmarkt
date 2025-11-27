@@ -7,20 +7,19 @@ import { IoIosCheckmarkCircle } from "react-icons/io";
 import { useAlert } from "../alert/Alert_message";
 import axios from "axios";
 import { GrAttachment } from "react-icons/gr";
-import { FaRegFolder } from "react-icons/fa";
+import { FaRegFolder } from "react-icons/fa6";
 import { TiWarning } from "react-icons/ti";
 import { MdError } from "react-icons/md";
 import { useDropzone } from "react-dropzone";
-import { IoCloudUploadOutline } from "react-icons/io5";
-
 
 
 const DragAndDrop = ({ accept, onFileDrop, label, className }) => {
     const onDrop = useCallback(
         (acceptedFiles) => {
             if (acceptedFiles.length > 0) {
-                const file = acceptedFiles[0];
-                onFileDrop(file);
+                // const file = acceptedFiles[0];
+                // onFileDrop(file);
+                onFileDrop(acceptedFiles);
             }
         },
         [onFileDrop]
@@ -29,7 +28,7 @@ const DragAndDrop = ({ accept, onFileDrop, label, className }) => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept,
-        multiple: false,
+        multiple: true,
     });
 
     return (
@@ -67,21 +66,57 @@ const Das_Message = () => {
         requestStatus: chatStatus,
         error: chatError
     } = useSelector((state) => state.user_chat);
-
     useEffect(() => {
         dispatch(fetchUserInfo());
-        dispatch(fetchUserChats());
-    }, [dispatch, location]);
+    }, [dispatch, location])
+
+    // useEffect(() => {
+    //     dispatch(fetchUserChats());
+    // }, [dispatch, location, selected_chat])
+    useEffect(() => {
+        if (selected_chat) {
+            dispatch(fetchUserChats());
+        }
+    }, [selected_chat]);
+
+
+    // useEffect(() => {
+    //     if (chatStatus === "fulfilled") {
+    //         dispatch(fetchUserChats());
+    //     }
+    // }, [chatStatus]);
+    // useEffect(() => {
+    //     dispatch(fetchUserInfo());
+    //     dispatch(fetchUserChats());
+    // }, [dispatch, location, selected_chat]);
     // console.log('chates-: ', chatData);
     // console.log('user data-: ', data);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedFiles, setSelectedFiles] = useState([]);
 
-    const handleFileDrop_banner = (file) => {
-        // setImage_changed_banner(true);
-        setSelectedFile(file);
-        setSelectedImage(URL.createObjectURL(file));
-    }
+
+    const handleFileDrop = (files) => {
+        const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+
+        const validFiles = [];
+        files.forEach((file) => {
+            const ext = file.name.split(".").pop().toLowerCase();
+
+            if (!allowedExtensions.includes(ext)) {
+                showAlert(`Invalid file: ${file.name}. Only JPG, JPEG, PNG, PDF allowed.`, 'warning');
+                return;
+            }
+
+            validFiles.push(file);
+
+        });
+
+        setSelectedFiles((prev) => [...prev, ...validFiles]);
+    };
+
+    const removeFile = (index) => {
+        setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+    };
+
 
 
     const [ws, setWs] = useState(null);
@@ -124,6 +159,15 @@ const Das_Message = () => {
 
         const years = months / 12;
         return years < 2 ? "a year ago" : `${Math.floor(years)} years ago`;
+    };
+
+    const fileToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(",")[1]); // remove prefix
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
     };
 
     const handle_chate = async (c) => {
@@ -202,37 +246,75 @@ const Das_Message = () => {
     };
 
 
-    const handleSendMessage = () => {
-        const isMessageEmpty = !messageText || messageText.trim() === "";
-        if (isMessageEmpty) {
-            showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
-                <TiWarning className="text-warning fs-5" />
-                <span>Write a message!</span> </div>, "warning")
+    // const handleSendMessage = () => {
+    //     const isMessageEmpty = !messageText || messageText.trim() === "";
+    //     if (isMessageEmpty) {
+    //         showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
+    //             <TiWarning className="text-warning fs-5" />
+    //             <span>Write a message!</span> </div>, "warning")
+    //         return;
+    //     }
+
+    //     if (!socket || socket.readyState !== WebSocket.OPEN) {
+    //         showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
+    //             <TiWarning className="text-warning fs-5" />
+    //             <span>Something went wrong!</span> </div>, "warning")
+    //         return;
+    //     }
+
+    //     socket.send(JSON.stringify({
+    //         type: "reply_message",
+    //         data: {
+    //             chatId: activeChatId,
+    //             senderId: userId,
+    //             message: messageText,
+    //             file: uploadedFiles || null,
+    //             fileType: uploadedFileTypes || null,
+    //         }
+    //     }));
+
+    //     setMessageText("");
+    //     setTimeout(() => {
+    //         handle_chate(selected_chat.chat_info);
+    //     }, 0.2);
+    // };
+
+
+    const handleSendMessage = async () => {
+        if (!messageText.trim() && selectedFiles.length === 0) {
+            showAlert("Write a message or attach a file!", "warning");
             return;
         }
 
         if (!socket || socket.readyState !== WebSocket.OPEN) {
-            showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
-                <TiWarning className="text-warning fs-5" />
-                <span>Something went wrong!</span> </div>, "warning")
+            showAlert("Socket is not connected!", "warning");
             return;
         }
+
+        const base64Files = await Promise.all(
+            selectedFiles.map(file => fileToBase64(file))
+        );
+
+        const fileTypes = selectedFiles.map(file =>
+            file.name.split(".").pop().toLowerCase()
+        );
 
         socket.send(JSON.stringify({
             type: "reply_message",
             data: {
                 chatId: activeChatId,
                 senderId: userId,
-                message: messageText,
-                file: uploadedFiles || null,
-                fileType: uploadedFileTypes || null,
+                message: messageText || "",
+                file: base64Files.length > 0 ? base64Files : null,
+                fileType: fileTypes.length > 0 ? fileTypes : null,
             }
         }));
 
         setMessageText("");
+        setSelectedFiles([]);
         setTimeout(() => {
             handle_chate(selected_chat.chat_info);
-        }, 0.2);
+        }, 2);
     };
 
     useEffect(() => {
@@ -293,17 +375,41 @@ const Das_Message = () => {
                                             <div className="d-flex align-items-start justify-content-between w-100 ">
                                                 <div className="d-flex flex-column align-items-start justify-content-start">
                                                     <h3>{c.title}</h3>
-                                                    {c.sender.contact_first_name && c.sender.contact_last_name ? (
+                                                    {c.sender._id === data._id ? (
                                                         <>
-                                                            <span>{c.sender.contact_first_name} {c.sender.contact_last_name}</span>
+                                                            {c.receiver.contact_first_name && c.receiver.contact_last_name ? (
+                                                                <>
+                                                                    <span>{c.receiver.contact_first_name} {c.receiver.contact_last_name}</span>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <span>{c.receiver.company_name}</span>
+                                                                </>
+                                                            )}
                                                         </>
                                                     ) : (
                                                         <>
-                                                            <span>{c.sender.company_name}</span>
+                                                            {c.sender.contact_first_name && c.sender.contact_last_name ? (
+                                                                <>
+                                                                    <span>{c.sender.contact_first_name} {c.sender.contact_last_name}</span>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <span>{c.sender.company_name}</span>
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    )}
+
+                                                </div>
+                                                <div className="d-flex flex-column align-items-end justify-content-start">
+                                                    <span className="display_time">{timeAgo(c.created_time)}</span>
+                                                    {c.unreadMsg != 0 && (
+                                                        <>
+                                                            <span className="display_num_msg">{c.unreadMsg}</span>
                                                         </>
                                                     )}
                                                 </div>
-                                                <p>{timeAgo(c.created_time)}</p>
                                             </div>
                                         </div>
                                     </>
@@ -353,28 +459,35 @@ const Das_Message = () => {
                                                             </>}
                                                         </div>
                                                     </div>
-                                                    <div className="chat-box-text d-flex ftranspostlex-column align-items-start justify-content-start w-100">
+                                                    <div className="chat-box-text d-flex flex-column align-items-start justify-content-start w-100">
                                                         <span>{chat.message} </span>
-                                                        {chat?.file.map((f, key) => (
+                                                        {chat?.file.length > 0 && (
                                                             <>
-                                                                <div key={key}
-                                                                    // onClick={() => navigate(`${Backend_URL}/files/${f}`)}
-                                                                    onClick={() => {
-                                                                        const link = document.createElement("a");
-                                                                        link.href = `${Backend_URL}/files/${f}`;
-                                                                        link.download = f; // forces download
-                                                                        document.body.appendChild(link);
-                                                                        link.click();
-                                                                        document.body.removeChild(link);
-                                                                    }}
-                                                                    className="chat-box-text-file d-flex flex-column align-items-start justify-content-start w-100">
-                                                                    <div className="chat-box-text-file-inner d-flex flex-column align-items-start justify-content-start">
-                                                                        <FaRegFolder className="fs-3 text-secondary" />
-                                                                        <span>{f}</span>
-                                                                    </div>
+                                                                <div className="d-flex flex-wrap align-items-start justify-content-start w-100 gap-3 mt-3">
+                                                                    {chat?.file.map((f, key) => (
+                                                                        <>
+                                                                            <div key={key}
+                                                                                // onClick={() => navigate(`${Backend_URL}/files/${f}`)}
+                                                                                onClick={() => {
+                                                                                    const link = document.createElement("a");
+                                                                                    link.href = `${Backend_URL}/files/${f}`;
+                                                                                    link.download = f; // forces download
+                                                                                    document.body.appendChild(link);
+                                                                                    link.click();
+                                                                                    document.body.removeChild(link);
+                                                                                }}
+                                                                                className="chat-box-text-file d-flex flex-column align-items-start justify-content-start text-start gap-1">
+                                                                                <div className="chat-box-text-file-inner d-flex flex-column align-items-start justify-content-start">
+                                                                                    <FaRegFolder className="fs-5 text-secondary" />
+                                                                                    <span>{f}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </>
+                                                                    ))}
                                                                 </div>
                                                             </>
-                                                        ))}
+                                                        )}
+
                                                     </div>
 
                                                     <div className="chat-box-date d-flex align-items-start justify-content-end w-100">
@@ -386,6 +499,32 @@ const Das_Message = () => {
                                 </div>
 
                                 <div className="dash-right-msg-chat-input w-100 d-flex flex-column align-items-start justify-content-start py-2 gap-3">
+                                    {selectedFiles.length > 0 && (
+                                        <div className="dash-msg-selected-file d-flex flex-wrap align-items-start justify-content-start w-100 gap-3 px-2">
+                                            {selectedFiles.map((file, index) => (
+                                                <div className="dash-msg-file position-relative d-flex flex-column align-items-start justify-content-start text-start gap-1 p-2">
+                                                    <button
+                                                        onClick={() => removeFile(index)}
+                                                        className="position-absolute top-0 end-0 btn p-0 m-1 me-2"
+                                                        style={{
+                                                            background: "transparent",
+                                                            border: "none",
+                                                            fontSize: "16px",
+                                                            cursor: "pointer",
+                                                            color: "dark",
+                                                            lineHeight: "1"
+                                                        }}
+                                                    >
+                                                        x
+                                                    </button>
+                                                    <FaRegFolder className="fs-5 text-secondary" />
+                                                    <span key={index} className="me-2">
+                                                        {file.name}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                     <textarea
                                         rows={3}
                                         className="form-control w-100"
@@ -396,10 +535,12 @@ const Das_Message = () => {
 
                                     <div className="d-flex flex-row align-items-start justify-content-between w-100 px-2">
                                         <DragAndDrop
-                                            accept="image/*"
-                                            name="banner"
-                                            onFileDrop={handleFileDrop_banner}
-                                            className="dash-mesg-attetch p-0"
+                                            accept={{
+                                                "image/*": [".jpg", ".jpeg", ".png"],
+                                                "application/pdf": [".pdf"],
+                                            }}
+                                            onFileDrop={handleFileDrop}
+                                            className="p-0"
                                             label={
                                                 <>
                                                     <GrAttachment className="fs-4 text-secondary" />

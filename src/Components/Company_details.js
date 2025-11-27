@@ -13,12 +13,18 @@ import * as SiIcons from "react-icons/si";
 import * as GrIcons from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserInfo } from "../redux/userSlice";
+import { RxCross2 } from "react-icons/rx";
+import { useAlert } from "./alert/Alert_message";
+import { TiWarning } from "react-icons/ti";
+import { IoIosCheckmarkCircle } from "react-icons/io";
+import { MdError } from "react-icons/md";
 
 const Company_details = () => {
     const Backend_URL = process.env.REACT_APP_API_URL;
     const { companyId } = useParams();
     const [company, setCompany] = useState(null);
     const navigate = useNavigate();
+    const { showAlert } = useAlert();
 
     const dispatch = useDispatch();
     const location = useLocation();
@@ -28,6 +34,8 @@ const Company_details = () => {
         dispatch(fetchUserInfo());
     }, [dispatch, location]);
 
+    const [contact_company, setContact_company] = useState(false);
+    const [current_img, setCurrent_img] = useState('');
     useEffect(() => {
         const fetchCompany = async () => {
             try {
@@ -51,6 +59,72 @@ const Company_details = () => {
         return Array.isArray(v) ? v : [v];
     };
 
+    const [title, setTitle] = useState('');
+    const [contect_message, setContect_message] = useState('');
+
+    const handle_show_message = () => {
+        if (data?.is_premium === 0 || !data) {
+            showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
+                <TiWarning className="text-warning fs-1" />
+                <span>Please upgrade your membership to contact company</span>
+            </div>, 'warning')
+            return
+        }
+        setContact_company(true)
+    }
+    const handle_send_message = async () => {
+        if (data.is_premium === 0) {
+            showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
+                <TiWarning className="text-warning fs-3" />
+                <span>Please upgrade your membership to contact company</span>
+            </div>, 'warning')
+            return
+        }
+        if (!contect_message || !title) {
+            showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
+                <TiWarning className="text-warning fs-3" />
+                <span>Enter the Title and Message !</span>
+            </div>, 'warning')
+            return;
+        }
+        try {
+            const res = await axios.post(`${Backend_URL}/api/chats/create`, {
+                message: contect_message || '',
+                receiverId: company._id,
+                title: title || '',
+            }, {
+                withCredentials: true,
+            })
+
+            if (res.data.status) {
+                showAlert(<div className="d-flex align-items-center justify-content-start gap-1">
+                    <IoIosCheckmarkCircle className="text-success fs-3" />
+                    {res.data.msg}
+                </div>, 'success');
+                handleClose();
+            }
+        } catch (e) {
+            const errorMessage =
+                e.response?.data?.msg ||
+                e.response?.data?.error ||
+                e.message ||
+                "Something went wrong";
+
+            showAlert(
+                <div className="d-flex align-items-center justify-content-start gap-1">
+                    <MdError className="text-danger fs-3" />
+                    {errorMessage}
+                </div>,
+                "danger"
+            );
+        }
+    }
+
+    const handleClose = () => {
+        setContact_company(false);
+        setContect_message('')
+        setTitle('');
+    }
     const getIconComponent = (iconString) => {
         if (!iconString) return null;
 
@@ -159,7 +233,7 @@ const Company_details = () => {
                                     <>
                                         {company.products.map((p, key) => (
                                             <>
-                                                <div className="export-product-div d-flex flex-column gap-2" key={key}>
+                                                <div className="export-product-div d-flex flex-column gap-2" key={key} onClick={() => setCurrent_img(p.image)}>
                                                     <img src={`${Backend_URL}/files/${p.image}`} alt={p.title} />
                                                     {/* <img src={`http://localhost:5001/files/${p.image}`} alt={p.title} /> */}
                                                     <span >{p.title}</span>
@@ -180,7 +254,7 @@ const Company_details = () => {
                                     <>
                                         {company.certificates.map((p, key) => (
                                             <>
-                                                <div className="export-product-div d-flex flex-column gap-2" key={key}>
+                                                <div className="export-product-div d-flex flex-column gap-2" key={key} onClick={() => setCurrent_img(p.image)}>
                                                     <img src={`${Backend_URL}/files/${p.image}`} alt={p.title} />
                                                     {/* <img src={`http://localhost:5001/files/${p.image}`} alt={p.title} /> */}
                                                     <span >{p.title}</span>
@@ -237,7 +311,7 @@ const Company_details = () => {
                             <div className="d-flex align-items-center justify-content-center mb-3 w-100 detail-address">
                                 <Fa6Icons.FaLocationDot className="me-1" style={{ color: '#3b82f6' }} /> <span>{company.street ? (company.street) : null} {company.zipcode ? (company.zipcode) : null} {company.city ? (company.city) : null} {company.country ? (company.country) : null}</span>
                             </div>
-                            <div className="d-flex align-items-center justify-content-center w-100 contect-detail-button gap-2">
+                            <div className="d-flex align-items-center justify-content-center w-100 contect-detail-button gap-2" onClick={handle_show_message}>
                                 <span>Contact Now</span> <Fa6Icons.FaRegMessage />
                             </div>
                         </div>
@@ -308,6 +382,114 @@ const Company_details = () => {
 
                     </div>
                 </div>
+                {contact_company && (
+                    <>
+                        <div
+                            className="popup-overlay"
+                            style={{
+                                position: "fixed",
+                                top: 0,
+                                left: 0,
+                                width: "100vw",
+                                height: "100vh",
+                                backgroundColor: "rgba(0, 0, 0, 0.6)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                zIndex: 9999,
+                            }}
+                        >
+                            <div
+                                className="popup-box bg-white rounded shadow-lg position-relative p-0"
+                                style={{
+                                    width: "900px",
+                                    maxWidth: "90%",
+                                    cursor: 'default'
+                                }}
+                            >
+                                <button
+                                    onClick={handleClose}
+                                    className="btn  position-absolute"
+                                    style={{ top: "10px", right: "10px" }}
+                                >
+                                    <RxCross2 />
+                                </button>
+
+                                <div className="d-flex flex-column align-items-start justify-content-start w-100">
+                                    <div className="d-flex w-100 border-bottom border-1 px-4 pb-2 pt-3 pop-up-post-head">
+                                        <h3>Contact Company</h3>
+                                    </div>
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 px-4 py-3 gap-4  border-bottom border-1">
+                                        <div className="d-flex flex-column align-items-start justify-conttent-start w-100 gap-1">
+                                            <label>Title <span className="text-danger">*</span></label>
+                                            <input value={title} onChange={(e) => setTitle(e.target.value)} className="form-control bg-light" />
+                                        </div>
+                                        <div className="d-flex flex-column align-items-start justify-conttent-start w-100 gap-1">
+                                            <label>Message <span className="text-danger">*</span></label>
+                                            <textarea className="form-control" rows={6} value={contect_message} onChange={(e) => setContect_message(e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <div className="d-flex align-items-end justify-content-end w-100 gap-3 p-4">
+                                        <button className="das-button-end save-button" onClick={handle_send_message}>Send</button>
+                                        <button className="das-button-end cancel-button" onClick={handleClose}>Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {current_img && (
+                    <>
+                        <div
+                            className="img-popup-overlay pb-5"
+                            style={{
+                                position: "fixed",
+                                top: 66,
+                                left: 0,
+                                width: "100vw",
+                                height: "100vh",
+                                backgroundColor: "rgba(0, 0, 0, 0.6)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                zIndex: 9999,
+                            }}
+                        >
+                            <div
+                                className="popup-box rounded shadow-lg position-relative p-0"
+                                style={{
+                                    width: "100vw",
+                                    height: "100vh",
+                                    maxWidth: "100%",
+                                    cursor: 'default'
+                                }}
+                            >
+                                <button
+                                    onClick={() => setCurrent_img('')}
+                                    className="btn  position-absolute"
+                                    style={{ top: "10px", right: "10px" }}
+                                >
+                                    <RxCross2 className="text-light fs-1 fw-bold" />
+                                </button>
+                                <div className="d-flex align-items-center justify-content-center h-100 w-100 px-5 py-5">
+                                    <img
+                                        src={`${Backend_URL}/files/${current_img}`}
+                                        alt="Image not available"
+                                        style={{
+                                            maxWidth: "100%",
+                                            maxHeight: "100%",
+                                            objectFit: "contain",
+                                            display: "block",
+                                            borderRadius: "10px",
+                                            padding: '50px'
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
 
             </div>
             <Footer />

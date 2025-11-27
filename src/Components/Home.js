@@ -21,8 +21,9 @@ import * as AiIcons from "react-icons/ai";
 import * as PiIcons from "react-icons/pi";
 import * as SiIcons from "react-icons/si";
 import * as GrIcons from "react-icons/gr";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAlert } from "./alert/Alert_message";
+import { fetchUserChats } from "../redux/userChatSlice";
 
 const Home = () => {
     const Backend_URL = process.env.REACT_APP_API_URL;
@@ -109,10 +110,28 @@ const Home = () => {
 
     const { showAlert } = useAlert();
     const dispatch = useDispatch();
-    const { data, requestStatus, error } = useSelector((state) => state.user);
+    const location = useLocation();
+    // const { data, requestStatus, error } = useSelector((state) => state.user);
+    // useEffect(() => {
+    //     dispatch(fetchUserInfo());
+    // }, [dispatch]);
+
+    const {
+        data,
+        requestStatus: userStatus,
+        error: userError
+    } = useSelector((state) => state.user);
+
+    const {
+        chatData,
+        requestStatus: chatStatus,
+        error: chatError
+    } = useSelector((state) => state.user_chat);
+
     useEffect(() => {
         dispatch(fetchUserInfo());
-    }, [dispatch]);
+        dispatch(fetchUserChats());
+    }, [dispatch, location]);
 
     console.log('this is email-: ', data?.email);
     const handlePayment = async (plan) => {
@@ -601,7 +620,7 @@ const Home = () => {
                                             "179"
                                         )}
                                     </h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
-                                    <button className="price-get-box-premium w-100" onClick={() => checked ? handlePayment(1999): handlePayment(179)}>Get Premium</button>
+                                    <button className="price-get-box-premium w-100" onClick={() => checked ? handlePayment(1999) : handlePayment(179)}>Get Premium</button>
                                     <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Full Features for Company Website</span></span>
                                     <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>2nd Priority for Listing</span></span>
                                     <span className="price-list-checked-premium"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Unlimited Messaging for Communication</span></span>
@@ -627,7 +646,7 @@ const Home = () => {
                                             "249"
                                         )}
                                     </h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
-                                    <button className="price-get-box w-100" onClick={() => checked ? handlePayment(2699): handlePayment(249)}>Get Premium +</button>
+                                    <button className="price-get-box w-100" onClick={() => checked ? handlePayment(2699) : handlePayment(249)}>Get Premium +</button>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Full Features for Company Website</span></span>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>1st Priority + Sponsored for Listing</span></span>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Unlimited Messaging for Communication</span></span>

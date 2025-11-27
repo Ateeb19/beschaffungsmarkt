@@ -7,6 +7,8 @@ import { useAlert } from "../../alert/Alert_message";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchUserInfo } from "../../../redux/userSlice";
 import axios from "axios";
+import { MdError } from "react-icons/md";
+import { IoIosCheckmarkCircle } from "react-icons/io";
 
 const DragAndDrop = ({ accept, onFileDrop, label, className }) => {
     const onDrop = useCallback(
@@ -185,6 +187,37 @@ const Das_Profile = () => {
             }
         }
     }
+
+    const handle_email_varification = async () => {
+        try {
+            const res = await axios.post(`${Backend_URL}/api/auth/send-verify-email`, {
+                email: data.email,
+            }, {
+                withCredentials: true,
+            })
+
+            if (res.data.status) {
+                showAlert(<div className="d-flex align-items-center justify-content-start gap-1">
+                    <IoIosCheckmarkCircle className="text-success fs-1" />
+                    {res.data.msg}
+                </div>, 'success');
+            }
+        } catch (e) {
+            const errorMessage =
+                e.response?.data?.msg ||
+                e.response?.data?.error ||
+                e.message ||
+                "Something went wrong";
+
+            showAlert(
+                <div className="d-flex align-items-center justify-content-start gap-1">
+                    <MdError className="text-danger fs-3" />
+                    {errorMessage}
+                </div>,
+                "danger"
+            );
+        }
+    }
     return (
         <div className="d-flex flex-column align-items-start justify-content-start w-100">
             <h5 style={{ fontWeight: '700' }}>User Profile</h5>
@@ -221,12 +254,17 @@ const Das_Profile = () => {
                     </div>
 
                     <div className="col-md-6 d-flex flex-column align-items-start justify-content-end gap-3 ps-4">
-                        <div className="d-flex text-start dssh-profile-email-var w-100">
-                            <p>Your email has not been verified yet. You need to check your email before you can do anything else.</p>
-                        </div>
-                        <div className="d-flex align-item-end justify-content-end p-0 w-100">
-                            <button className="das-button-end save-button">Get the verified email</button>
-                        </div>
+                        {data.is_verified ? null : (
+                            <>
+                                <div className="d-flex text-start dssh-profile-email-var w-100">
+                                    <p>Your email has not been verified yet. You need to check your email before you can do anything else.</p>
+                                </div>
+
+                                <div className="d-flex align-item-end justify-content-end p-0 w-100">
+                                    <button className="das-button-end save-button" onClick={handle_email_varification}>Get the verified email</button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 

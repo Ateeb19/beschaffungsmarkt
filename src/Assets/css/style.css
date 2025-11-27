@@ -2480,10 +2480,16 @@ input[type="password"]:focus {
     overflow: hidden;
 }
 
-.dash-msg-left p {
+.dash-msg-left .display_time {
     color: rgb(156 163 175);
     font-size: .75rem;
     white-space: nowrap;
+}
+
+.dash-msg-left .display_num_msg {
+    color: rgb(239 68 68);
+    font-weight: 700;
+    font-size: .875rem;
 }
 
 .dash-msg-left span {
@@ -2622,8 +2628,8 @@ input[type="password"]:focus {
 }
 
 .chat-box-text-file {
-    padding: 1.25rem 0rem;
-    gap: .5rem;
+    /* padding: .25rem 0rem; */
+    /* gap: .2rem; */
 }
 
 .chat-box-text-file-inner {
@@ -2635,6 +2641,25 @@ input[type="password"]:focus {
 }
 
 
+
+
+.dash-msg-file {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: .5rem;
+}
+
+.dash-msg-file span {
+    font-size: .75rem;
+}
+
+.notification_dot {
+    background-color: rgb(239 68 68);
+    border-radius: 9999px;
+    width: .75rem;
+    height: .75rem;
+    margin-left: -14px;
+}
 
 /* Responsive height like xs:h-60 */
 @media (max-width: 576px) {

@@ -7,6 +7,7 @@ import { GoBellFill } from "react-icons/go";
 import { LuUser } from "react-icons/lu";
 import { MdLogout } from "react-icons/md";
 import axios from "axios";
+import { fetchUserChats } from "../../redux/userChatSlice";
 
 
 const Navbar = () => {
@@ -15,22 +16,62 @@ const Navbar = () => {
     const [open, setOpen] = useState(false);
     const token = localStorage.getItem("procurement_token");
     const isDashboard = location.pathname.startsWith("/dashboard");
-
-
+    const [notification, setNotification] = useState(false);
     const dispatch = useDispatch();
-    const { data, requestStatus, error } = useSelector((state) => state.user);
+
+    const {
+        data,
+        requestStatus: userStatus,
+        error: userError
+    } = useSelector((state) => state.user);
+
+    const {
+        chatData,
+        requestStatus: chatStatus,
+        error: chatError
+    } = useSelector((state) => state.user_chat);
+
     useEffect(() => {
-        const token = localStorage.getItem("procurement_token");
-        if (token) {
-            dispatch(fetchUserInfo());
-        }
-    }, [dispatch]);
+        dispatch(fetchUserInfo());
+        dispatch(fetchUserChats());
+    }, [dispatch, location.pathname]);
+
+    console.log('chat -: ', chatData);
+
+    useEffect(() => {
+        const chat = chatData?.allChatData || [];
+
+        const hasUnread = chat.some(c => c.unreadMsg > 0);
+
+        setNotification(hasUnread);
+    }, [data, chatData]);
+
+    // useEffect(() => {
+    //     const notify = () => {
+    //         const chat = chatData?.allChatData || [];
+    //         chat.forEach(c => {
+    //             if (c.unreadMsg != 0) {
+    //                 setNotification(true);
+    //             }
+    //         });
+    //     }
+    //     notify();
+    // }, [data, chatData])
+
+    console.log(notification);
+    // const { data, requestStatus, error } = useSelector((state) => state.user);
+    // useEffect(() => {
+    //     const token = localStorage.getItem("procurement_token");
+    //     if (token) {
+    //         dispatch(fetchUserInfo());
+    //     }
+    // }, [dispatch]);
     // console.log(data);
     // console.log('request-: ', requestStatus);
 
     useEffect(() => {
         setOpen(false);
-    }, [data, requestStatus]);
+    }, [data]);
 
     const handleLogout = async () => {
         console.log('logou')
@@ -76,10 +117,13 @@ const Navbar = () => {
                             <span onClick={() => { navigate('/pricing') }}>Pricing</span>
                             <span onClick={() => { navigate('/contact') }}>Contact</span>
 
-                            {requestStatus === 'fulfilled' ? (
+                            {data ? (
+                                // {requestStatus === 'fulfilled' ? (
                                 <>
                                     <div className="d-flex align-items-center jusitfy-content-center gap-3 nav-buttons">
-                                        <div onClick={() => { navigate('/dashboard/message') }}><GoBellFill className="fs-4" /></div>
+                                        <div className="d-flex ailgn-items-center justify-content-center" onClick={() => { navigate('/dashboard/message') }}><GoBellFill className="fs-4" />{notification && (<>
+                                            <div className="notification_dot"></div>
+                                        </>)} </div>
                                         <div
                                             className="user-initials d-flex flex-column gap-5 align-items-end justify-content-start"
                                             onMouseEnter={() => setOpen(true)}

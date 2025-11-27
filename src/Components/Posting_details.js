@@ -12,7 +12,7 @@ import * as PiIcons from "react-icons/pi";
 import * as SiIcons from "react-icons/si";
 import * as GrIcons from "react-icons/gr";
 import { LiaBuysellads, LiaSellcast } from "react-icons/lia";
-import { MdOutlineEmojiTransportation } from "react-icons/md";
+import { MdError, MdOutlineEmojiTransportation } from "react-icons/md";
 import { FaCarSide } from "react-icons/fa6";
 import { SlEye } from "react-icons/sl";
 import { IoIosCheckmarkCircle, IoMdThumbsUp } from "react-icons/io";
@@ -51,7 +51,7 @@ const Posting_details = () => {
     const [contact_company, setContact_company] = useState(false);
     const [contect_message, setContect_message] = useState('');
     // console.log('user data -: ', data);
-
+    const [selected_img, setSelected_img] = useState('');
     useEffect(() => {
         const fetchCompany = async () => {
             try {
@@ -153,6 +153,13 @@ const Posting_details = () => {
     }
 
     const handle_send_message = async () => {
+        if (!contect_message) {
+            showAlert(<div className="d-flex gap-1 justify-content-center align-items-center text-start me-3">
+                <TiWarning className="text-warning fs-3" />
+                <span>Enter the Message !</span>
+            </div>, 'warning')
+            return;
+        }
         try {
             const res = await axios.post(`${Backend_URL}/api/chats/create`, {
                 message: contect_message,
@@ -178,7 +185,7 @@ const Posting_details = () => {
 
             showAlert(
                 <div className="d-flex align-items-center justify-content-start gap-1">
-                    <IoIosCheckmarkCircle className="text-danger fs-3" />
+                    <MdError className="text-danger fs-3" />
                     {errorMessage}
                 </div>,
                 "danger"
@@ -265,7 +272,7 @@ const Posting_details = () => {
                                                 {post.postInfoData.file.length > 0 && (
                                                     <>
                                                         {post.postInfoData.file.map((f, index) => (
-                                                            <div className="post-atach-file">
+                                                            <div className="post-atach-file" onClick={() => setSelected_img(f)}>
                                                                 <img src={`${Backend_URL}/files/${f}`} alt={post.postInfoData.title} />
                                                             </div>
                                                         ))}
@@ -461,6 +468,58 @@ const Posting_details = () => {
                         )}
 
                     </div>
+
+                    {selected_img && (
+                        <>
+                            <div
+                                className="img-popup-overlay pb-5"
+                                style={{
+                                    position: "fixed",
+                                    top: 66,
+                                    left: 0,
+                                    width: "100vw",
+                                    height: "100vh",
+                                    backgroundColor: "rgba(0, 0, 0, 0.6)",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    zIndex: 9999,
+                                }}
+                            >
+                                <div
+                                    className="popup-box rounded shadow-lg position-relative p-0"
+                                    style={{
+                                        width: "100vw",
+                                        height: "100vh",
+                                        maxWidth: "100%",
+                                        cursor: 'default'
+                                    }}
+                                >
+                                    <button
+                                        onClick={() => setSelected_img('')}
+                                        className="btn  position-absolute"
+                                        style={{ top: "10px", right: "10px" }}
+                                    >
+                                        <RxCross2 className="text-light fs-1 fw-bold" />
+                                    </button>
+                                    <div className="d-flex align-items-center justify-content-center h-100 w-100 px-5 py-5">
+                                        <img
+                                            src={`${Backend_URL}/files/${selected_img}`}
+                                            alt="Image not available"
+                                            style={{
+                                                maxWidth: "100%",
+                                                maxHeight: "100%",
+                                                objectFit: "contain",
+                                                display: "block",
+                                                borderRadius: "10px",
+                                                padding: '50px'
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
 
                     <div className="col-3 d-flex flex-column gap-3 ps-3">
                         <div className="d-flex align-items-center justify-content-center w-100 post-sponsor">
