@@ -2243,7 +2243,6 @@ input[type="password"]:focus {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    /* similar to gap-3 in Tailwind */
     margin-top: 1rem;
 }
 
@@ -2447,13 +2446,18 @@ input[type="password"]:focus {
     overflow: hidden;
 }
 
+.msg-outer-div{
+    height: calc(100vh - 125px);
+}
+
 .dash-message-box-left {
-    display: flex;
-    flex-direction: column;
+    /* display: flex;
+    flex-direction: column; */
     background-color: #f9fafb;
-    padding: 0.75rem 0rem 0rem 0rem;
+    height: 100%;
+    /* padding: 0.75rem 0rem 0rem 0rem;
     overflow-y: auto;
-    min-height: 0;
+    min-height: 0; */
 }
 
 .message-search {

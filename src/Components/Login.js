@@ -60,6 +60,7 @@ const Login = () => {
                 localStorage.setItem('procurement_token', res.data.token);
                 dispatch(fetchUserInfo());
                 navigate("/"); // redirect to homepage or dashboard
+                
             } else {
                 showAlert(
                     <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>

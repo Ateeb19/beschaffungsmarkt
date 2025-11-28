@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserChats } from "../../redux/userChatSlice";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -183,9 +183,9 @@ const Das_Message = () => {
 
             setSelected_chat({
                 chat_info: c,
-                messages: res.data
+                // messages: res.data
+                messages: res.data.slice().reverse()
             });
-            console.log(selected_chat);
 
             // CLOSE OLD SOCKET IF EXISTS
             if (socket) {
@@ -208,6 +208,8 @@ const Das_Message = () => {
             );
         }
     };
+
+    console.log(selected_chat);
 
     const connectWebSocket = (chatId) => {
         // close previous connection if exists
@@ -291,6 +293,21 @@ const Das_Message = () => {
             return;
         }
 
+        const newMessage = {
+            _id: Math.random().toString(36).substr(2, 9), // temporary unique ID
+            chatId: activeChatId,
+            sender: userId,
+            message: messageText,
+            file: selectedFiles.map(f => f.name), // display file names immediately
+            created_time: new Date().toISOString(),
+        };
+
+        // 2️⃣ Update the chat instantly
+        setSelected_chat(prev => ({
+            ...prev,
+            messages: [...prev.messages, newMessage]
+        }));
+
         const base64Files = await Promise.all(
             selectedFiles.map(file => fileToBase64(file))
         );
@@ -312,15 +329,19 @@ const Das_Message = () => {
 
         setMessageText("");
         setSelectedFiles([]);
-        setTimeout(() => {
-            handle_chate(selected_chat.chat_info);
-        }, 2);
+        // setTimeout(() => {
+        //     handle_chate(selected_chat.chat_info);
+        // }, 2);
     };
 
+    const chatScrollRef = useRef(null);
+
     useEffect(() => {
-        const box = document.querySelector(".dash-right-msg-chat-box");
-        if (box) box.scrollTop = box.scrollHeight;
+        if (chatScrollRef.current) {
+            chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+        }
     }, [selected_chat?.messages]);
+
 
     const formatChatDate = (isoString) => {
         const date = new Date(isoString);
@@ -357,7 +378,281 @@ const Das_Message = () => {
     return (
         <div className="d-flex flex-column align-items-start justify-content-start w-100 p-1">
             <div className="d-flex align-items-start justify-content-start w-100 dash-message"><h2>Your Messages</h2></div>
-            <div className="row w-100 dash-message-box h-100 mt-1 p-1">
+
+            <div className="container-fluid p-0 msg-outer-div">
+                <div className="row g-0 h-100">
+                    {/* Left side - Chat list */}
+
+                    <div className="col-4 d-flex flex-column  pe-2" style={{ height: "100%" }}>
+                        <div className="w-100 dash-message-box-left">
+                            <div className="w-100 py-1 px-2">
+                                <input className="form-control w-100 message-search" placeholder="Search..." />
+                            </div>
+
+
+
+                            {/* Chat list - scrollable */}
+                            {/* <div className="flex-grow-1 overflow-auto">
+                            {Array.from({ length: 20 }).map((_, i) => (
+                                <div
+                                    key={i}
+                                    className="p-3 border-bottom d-flex align-items-center justify-content-between"
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    <div>
+                                        <strong>Sender Name</strong>
+                                        <p className="mb-0 text-muted">Last message preview...</p>
+                                    </div>
+                                    <span className="badge bg-primary rounded-pill">2</span>
+                                </div>
+                            ))}
+                        </div> */}
+                            <div className="w-100 mt-4 d-flex flex-column align-items-start justify-content-start">
+                                {chatData?.allChatData?.length > 0 && (
+                                    <>
+                                        {chatData?.allChatData?.map((c, key) => (
+                                            <>
+                                                <div
+                                                    className={`d-flex flex-column w-100 align-items-start justify-content-start border-bottom dash-msg-left ${activeChatId === c._id ? "dash-msg-left-active" : "dash-msg-left"}`}
+                                                    key={key}
+                                                    onClick={() => handle_chate(c)}
+                                                >
+                                                    <div className="d-flex align-items-start justify-content-between w-100 ">
+                                                        <div className="d-flex flex-column align-items-start justify-content-start">
+                                                            <h3>{c.title}</h3>
+                                                            {c.sender._id === data._id ? (
+                                                                <>
+                                                                    {c.receiver.contact_first_name && c.receiver.contact_last_name ? (
+                                                                        <>
+                                                                            <span>{c.receiver.contact_first_name} {c.receiver.contact_last_name}</span>
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <span>{c.receiver.company_name}</span>
+                                                                        </>
+                                                                    )}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    {c.sender.contact_first_name && c.sender.contact_last_name ? (
+                                                                        <>
+                                                                            <span>{c.sender.contact_first_name} {c.sender.contact_last_name}</span>
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <span>{c.sender.company_name}</span>
+                                                                        </>
+                                                                    )}
+                                                                </>
+                                                            )}
+
+                                                        </div>
+                                                        <div className="d-flex flex-column align-items-end justify-content-start">
+                                                            <span className="display_time">{timeAgo(c.created_time)}</span>
+                                                            {c.unreadMsg != 0 && (
+                                                                <>
+                                                                    <span className="display_num_msg">{c.unreadMsg}</span>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        ))}
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right side - Selected chat */}
+                    <div className="col-8 d-flex flex-column " style={{ height: "100%" }}>
+
+                        {selected_chat && (
+                            <>
+                                <div className="">
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 p-1 dash-chat-outer-div">
+                                        <div className="dash-right-msg-top w-100 d-flex flex-column align-items-start gap-2 py-3">
+                                            <h1>{selected_chat.chat_info.title}</h1>
+                                            <button
+                                                className=""
+                                                onClick={() => navigate(`/company/${selected_chat.chat_info.sender._id}`)}
+                                            >{selected_chat.chat_info.sender.contact_first_name && selected_chat.chat_info.sender.contact_last_name ? (
+                                                <>
+                                                    <span>{selected_chat.chat_info.sender.contact_first_name} {selected_chat.chat_info.sender.contact_last_name}</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>{selected_chat.chat_info.sender.company_name}</span>
+                                                </>
+                                            )}</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                {/* Chat messages - scrollable */}
+                                <div className="flex-grow-1 overflow-auto justify-content-end"
+                                    ref={chatScrollRef}
+                                >
+                                    <div className="dash-right-msg-chat-box w-100 d-flex flex-column align-items-start justify-content-end pb-3">
+                                        {selected_chat?.messages?.map((chat, key) => (
+                                            <>
+                                                <div className="chat-inner-box w-100 d-flex flex-column align-items-start justify-content-start">
+                                                    <div className="chat-box-profile d-flex flex-row align-items-start justify-content-start gap-2">
+                                                        <img src={chat.sender === selected_chat.chat_info.sender._id ? selected_chat.chat_info.sender.contact_img ? `${Backend_URL}/files/${selected_chat.chat_info.sender.contact_img}` : '/Images/user-avatar-CZ6R_fL7.webp' : selected_chat.chat_info.receiver.contact_img ? `${Backend_URL}/files/${selected_chat.chat_info.receiver.contact_img}` : '/Images/user-avatar-CZ6R_fL7.webp'} alt="" />
+                                                        <div className="chat-inner-box-id d-flex flex-column align-items-start justify-content-start">
+                                                            {chat.sender === selected_chat.chat_info.sender._id ? selected_chat.chat_info.sender.contact_first_name ? <>
+                                                                <label>{selected_chat.chat_info.sender.contact_first_name} {selected_chat.chat_info.sender.contact_last_name}</label>
+                                                                <span>{selected_chat.chat_info.sender.contact_email}</span>
+                                                            </> : <>
+                                                                <label>{selected_chat.chat_info.sender.company_name}</label>
+
+                                                            </> : selected_chat.chat_info.receiver.contact_first_name ? <>
+                                                                <label>{selected_chat.chat_info.receiver.contact_first_name} {selected_chat.chat_info.receiver.contact_last_name}</label>
+                                                                <span>{selected_chat.chat_info.receiver.contact_email}</span>
+                                                            </> : <>
+                                                                <label>{selected_chat.chat_info.receiver.company_name}</label>
+                                                            </>}
+                                                        </div>
+                                                    </div>
+                                                    <div className="chat-box-text d-flex flex-column align-items-start justify-content-start w-100">
+                                                        <span>{chat.message} </span>
+                                                        {chat?.file.length > 0 && (
+                                                            <>
+                                                                <div className="d-flex flex-wrap align-items-start justify-content-start w-100 gap-3 mt-3">
+                                                                    {chat?.file.map((f, key) => (
+                                                                        <>
+                                                                            <div key={key}
+                                                                                // onClick={() => navigate(`${Backend_URL}/files/${f}`)}
+                                                                                onClick={() => {
+                                                                                    const link = document.createElement("a");
+                                                                                    link.href = `${Backend_URL}/files/${f}`;
+                                                                                    link.download = f; // forces download
+                                                                                    document.body.appendChild(link);
+                                                                                    link.click();
+                                                                                    document.body.removeChild(link);
+                                                                                }}
+                                                                                className="chat-box-text-file d-flex flex-column align-items-start justify-content-start text-start gap-1">
+                                                                                <div className="chat-box-text-file-inner d-flex flex-column align-items-start justify-content-start">
+                                                                                    <FaRegFolder className="fs-5 text-secondary" />
+                                                                                    <span>{f}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </>
+                                                                    ))}
+                                                                </div>
+                                                            </>
+                                                        )}
+
+                                                    </div>
+
+                                                    <div className="chat-box-date d-flex align-items-start justify-content-end w-100">
+                                                        <span>{formatChatDate(chat.created_time)} </span>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        ))}
+                                    </div>
+                                    {/* {Array.from({ length: 30 }).map((_, i) => (
+                                <div
+                                    key={i}
+                                    className={`d-flex flex-column mb-3 ${i % 2 === 0 ? "align-items-start" : "align-items-end"}`}
+                                >
+                                    <div
+                                        className={`p-2 rounded ${i % 2 === 0 ? "bg-white" : "bg-primary text-white"}`}
+                                        style={{ maxWidth: "70%" }}
+                                    >
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. #{i + 1}
+                                    </div>
+                                    <small className="text-muted mt-1">{new Date().toLocaleTimeString()}</small>
+                                </div>
+                            ))} */}
+                                </div>
+                                <div className="dash-right-msg-chat-input w-100 d-flex flex-column align-items-start justify-content-start py-2 gap-3">
+                                    {selectedFiles.length > 0 && (
+                                        <div className="dash-msg-selected-file d-flex flex-wrap align-items-start justify-content-start w-100 gap-3 px-2">
+                                            {selectedFiles.map((file, index) => (
+                                                <div className="dash-msg-file position-relative d-flex flex-column align-items-start justify-content-start text-start gap-1 p-2">
+                                                    <button
+                                                        onClick={() => removeFile(index)}
+                                                        className="position-absolute top-0 end-0 btn p-0 m-1 me-2"
+                                                        style={{
+                                                            background: "transparent",
+                                                            border: "none",
+                                                            fontSize: "16px",
+                                                            cursor: "pointer",
+                                                            color: "dark",
+                                                            lineHeight: "1"
+                                                        }}
+                                                    >
+                                                        x
+                                                    </button>
+                                                    <FaRegFolder className="fs-5 text-secondary" />
+                                                    <span key={index} className="me-2">
+                                                        {file.name}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    <textarea
+                                        rows={3}
+                                        className="form-control w-100"
+                                        placeholder="Type your reply here..."
+                                        value={messageText}
+                                        onChange={(e) => setMessageText(e.target.value)}
+                                    />
+
+                                    <div className="d-flex flex-row align-items-start justify-content-between w-100 px-2">
+                                        <DragAndDrop
+                                            accept={{
+                                                "image/*": [".jpg", ".jpeg", ".png"],
+                                                "application/pdf": [".pdf"],
+                                            }}
+                                            onFileDrop={handleFileDrop}
+                                            className="p-0"
+                                            label={
+                                                <>
+                                                    <GrAttachment className="fs-4 text-secondary" />
+                                                </>
+                                            } />
+
+
+                                        <button
+                                            className="das-button-end save-button"
+                                            onClick={handleSendMessage}
+                                        >
+                                            Reply
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+
+
+                        {/* Chat input */}
+                        {/* <div className="p-3 border-top">
+                            <div className="d-flex">
+                                <textarea
+                                    className="form-control me-2"
+                                    placeholder="Type a message..."
+                                    rows={1}
+                                    style={{ resize: "none" }}
+                                ></textarea>
+                                <button className="btn btn-primary">Send</button>
+                            </div>
+                        </div> */}
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            {/* <div className="container-fluid vh-100 mt-1 p-0 dash-message-box">
                 <div className="col-4 dash-message-box-left h-100">
                     <div className="w-100 py-1 px-2">
                         <input className="form-control w-100 message-search" placeholder="Search..." />
@@ -438,64 +733,63 @@ const Das_Message = () => {
                                     )}</button>
                                 </div>
                                 <div className="dash-right-msg-chat-box w-100 d-flex flex-column align-items-start justify-content-end py-3">
-                                    {selected_chat?.messages?.slice()
-                                        .reverse().map((chat, key) => (
-                                            <>
-                                                <div className="chat-inner-box w-100 d-flex flex-column align-items-start justify-content-start">
-                                                    <div className="chat-box-profile d-flex flex-row align-items-start justify-content-start gap-2">
-                                                        <img src={chat.sender === selected_chat.chat_info.sender._id ? selected_chat.chat_info.sender.contact_img ? `${Backend_URL}/files/${selected_chat.chat_info.sender.contact_img}` : '/Images/user-avatar-CZ6R_fL7.webp' : selected_chat.chat_info.receiver.contact_img ? `${Backend_URL}/files/${selected_chat.chat_info.receiver.contact_img}` : '/Images/user-avatar-CZ6R_fL7.webp'} alt="" />
-                                                        <div className="chat-inner-box-id d-flex flex-column align-items-start justify-content-start">
-                                                            {chat.sender === selected_chat.chat_info.sender._id ? selected_chat.chat_info.sender.contact_first_name ? <>
-                                                                <label>{selected_chat.chat_info.sender.contact_first_name} {selected_chat.chat_info.sender.contact_last_name}</label>
-                                                                <span>{selected_chat.chat_info.sender.contact_email}</span>
-                                                            </> : <>
-                                                                <label>{selected_chat.chat_info.sender.company_name}</label>
+                                    {selected_chat?.messages?.map((chat, key) => (
+                                        <>
+                                            <div className="chat-inner-box w-100 d-flex flex-column align-items-start justify-content-start">
+                                                <div className="chat-box-profile d-flex flex-row align-items-start justify-content-start gap-2">
+                                                    <img src={chat.sender === selected_chat.chat_info.sender._id ? selected_chat.chat_info.sender.contact_img ? `${Backend_URL}/files/${selected_chat.chat_info.sender.contact_img}` : '/Images/user-avatar-CZ6R_fL7.webp' : selected_chat.chat_info.receiver.contact_img ? `${Backend_URL}/files/${selected_chat.chat_info.receiver.contact_img}` : '/Images/user-avatar-CZ6R_fL7.webp'} alt="" />
+                                                    <div className="chat-inner-box-id d-flex flex-column align-items-start justify-content-start">
+                                                        {chat.sender === selected_chat.chat_info.sender._id ? selected_chat.chat_info.sender.contact_first_name ? <>
+                                                            <label>{selected_chat.chat_info.sender.contact_first_name} {selected_chat.chat_info.sender.contact_last_name}</label>
+                                                            <span>{selected_chat.chat_info.sender.contact_email}</span>
+                                                        </> : <>
+                                                            <label>{selected_chat.chat_info.sender.company_name}</label>
 
-                                                            </> : selected_chat.chat_info.receiver.contact_first_name ? <>
-                                                                <label>{selected_chat.chat_info.receiver.contact_first_name} {selected_chat.chat_info.receiver.contact_last_name}</label>
-                                                                <span>{selected_chat.chat_info.receiver.contact_email}</span>
-                                                            </> : <>
-                                                                <label>{selected_chat.chat_info.receiver.company_name}</label>
-                                                            </>}
-                                                        </div>
-                                                    </div>
-                                                    <div className="chat-box-text d-flex flex-column align-items-start justify-content-start w-100">
-                                                        <span>{chat.message} </span>
-                                                        {chat?.file.length > 0 && (
-                                                            <>
-                                                                <div className="d-flex flex-wrap align-items-start justify-content-start w-100 gap-3 mt-3">
-                                                                    {chat?.file.map((f, key) => (
-                                                                        <>
-                                                                            <div key={key}
-                                                                                // onClick={() => navigate(`${Backend_URL}/files/${f}`)}
-                                                                                onClick={() => {
-                                                                                    const link = document.createElement("a");
-                                                                                    link.href = `${Backend_URL}/files/${f}`;
-                                                                                    link.download = f; // forces download
-                                                                                    document.body.appendChild(link);
-                                                                                    link.click();
-                                                                                    document.body.removeChild(link);
-                                                                                }}
-                                                                                className="chat-box-text-file d-flex flex-column align-items-start justify-content-start text-start gap-1">
-                                                                                <div className="chat-box-text-file-inner d-flex flex-column align-items-start justify-content-start">
-                                                                                    <FaRegFolder className="fs-5 text-secondary" />
-                                                                                    <span>{f}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </>
-                                                                    ))}
-                                                                </div>
-                                                            </>
-                                                        )}
-
-                                                    </div>
-
-                                                    <div className="chat-box-date d-flex align-items-start justify-content-end w-100">
-                                                        <span>{formatChatDate(chat.created_time)} </span>
+                                                        </> : selected_chat.chat_info.receiver.contact_first_name ? <>
+                                                            <label>{selected_chat.chat_info.receiver.contact_first_name} {selected_chat.chat_info.receiver.contact_last_name}</label>
+                                                            <span>{selected_chat.chat_info.receiver.contact_email}</span>
+                                                        </> : <>
+                                                            <label>{selected_chat.chat_info.receiver.company_name}</label>
+                                                        </>}
                                                     </div>
                                                 </div>
-                                            </>
-                                        ))}
+                                                <div className="chat-box-text d-flex flex-column align-items-start justify-content-start w-100">
+                                                    <span>{chat.message} </span>
+                                                    {chat?.file.length > 0 && (
+                                                        <>
+                                                            <div className="d-flex flex-wrap align-items-start justify-content-start w-100 gap-3 mt-3">
+                                                                {chat?.file.map((f, key) => (
+                                                                    <>
+                                                                        <div key={key}
+                                                                            // onClick={() => navigate(`${Backend_URL}/files/${f}`)}
+                                                                            onClick={() => {
+                                                                                const link = document.createElement("a");
+                                                                                link.href = `${Backend_URL}/files/${f}`;
+                                                                                link.download = f; // forces download
+                                                                                document.body.appendChild(link);
+                                                                                link.click();
+                                                                                document.body.removeChild(link);
+                                                                            }}
+                                                                            className="chat-box-text-file d-flex flex-column align-items-start justify-content-start text-start gap-1">
+                                                                            <div className="chat-box-text-file-inner d-flex flex-column align-items-start justify-content-start">
+                                                                                <FaRegFolder className="fs-5 text-secondary" />
+                                                                                <span>{f}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </>
+                                                                ))}
+                                                            </div>
+                                                        </>
+                                                    )}
+
+                                                </div>
+
+                                                <div className="chat-box-date d-flex align-items-start justify-content-end w-100">
+                                                    <span>{formatChatDate(chat.created_time)} </span>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ))}
                                 </div>
 
                                 <div className="dash-right-msg-chat-input w-100 d-flex flex-column align-items-start justify-content-start py-2 gap-3">
@@ -561,7 +855,7 @@ const Das_Message = () => {
                         </>
                     )}
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

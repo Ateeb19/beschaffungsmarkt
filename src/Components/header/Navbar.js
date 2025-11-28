@@ -36,7 +36,7 @@ const Navbar = () => {
         dispatch(fetchUserChats());
     }, [dispatch, location.pathname]);
 
-    console.log('chat -: ', chatData);
+    // console.log('chat -: ', chatData);
 
     useEffect(() => {
         const chat = chatData?.allChatData || [];
@@ -58,7 +58,7 @@ const Navbar = () => {
     //     notify();
     // }, [data, chatData])
 
-    console.log(notification);
+    // console.log(notification);
     // const { data, requestStatus, error } = useSelector((state) => state.user);
     // useEffect(() => {
     //     const token = localStorage.getItem("procurement_token");
