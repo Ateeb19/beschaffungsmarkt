@@ -47,6 +47,7 @@ const Das_Message = () => {
 
     const Backend_URL = process.env.REACT_APP_API_URL;
     const Backend_CHAT_URL = process.env.REACT_APP_CHAT_URL;
+    const Backend_CHAT_FILE = process.env.REACT_APP_CHAT_FILE;
     const [selected_chat, setSelected_chat] = useState(null);
     const [activeChatId, setActiveChatId] = useState(null);
     const [messageText, setMessageText] = useState("");
@@ -532,7 +533,7 @@ const Das_Message = () => {
                                                                                     // onClick={() => navigate(`${Backend_URL}/files/${f}`)}
                                                                                     onClick={() => {
                                                                                         const link = document.createElement("a");
-                                                                                        link.href = `${Backend_URL}/files/${f}`;
+                                                                                        link.href = `${Backend_CHAT_FILE}/files/${f}`;
                                                                                         link.download = f; // forces download
                                                                                         document.body.appendChild(link);
                                                                                         link.click();
