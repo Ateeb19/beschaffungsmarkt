@@ -8,6 +8,7 @@ import { LuUser } from "react-icons/lu";
 import { MdLogout } from "react-icons/md";
 import axios from "axios";
 import { fetchUserChats } from "../../redux/userChatSlice";
+import LanguageDropdown from "./LanguageDroper";
 
 
 const Navbar = () => {
@@ -101,10 +102,11 @@ const Navbar = () => {
                     <div className="d-flex flex-row justify-content-between align-items-center">
                         <div className="d-flex align-items-center justify-content-start gap-3">
                             <div className="nav-image">
-                                <img src="/beschaffungsmarkt_images/logo-eWxZ6qaB.svg" alt="" width="208px" />
+                                <img src="/beschaffungsmarkt_images/logo-eWxZ6qaB.svg" alt="" width="208px" onClick={() => { navigate('/') }}/>
                             </div>
                             <div className="nav-laungage">
-                                <span><img src="/Images/united-states-of-america.png" alt="" className="me-2" width="30px" /> English</span>
+                                {/* <span><img src="/Images/united-states-of-america.png" alt="" className="me-2" width="30px" /> English</span> */}
+                                <LanguageDropdown />
                             </div>
 
                         </div>

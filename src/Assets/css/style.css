@@ -2644,8 +2644,9 @@ input[type="password"]:focus {
     cursor: pointer;
 }
 
-
-
+.nav-image{
+    cursor: pointer;
+}
 
 .dash-msg-file {
     padding: 0.5rem 0.75rem;
