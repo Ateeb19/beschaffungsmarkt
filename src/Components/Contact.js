@@ -1,6 +1,6 @@
 import React from "react";
 import "../Assets/css/style.css";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer/Footer";
 import { useNavigate } from "react-router-dom";
 const Contact = () => {
 

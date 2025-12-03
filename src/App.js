@@ -35,10 +35,13 @@ import Company_details from './Components/Company_details';
 import PaymentSuccess from './Components/Payment/PaymentSuccess';
 import PaymentCancel from './Components/Payment/PaymentCancel';
 import Posting_details from './Components/Posting_details';
-
+import { useDispatch } from 'react-redux';
+import { setDroper_open } from './redux/Close_droper';
+import Forgot_password from './Components/Forgot_password';
 const AppContent = () => {
+
   return (
-    <div className="App">
+    <div className="App" >
       {/* <ScrollToTop /> */}
       <Routes>
         <Route path="/" element={<Home />} />
@@ -57,7 +60,8 @@ const AppContent = () => {
         <Route path="/terms-of-service" element={<Terms />} />
         <Route path="/login" element={<Login />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/payment-cancel" element={<PaymentCancel/>} />
+        <Route path="/payment-cancel" element={<PaymentCancel />} />
+        <Route path='forgot-password' element={<Forgot_password />} />
 
 
         <Route path='/dashboard' element={<Dashboard_layout />}>
@@ -82,12 +86,15 @@ const AppContent = () => {
 };
 
 function App() {
+  const dispatch = useDispatch();
   return (
     <GoogleReCaptchaProvider reCaptchaKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}>
       <Router>
         <AlertProvider>
-          <Navbar />
-          <AppContent />
+          <div onClick={() => dispatch(setDroper_open(false))}>
+            <Navbar />
+            <AppContent />
+          </div>
         </AlertProvider>
       </Router>
     </GoogleReCaptchaProvider>

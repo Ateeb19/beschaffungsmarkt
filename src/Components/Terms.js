@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer/Footer";
 
 const Terms = () => {
     const navigate = useNavigate();

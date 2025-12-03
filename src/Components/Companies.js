@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer/Footer";
 import { MdClose, MdOutlineSearch } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import axios from "axios";

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer/Footer";
 import { FiCheckCircle } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import Switch from "react-switch";

@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form';
 import Switch from "react-switch";
 import { FiCheckCircle } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserInfo } from "../redux/userSlice";
 import axios from "axios";

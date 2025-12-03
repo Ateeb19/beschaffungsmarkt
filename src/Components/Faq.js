@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer/Footer";
 import Accordion from 'react-bootstrap/Accordion';
 
 const Faq = () => {

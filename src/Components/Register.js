@@ -103,7 +103,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer/Footer";
 import { useAlert } from "./alert/Alert_message";
 import Switch from "react-switch";
 import { MdError } from "react-icons/md";

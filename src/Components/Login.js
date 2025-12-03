@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer/Footer";
 import Switch from "react-switch";
 import axios from "axios";
 import { useAlert } from "./alert/Alert_message";
@@ -153,7 +153,7 @@ const Login = () => {
                                                     value={formData.password}
                                                     onChange={handleChange}
                                                     required />
-                                                <span style={{ color: '#2563eb' }}>Forgot Password?</span>
+                                                <span style={{ color: '#2563eb', cursor:'pointer' }} onClick={() => navigate('/forgot-password')}>Forgot Password?</span>
                                             </div>
                                         </div>
 

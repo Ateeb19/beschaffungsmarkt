@@ -9,6 +9,7 @@ import { MdLogout } from "react-icons/md";
 import axios from "axios";
 import { fetchUserChats } from "../../redux/userChatSlice";
 import LanguageDropdown from "./LanguageDroper";
+import { setDroper_open } from "../../redux/Close_droper";
 
 
 const Navbar = () => {
@@ -96,9 +97,9 @@ const Navbar = () => {
     };
     return (
         <>
-            <div className="w-100 nav-bar-wrap">
+            <div className="w-100 nav-bar-wrap" >
                 {/* <div className="container"> */}
-                <div className={isDashboard ? "container-fluid" : "container"}>
+                <div className={isDashboard ? "container-fluid" : "container"} >
                     <div className="d-flex flex-row justify-content-between align-items-center">
                         <div className="d-flex align-items-center justify-content-start gap-3">
                             <div className="nav-image">

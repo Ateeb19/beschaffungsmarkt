@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer/Footer";
 import { GiClothes, GiCosmicEgg, GiElectricalResistance, GiLeatherArmor, GiMetalScales, GiRubberBoot } from "react-icons/gi";
 import { FaCarSide, FaChair, FaSheetPlastic } from "react-icons/fa6";
 import { PiBowlFoodFill } from "react-icons/pi";

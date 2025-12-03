@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer/Footer";
 import { IoHomeOutline } from "react-icons/io5";
 import * as GiIcons from "react-icons/gi";
 import * as FaIcons from "react-icons/fa";

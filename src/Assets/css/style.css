@@ -2644,7 +2644,7 @@ input[type="password"]:focus {
     cursor: pointer;
 }
 
-.nav-image{
+.nav-image {
     cursor: pointer;
 }
 
@@ -2664,6 +2664,51 @@ input[type="password"]:focus {
     width: .75rem;
     height: .75rem;
     margin-left: -14px;
+}
+
+.forget-password {
+    width: 35%;
+    background-color: #ffffff;
+    padding: 1.5rem 2rem 2rem 2rem;
+    border: 1px solid rgb(224 230 239);
+    border-radius: .25rem;
+    margin-bottom: 2rem;
+    margin-top: 5rem;
+}
+
+.forget-password img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.forget-password h1 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.forget-password p {
+    font-size: .875rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.forget-email {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.forget-email label {
+    color: rgb(55 65 81);
+    font-weight: 700;
+    font-size: .875rem;
+    margin-bottom: .5rem;
+}
+
+.cancel-button-forget {
+    color: #6b7280;
+    background-color: transparent;
 }
 
 /* Responsive height like xs:h-60 */
