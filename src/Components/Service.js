@@ -130,7 +130,7 @@ const Service = () => {
                                         <li>Direct networking: Get in touch with potential partners quickly and easily.</li>
                                     </ul>
                                     <div className="serch-btn mt-2">
-                                        <button>Contact Us</button>
+                                        <button onClick={() => navigate('/contact')}>Contact Us</button>
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +165,7 @@ const Service = () => {
                                             <li>Direct inquiries: Companies can contact you directly and prepare business deals.</li>
                                         </ul>
                                         <div className="serch-btn mt-2">
-                                            <button>Contact Us</button>
+                                            <button onClick={() => navigate('/contact')}>Contact Us</button>
                                         </div>
                                     </div>
                                 </div>
@@ -192,7 +192,7 @@ const Service = () => {
                                         <li>Real-time notifications: Receive instant updates on new messages and requests.</li>
                                     </ul>
                                     <div className="serch-btn mt-2">
-                                        <button>Contact Us</button>
+                                        <button onClick={() => navigate('/contact')}>Contact Us</button>
                                     </div>
                                 </div>
                             </div>

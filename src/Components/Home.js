@@ -353,7 +353,7 @@ const Home = () => {
                                 </div>
                                 <div className="d-flex align-items-start jusitfy-content-start w-100">
                                     <div className="serch-btn mt-2">
-                                        <button>Contact Us</button>
+                                        <button onClick={() => navigate('/contact')}>Contact Us</button>
                                     </div>
                                 </div>
                             </div>
@@ -443,7 +443,7 @@ const Home = () => {
                                         <p>Experience seamless on all our commodity orders. Maximize your profits, save on costs, and export confidently with our advanced tools and features.</p>
                                     </div>
                                     <div className="d-flex align-items-start text-start home-5-button mb-5">
-                                        <button>Get Started Free</button>
+                                        <button onClick={() => navigate('/login')}>Get Started Free</button>
                                     </div>
                                     <div className="d-flex align-items-start justify-content-start text-start home-5-bottom">
                                         <div className="d-flex flex-column align-items-start justify-content-start pe-4 home-5-bottom-box border-end border-light me-4">
