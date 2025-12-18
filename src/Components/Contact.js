@@ -1,10 +1,188 @@
-import React from "react";
+import React, { useState } from "react";
 import "../Assets/css/style.css";
 import Footer from "./Footer/Footer";
 import { useNavigate } from "react-router-dom";
-const Contact = () => {
+import { useAlert } from "./alert/Alert_message";
+import { FaExclamationTriangle } from "react-icons/fa";
+import axios from "axios";
+import { IoMdCheckmarkCircle } from "react-icons/io";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
+const Contact = () => {
+    const Backend_URL = process.env.REACT_APP_API_URL;
+    const { showAlert } = useAlert();
     const navigate = useNavigate();
+    const { executeRecaptcha } = useGoogleReCaptcha();
+
+    const [formData, setFormData] = useState({
+        name: "",
+        phoneNumber: "",
+        email: "",
+        subject: "",
+        title: "",
+        description: "",
+    });
+
+    const [file, setFile] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setErrors({});
+        setLoading(true);
+
+        try {
+            if (!executeRecaptcha) {
+                setLoading(false);
+                return;
+            }
+
+            // ✅ Generate reCAPTCHA v3 token
+            const token = await executeRecaptcha("feedback_form");
+
+            const data = new FormData();
+            data.append("name", formData.name);
+            data.append("phoneNumber", formData.phoneNumber);
+            data.append("email", formData.email);
+            data.append("subject", formData.subject);
+            data.append("title", formData.title);
+            data.append("description", formData.description);
+            data.append("recaptchaToken", token);
+
+            if (file) {
+                data.append("file", file);
+            }
+
+            const res = await axios.post(
+                `${Backend_URL}/api/feedbacks/send`,
+                data,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            showAlert(<>
+                <IoMdCheckmarkCircle className="me-2 fs-2 text-success" />
+                {res.data.msg}
+            </>,
+                "success")
+
+            setFormData({
+                name: "",
+                phoneNumber: "",
+                email: "",
+                subject: "",
+                title: "",
+                description: "",
+            });
+            setFile(null);
+
+        } catch (err) {
+            if (err.response && err.response.data) {
+                // setErrors(err.response.data);
+                showAlert(
+                    <>
+                        <FaExclamationTriangle className="me-2 fs-2 text-warning" />
+                        {err.response.data || "An unexpected error occurred while sumbiting form"}
+                    </>,
+                    "danger"
+                );
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    // const handle_form_sumbit = async (e) => {
+    //     e.preventDefault();
+
+    //     const form = e.target;
+    //     const newErrors = {};
+
+
+    //     const name = form.full_name.value.trim();
+    //     const email = form.email_id.value.trim();
+    //     const phone = form.contact_number.value.trim();
+    //     const subject = form.enquiry.value;
+    //     const message = form.msg.value.trim();
+
+
+    //     if (!name) newErrors.full_name = "Your name is required!";
+
+    //     if (!email) {
+    //         newErrors.email_id = "Your email is required!";
+    //     } else if (!validateEmail(email)) {
+    //         newErrors.email_id = "Please enter a valid email address!";
+    //     }
+
+    //     if (!phone) {
+    //         newErrors.contact_number = "Your phone number is required!";
+    //     } else if (!validatePhone(phone)) {
+    //         newErrors.contact_number = "Please enter a valid phone number!";
+    //     }
+
+    //     if (subject === '0') newErrors.enquiry = "Please select a subject!";
+
+    //     if (!message) newErrors.msg = "Message is required!";
+
+    //     setErrors(newErrors);
+
+    //     if (Object.keys(newErrors).length > 0) return;
+
+
+    //     const formData = new FormData();
+    //     formData.append("name", form.full_name.value);
+    //     formData.append("email", form.email_id.value);
+    //     formData.append("phoneNumber", form.contact_number.value);
+    //     formData.append("subject", form.enquiry.value);
+    //     formData.append("description", form.msg.value);
+
+    //     // file
+    //     if (form.file_upload.files.length > 0) {
+    //         formData.append("file", form.file_upload.files[0]);
+    //     }
+
+    //     try {
+    //         const res = await axios.post(
+    //             `${Backend_URL}/api/feedbacks/send`,
+    //             formData
+    //         );
+
+    //         console.log("Success:", res.data);
+    //         showAlert(<>
+    //             <IoMdCheckmarkCircle className="me-2 fs-2 text-success" />
+    //             {res.data.msg}
+    //         </>,
+    //             "success")
+
+    //         form.reset();
+    //     } catch (err) {
+    //         console.error(err);
+    //         const backendMsg = err.response?.data?.msg;
+    //         showAlert(
+    //             <>
+    //                 <FaExclamationTriangle className="me-2 fs-2 text-warning" />
+    //                 {backendMsg || "An unexpected error occurred while sumbiting form"}
+    //             </>,
+    //             "danger"
+    //         );
+    //     }
+    // }
     return (
         <div className="service-div">
             <section className="overview-wrapper text-start">
@@ -23,7 +201,7 @@ const Contact = () => {
                                     <li className="breadcrumb-item active" aria-current="page">Contact</li>
                                 </ol>
                             </nav>
-                            
+
                             <div className="overview-head">
                                 <h2>Get in Touch with Us</h2>
                                 {/* <!-- <h3>There's more to international trade - and we'll show you how!</h3> -->
@@ -50,49 +228,121 @@ const Contact = () => {
                                     <h2>Contact Support for Questions and Assistance</h2>
                                     <p>Use this form to submit your questions or issues related to our services or your account. Our support team will respond within 24 hours to assist you. Please ensure all mandatory fields are filled out for a smooth process</p>
 
-                                    <form action="#">
+                                    <form action="#" onSubmit={handleSubmit}>
                                         <div className="row gy-4">
                                             <div className="col-xl-6">
                                                 <div className="form-group">
-                                                    <label for="full_name">Full Name</label>
-                                                    <input type="text" className="form-control" id="full_name" aria-describedby="fullname" placeholder="Enter your full name" />
+                                                    <label for="name">Full Name</label>
+                                                    <input
+                                                        name="name"
+                                                        type="text"
+                                                        className={`form-control ${errors.name ? "border-danger" : ""}`}
+                                                        id="name"
+                                                        aria-describedby="fullname"
+                                                        value={formData.name}
+                                                        onChange={handleChange}
+                                                        placeholder="Enter your full name" />
+                                                    {errors.name && <small className="text-danger fst-italic">{errors.name}</small>}
                                                 </div>
                                             </div>
                                             <div className="col-xl-6">
                                                 <div className="form-group">
-                                                    <label for="email_id">Email address</label>
-                                                    <input type="email" className="form-control" id="email_id" aria-describedby="email" placeholder="Enter your email id" />
+                                                    <label for="email">Email address</label>
+                                                    <input
+                                                        name="email"
+                                                        type="email"
+                                                        className={`form-control ${errors.email ? "border-danger" : ""}`}
+                                                        id="email"
+                                                        aria-describedby="email"
+                                                        value={formData.email}
+                                                        onChange={handleChange}
+                                                        placeholder="Enter your email id" />
+                                                    {errors.email && <small className="text-danger fst-italic">{errors.email}</small>}
                                                 </div>
                                             </div>
                                             <div className="col-xl-6">
                                                 <div className="form-group">
-                                                    <label for="contact_number">Contact Number</label>
-                                                    <input type="number" className="form-control" id="contact_number" aria-describedby="contact_number" placeholder="Enter your contact number" />
+                                                    <label for="phoneNumber">Contact Number</label>
+                                                    <input
+                                                        name="phoneNumber"
+                                                        type="text"
+                                                        className={`form-control ${errors.phoneNumber ? "border-danger" : ""}`}
+                                                        id="phoneNumber"
+                                                        aria-describedby="phoneNumber"
+                                                        value={formData.phoneNumber}
+                                                        onChange={handleChange}
+                                                        placeholder="Enter your contact number" />
+                                                    {errors.phoneNumber && <small className="text-danger fst-italic">{errors.phoneNumber}</small>}
                                                 </div>
                                             </div>
                                             <div className="col-xl-6">
                                                 <div className="form-group">
-                                                    <label for="enquiry">Subject of Inquiry</label>
-                                                    <select name="enquiry" id="">
+                                                    <label for="subject">Subject of Inquiry</label>
+                                                    {/* <select
+                                                        name="subject"
+                                                        value={formData.subject}
+                                                        onChange={handleChange}
+                                                        className={`form-control ${errors.subject ? "border-danger" : ""}`}
+                                                        id="">
                                                         <option value="0" selected disabled>Select the type</option>
-                                                        <option value="1">General Question</option>
-                                                        <option value="2">Account Issue</option>
-                                                        <option value="2">Payment Enquiry</option>
-                                                        <option value="2">Technical Issue</option>
+                                                        <option value="General Question">General Question</option>
+                                                        <option value="Account Issue">Account Issue</option>
+                                                        <option value="Payment Enquiry">Payment Enquiry</option>
+                                                        <option value="Technical Issue">Technical Issue</option>
+                                                    </select> */}
+                                                    <select
+                                                        name="subject"
+                                                        value={formData.subject}
+                                                        onChange={handleChange}
+                                                        className={`form-control ${errors.subject ? "border-danger" : ""}`}
+                                                    >
+                                                        <option value="" disabled>
+                                                            Select the type
+                                                        </option>
+                                                        <option value="General Question">General Question</option>
+                                                        <option value="Account Issue">Account Issue</option>
+                                                        <option value="Payment Enquiry">Payment Enquiry</option>
+                                                        <option value="Technical Issue">Technical Issue</option>
                                                     </select>
+
+                                                    {errors.subject && <small className="text-danger fst-italic">{errors.subject}</small>}
+                                                </div>
+                                            </div>
+                                            <div className="col-xl-12 d-flex flex-column">
+                                                <div className="form-group">
+                                                    <label for="title">Title</label>
+                                                    <input
+                                                        name="title"
+                                                        type="text"
+                                                        className={`form-control ${errors.title ? "border-danger" : ""}`}
+                                                        id="title"
+                                                        aria-describedby="title"
+                                                        value={formData.title}
+                                                        onChange={handleChange}
+                                                        placeholder="Enter your title" />
+                                                    {errors.title && <small className="text-danger fst-italic">{errors.title}</small>}
                                                 </div>
                                             </div>
                                             <div className="col-xl-12 d-flex flex-column">
                                                 <div className="form-group">
                                                     <label >Message</label>
-                                                    <textarea className="w-100 form-control text-area-input" name="message" id="msg" cols="30" rows="4" placeholder="Type your message here . . ."></textarea>
+                                                    <textarea
+                                                        name="description"
+                                                        className={`w-100 form-control text-area-input ${errors.description ? "border-danger" : ""}`}
+                                                        id="description"
+                                                        cols="30"
+                                                        rows="4"
+                                                        value={formData.description}
+                                                        onChange={handleChange}
+                                                        placeholder="Type your message here . . ."></textarea>
+                                                    {errors.description && <small className="text-danger fst-italic">{errors.description}</small>}
                                                 </div>
                                             </div>
 
                                             <div className="col-xl-12">
                                                 <div className="form-group">
                                                     <label for="file_upload">File Upload</label>
-                                                    <input type="file" className="form-control" id="file_upload" />
+                                                    <input name="file_upload" onChange={handleFileChange} type="file" className="form-control" id="file_upload" />
                                                 </div>
                                             </div>
 

@@ -95,6 +95,12 @@ const Navbar = () => {
             console.error(err.response?.data || err.message);
         }
     };
+
+    const current_url = location.pathname;
+
+    console.log('current_url -: ', current_url);
+
+
     return (
         <>
             <div className="w-100 nav-bar-wrap" >
@@ -113,18 +119,18 @@ const Navbar = () => {
                         </div>
 
                         <div className="d-flex align-items-center justify-content-end nav-links gap-4">
-                            <span onClick={() => { navigate('/') }}>Home</span>
-                            <span onClick={() => { navigate('/posting') }}>Posting</span>
-                            <span onClick={() => { navigate('/companies') }}>Companies</span>
-                            <span onClick={() => { navigate('/service') }}>Our Service</span>
-                            <span onClick={() => { navigate('/pricing') }}>Pricing</span>
-                            <span onClick={() => { navigate('/contact') }}>Contact</span>
+                            <span onClick={() => { navigate('/') }}  className={current_url === '/' && 'active-nav-bar'}>Home</span>
+                            <span onClick={() => { navigate('/posting') }} className={current_url === '/posting' && 'active-nav-bar'}>Posting</span>
+                            <span onClick={() => { navigate('/companies') }} className={current_url === '/companies' && 'active-nav-bar'}>Companies</span>
+                            <span onClick={() => { navigate('/service') }} className={current_url === '/service' && 'active-nav-bar'}>Our Service</span>
+                            <span onClick={() => { navigate('/pricing') }} className={current_url === '/pricing' && 'active-nav-bar'}>Pricing</span>
+                            <span onClick={() => { navigate('/contact') }} className={current_url === '/contact' && 'active-nav-bar'}>Contact</span>
 
                             {data ? (
                                 // {requestStatus === 'fulfilled' ? (
                                 <>
                                     <div className="d-flex align-items-center jusitfy-content-center gap-3 nav-buttons">
-                                        <div className="d-flex ailgn-items-center justify-content-center" onClick={() => { navigate('/dashboard/message') }}><GoBellFill className="fs-4" />{notification && (<>
+                                        <div className="d-flex ailgn-items-center justify-content-center" onClick={() => { navigate('/dashboard/message') }} ><GoBellFill className={`fs-4 ${current_url === '/dashboard/message' && 'active-nav-bar'}`} />{notification && (<>
                                             <div className="notification_dot"></div>
                                         </>)} </div>
                                         <div

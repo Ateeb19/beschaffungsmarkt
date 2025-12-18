@@ -42,7 +42,6 @@ const AppContent = () => {
 
   return (
     <div className="App" >
-      {/* <ScrollToTop /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/service" element={<Service />} />
@@ -90,6 +89,7 @@ function App() {
   return (
     <GoogleReCaptchaProvider reCaptchaKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}>
       <Router>
+        <ScrollToTop />
         <AlertProvider>
           <div onClick={() => dispatch(setDroper_open(false))}>
             <Navbar />

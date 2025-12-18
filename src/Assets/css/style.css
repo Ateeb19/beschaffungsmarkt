@@ -53,7 +53,7 @@ input:focus {
 }
 
 .serch-input input {
-    border-radius: 8px;
+    border-radius: 8px !important;
     border: none;
     padding: 10px;
     font-weight: 400;
@@ -95,6 +95,7 @@ input:focus {
     border: none;
     font-size: 16px;
     padding: 10px 20px;
+    margin-bottom: -7px;
     color: #ffffff;
     font-weight: 500;
     letter-spacing: 1px;
@@ -151,6 +152,7 @@ input:focus {
     padding: 4px 12px;
     border-radius: 9999px;
     border: 1px solid #9ca3af;
+    background-color: #fff;
 }
 
 .home-2-head span {
@@ -234,7 +236,7 @@ input:focus {
     color: #1e3a8a;
     background-color: #ffffff;
     font-weight: 700;
-    padding: 16px 16px;
+    padding: 10px 16px;
     border-radius: 8px;
     border: none;
 }
@@ -1456,8 +1458,8 @@ input[type="password"]:focus {
 
 .dashboard {
     background-color: #ffffff;
-    overflow-y: auto;
-    overflow-x: auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
     position: relative;
 }
 
@@ -1495,12 +1497,16 @@ input[type="password"]:focus {
     height: 100vh;
     position: fixed;
     top: 50px;
-    /* Ensures it stays fixed to the top of the viewport */
     left: 0;
-    /* Ensures it stays fixed to the left side of the viewport */
     background-color: #0d111b;
     color: #ffffff;
     z-index: 10;
+}
+
+.dashboard-scroll {
+    /* height: 100vh; */
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .dashboard-right-div {
@@ -1554,7 +1560,9 @@ input[type="password"]:focus {
     cursor: pointer;
 }
 
-.das-sub-menu-ul {}
+.das-sub-menu-ul {
+    max-height: none;
+}
 
 .das-sub-menu {
     font-size: 14px;
@@ -2709,6 +2717,50 @@ input[type="password"]:focus {
 .cancel-button-forget {
     color: #6b7280;
     background-color: transparent;
+}
+
+.active-nav-bar {
+    color: #adddff;
+}
+
+.pricing-dash-display h2 {
+    color: #000;
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 32px;
+}
+
+.pricing-dash-display p {
+    color: #475569;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.pricing-dash-display ul {
+    list-style: none;
+}
+
+.pricing-dash-display li {
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    margin-top: 8px;
+}
+
+.pricing-button-dash {
+    background-color: #1d4ed8;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    padding: 10px 30px;
+}
+
+.pricing-button-dash:hover {
+    color: #fff !important;
 }
 
 /* Responsive height like xs:h-60 */

@@ -197,8 +197,8 @@ const Home = () => {
                                 </div>
                             </div>
 
-                            <div className="d-flex-flex-column justify-content-center align-items-center mt-5">
-                                <div className="d-flex flex-row hero-serch gap-3 w-100">
+                            <div className="d-flex-flex-column justify-content-center align-items-center mt-4">
+                                <div className="d-flex flex-row justify-content-center align-items-center hero-serch gap-3 w-100">
                                     <div className="serch-input">
                                         <input type="text" className="" placeholder="Type keyword" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
                                     </div>
@@ -595,7 +595,7 @@ const Home = () => {
                                     <span className="price-fee">Free</span>
                                     <span className="price-text">All the basics for businesses that are just getting started.</span>
                                     <div className="d-flex align-items-center gap-2 price-doller"><h1>$0</h1><span >/ {checked ? 'Year' : 'Month'}</span></div>
-                                    <button className="price-get-box w-100">Get Free</button>
+                                    <button className="price-get-box w-100" onClick={()=> navigate('/login')}>Get Free</button>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Limited for Company Website</span></span>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>3rd Priority for Listing</span></span>
                                     <span className="price-list-checked"><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> <span>Limited Messaging for Communication</span></span>

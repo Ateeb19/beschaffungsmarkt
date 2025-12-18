@@ -58,7 +58,7 @@ const Dashboard_layout = () => {
         <>
             <div className="container-fluid d-flex flex-row align-items-start justify-content-start w-100 p-0 dashboard">
 
-                <div className="dashboar-left-div pt-4">
+                <div className="dashboar-left-div pt-4 dashboard-scroll">
                     <div className="d-flex flex-column align-items-center justify-content-center w-100">
                         <div className="das-left-pic mb-3">
                             <img src="/Images/user-avatar-CZ6R_fL7.webp" alt="" width="100%" />
