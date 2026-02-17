@@ -214,9 +214,9 @@ const Company_details = () => {
                     </div>
 
                     <div className="d-flex flex-column align-items-start justify-content-start gap-2">
-                        <div className="d-flex flex-row align-itmes-center justify-content-center gap-3 company-name-img">
+                        <div className="d-flex flex-column flex-md-row align-itmes-center justify-content-center gap-3 company-name-img">
                             <h5 className="mt-2">{company.company_name}</h5>
-                            <div className="flag-div d-flex align-items-center justfy-content-center ">
+                            <div className="flag-div d-flex align-items-center justify-content-center ">
                                 <img src={company.country === 'Germany' ? "/Images/germany.png" : "/Images/turkey.png"} alt="Country Flag" width={20} height={20} /><span>{company.country}</span>
                             </div>
                         </div>
@@ -224,24 +224,26 @@ const Company_details = () => {
                     </div>
                 </div>
 
-                <div className="d-flex flex-row align-items-start justify-content-start w-100 gap-3">
-                    <div className="col-md-9 d-flex flex-column align-items-center justify-content-center gap-4">
+                <div className="d-flex flex-column flex-md-row align-items-start justify-content-start w-100 gap-3">
+                    <div className="col-12 col-md-9 d-flex flex-column align-items-center justify-content-center gap-4">
                         <div className="detail-company-2 w-100 d-flex flex-column align-items-start justify-content-start">
                             <h5>Export Products</h5>
-                            <div className="d-flex align-items-start justify-content-start gap-4 w-100">
+                            <div className="row g-3 w-100">
                                 {company.products.length > 0 ? (
                                     <>
                                         {company.products.map((p, key) => (
                                             <>
+                                            <div className="col-6 col-sm-4 col-md-3">
                                                 <div className="export-product-div d-flex flex-column gap-2" key={key} onClick={() => setCurrent_img(p.image)}>
                                                     <img src={`${Backend_URL}/files/${p.image}`} alt={p.title} />
                                                     {/* <img src={`http://localhost:5001/files/${p.image}`} alt={p.title} /> */}
                                                     <span >{p.title}</span>
                                                 </div>
+                                                </div>
                                             </>
                                         ))}
                                     </>
-                                ) : <div className="d-flex align-item-center justify-content-center w-100 no-item-detail-div">
+                                ) : <div className="d-flex align-item-center justify-content-md-center w-100 no-item-detail-div">
                                     <span>There are no export products</span>
                                 </div>}
                             </div>
@@ -249,20 +251,22 @@ const Company_details = () => {
 
                         <div className="detail-company-2 w-100 d-flex flex-column align-items-start justify-content-start">
                             <h5>Certificates</h5>
-                            <div className="d-flex align-items-start justify-content-start gap-4 w-100">
+                            <div className="row g-3 w-100">
                                 {company.certificates.length > 0 ? (
                                     <>
                                         {company.certificates.map((p, key) => (
                                             <>
+                                            <div className="col-6 col-sm-4 col-md-3">
                                                 <div className="export-product-div d-flex flex-column gap-2" key={key} onClick={() => setCurrent_img(p.image)}>
                                                     <img src={`${Backend_URL}/files/${p.image}`} alt={p.title} />
                                                     {/* <img src={`http://localhost:5001/files/${p.image}`} alt={p.title} /> */}
                                                     <span >{p.title}</span>
                                                 </div>
+                                                </div>
                                             </>
                                         ))}
                                     </>
-                                ) : <div className="d-flex align-item-center justify-content-center w-100 no-item-detail-div">
+                                ) : <div className="d-flex align-item-center justify-content-md-center w-100 no-item-detail-div">
                                     <span>There are no certificates</span>
                                 </div>}
                             </div>
@@ -300,7 +304,7 @@ const Company_details = () => {
                         )}
                     </div>
 
-                    <div className="col-md-3 d-flex flex-column align-items-start justify-content-start">
+                    <div className="col-12 col-md-3 d-flex flex-column align-items-start justify-content-start">
                         <div className="detail-company-right w-100 p-0">
                             <div className="d-flex align-items-center justify-content-center text-center w-100 my-3">
                                 <h6>Contact Information</h6>

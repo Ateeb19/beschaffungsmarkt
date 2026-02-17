@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbeschaffungsmarkt=self.webpackChunkbeschaffungsmarkt||[]).push([[8617],{8617:(s,e,t)=>{t.r(e),t.d(e,{default:()=>n});t(5043);var a=t(579);const n=()=>(0,a.jsx)(a.Fragment,{children:(0,a.jsx)("div",{className:"d-flex flex-column align-items-start justify-content-start w-100",children:(0,a.jsx)("h5",{style:{fontWeight:"700"},children:"My Favourite Posts"})})})}}]);
+//# sourceMappingURL=8617.83fe2872.chunk.js.map

@@ -77,7 +77,7 @@ const Pricing = () => {
                         </div>
                         <div className="col-xl-6">
                             <div className="overview-img">
-                                <img src="/beschaffungsmarkt_images/pricing-D2Qwp4ed.png" alt="overview-img" />
+                                <img src="/beschaffungsmarkt_images/pricing-D2Qwp4ed.png" alt="overview-img" loading = "lazy"/>
                             </div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@ const Pricing = () => {
                 </div>
             </section>
 
-            <section className="pricing-wrapper w-100">
+            {/* <section className="pricing-wrapper w-100">
                 <div className="countainer">
                     <div className="d-flex flex-column align-items-center justify-content-center w-100">
                         <div className="d-flex justify-content-center align-items-center w-100 home-2-heading text-center mt-3">
@@ -185,7 +185,343 @@ const Pricing = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
+
+            <section className="pricing-wrapper w-100">
+                      <div className="container">
+                        <div className="d-flex flex-column align-items-center justify-content-center w-100">
+                          <div className="d-flex justify-content-center align-items-center w-100 home-2-heading text-center mt-3">
+                            <span>Our Best Packages</span>
+                          </div>
+                          <div className="d-flex justify-content-center align-items-center w-100 home-6-title text-center mt-3">
+                            <span>
+                              See below our main three plans for your business, for your
+                              startup and agency. It start from here! You can teach yourself
+                              what you really like.
+                            </span>
+                          </div>
+                          <div className="d-flex justify-content-center align-items-center w-100 home-6-switch gap-3 form-switch-pricing">
+                            <div>Monthly</div>
+                            <Switch
+                              onChange={handleChange}
+                              onColor="#4097fb"
+                              offColor="#e2e8f0"
+                              checkedIcon={<div></div>}
+                              uncheckedIcon={<div></div>}
+                              handleDiameter={24}
+                              checked={checked}
+                            />
+                            <div className="pricing-annually-text position-relative">
+                              Annually
+                              <div className="d-flex align-items-start justify-content-start pricing-offer">
+                                <img
+                                  src="/Images/download.png"
+                                  alt=""
+                                  width="96px"
+                                  className="mt-3"
+                                />
+                                <span
+                                  className="mt-5 pt-1 ms-2"
+                                  style={{ color: "#1e3a8a", fontWeight: "700" }}
+                                >
+                                  Exclusive Offer
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="row justify-content-center g-4 pricing-content mx-0">
+                            <div className="col-12 col-md-6 col-lg-4">
+                                <div className="d-flex flex-column align-items-start justify-content-start pric-box-free text-start gap-3">
+                                <span className="price-fee">Free</span>
+                                <span className="price-text">
+                                    All the basics for businesses that are just getting started.
+                                </span>
+                                <div className="d-flex align-items-center gap-2 price-doller">
+                                    <h1>$0</h1>
+                                    <span>/ {checked ? "Year" : "Month"}</span>
+                                </div>
+                                <button
+                                    className="price-get-box w-100"
+                                    onClick={() => navigate("/login")}
+                                >
+                                    Get Free
+                                </button>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Limited for Company Website</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>3rd Priority for Listing</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Limited Messaging for Communication</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>1 Main and 1 Subcategory</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>EN for Company Language</span>
+                                </span>
+            
+                                <span className="price-list-unchecked">
+                                    <RxCross1 className="fs-4" style={{ color: "#ef4444" }} />{" "}
+                                    <span>Limited for Company Website </span>
+                                </span>
+                                <span className="price-list-unchecked">
+                                    <RxCross1 className="fs-4" style={{ color: "#ef4444" }} />{" "}
+                                    <span>No Posting Opportunity </span>
+                                </span>
+                                <span className="price-list-unchecked">
+                                    <RxCross1 className="fs-4" style={{ color: "#ef4444" }} />{" "}
+                                    <span>No Product</span>
+                                </span>
+                                <span className="price-list-unchecked">
+                                    <RxCross1 className="fs-4" style={{ color: "#ef4444" }} />{" "}
+                                    <span>No Certificate</span>
+                                </span>
+                                <span className="price-list-unchecked">
+                                    <RxCross1 className="fs-4" style={{ color: "#ef4444" }} />{" "}
+                                    <span>No Keyword</span>
+                                </span>
+                                <span className="price-list-unchecked">
+                                    <RxCross1 className="fs-4" style={{ color: "#ef4444" }} />{" "}
+                                    <span>No Personal Agent</span>
+                                </span>
+                                </div>
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-4">
+                                <div className="d-flex flex-column align-items-start justify-content-start pric-box-premium text-start gap-3">
+                                <span className="price-fee-premium">Premium</span>
+                                <span className="price-text-premium">
+                                    Better for growing businesses that want more customers.
+                                </span>
+                                <div className="d-flex align-items-center gap-2 price-doller-premium">
+                                    <h1>
+                                    $
+                                    {checked ? (
+                                        <>
+                                        <span className="old-price">2148</span> 1999
+                                        </>
+                                    ) : (
+                                        "179"
+                                    )}
+                                    </h1>
+                                    <span>/ {checked ? "Year" : "Month"}</span>
+                                </div>
+                                <button
+                                    className="price-get-box-premium w-100"
+                                    onClick={() =>
+                                    checked ? handlePayment(1999) : handlePayment(179)
+                                    }
+                                >
+                                    Get Premium
+                                </button>
+                                <span className="price-list-checked-premium">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Full Features for Company Website</span>
+                                </span>
+                                <span className="price-list-checked-premium">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>2nd Priority for Listing</span>
+                                </span>
+                                <span className="price-list-checked-premium">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Unlimited Messaging for Communication</span>
+                                </span>
+                                <span className="price-list-checked-premium">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>5 Main and 5 Subcategories</span>
+                                </span>
+                                <span className="price-list-checked-premium">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>DE/TR/EN for Company Languages</span>
+                                </span>
+                                <span className="price-list-checked-premium">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Full Access to Trade Platform</span>
+                                </span>
+                                <span className="price-list-checked-premium">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Upload 10 Postings</span>
+                                </span>
+                                <span className="price-list-checked-premium">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Upload 5 Products</span>
+                                </span>
+                                <span className="price-list-checked-premium">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Upload 5 Certificates</span>
+                                </span>
+                                <span className="price-list-checked-premium">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Upload 50 Keywords</span>
+                                </span>
+            
+                                <span className="price-list-unchecked-premium">
+                                    <RxCross1 className="fs-4" style={{ color: "#ef4444" }} />{" "}
+                                    <span>No Personal Agent</span>
+                                </span>
+                                </div>
+                            </div>
+                            <div className="col-12 col-md-6 col-lg-4">
+                                <div className="d-flex flex-column align-items-start justify-content-start pric-box-free text-start gap-3">
+                                <span className="price-fee">Premium +</span>
+                                <span className="price-text">
+                                    Advanced features for pros who need more customization.
+                                </span>
+                                <div className="d-flex align-items-center gap-2 price-doller">
+                                    <h1>
+                                    $
+                                    {checked ? (
+                                        <>
+                                        <span className="old-price">2988</span> 2699
+                                        </>
+                                    ) : (
+                                        "249"
+                                    )}
+                                    </h1>
+                                    <span>/ {checked ? "Year" : "Month"}</span>
+                                </div>
+                                <button
+                                    className="price-get-box w-100"
+                                    onClick={() =>
+                                    checked ? handlePayment(2699) : handlePayment(249)
+                                    }
+                                >
+                                    Get Premium +
+                                </button>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Full Features for Company Website</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>1st Priority + Sponsored for Listing</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Unlimited Messaging for Communication</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>5 Main and 5 Subcategories</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>DE/TR/EN for Company Languages</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Full Access to Trade Platform</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Upload 20 Postings</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Upload 20 Products</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Upload 20 Certificates</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Upload 100 Keywords</span>
+                                </span>
+                                <span className="price-list-checked">
+                                    <FiCheckCircle
+                                    className="fs-4"
+                                    style={{ color: "#4097fb" }}
+                                    />{" "}
+                                    <span>Personal Agent</span>
+                                </span>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
 
             <section className="footer-section w-100">
                 <Footer />

@@ -394,10 +394,11 @@ const Das_Message = () => {
                                 <input className="form-control w-100 message-search" placeholder="Search..." />
                             </div> */}
             <div className="container-fluid p-0 msg-outer-div border p-2"
-                style={{ height: "calc(100vh - 130px)" }}>
+                // style={{ height: "calc(100vh - 130px)" }}
+                >
                 <div className="row g-0 h-100">
 
-                    <div className="col-4 d-flex flex-column pe-2 h-100">
+                    <div className="col-12 col-md-4 d-flex flex-column pe-2 h-100">
                         <div className="d-flex flex-column w-100 dash-message-box-left">
 
                             <div className="w-100 py-1 px-2">
@@ -471,7 +472,7 @@ const Das_Message = () => {
                     </div>
 
                     {/* Right side - Selected chat */}
-                    <div className="col-8 d-flex flex-column " style={{ height: "100%" }}>
+                    <div className="col-12 col-md-8 d-flex flex-column " style={{ height: "100%" }}>
 
                         {selected_chat && (
                             <>

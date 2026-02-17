@@ -92,21 +92,43 @@ const Contact = () => {
             setFile(null);
 
         } catch (err) {
-            if (err.response && err.response.data) {
-                // setErrors(err.response.data);
+            if (err.response && err.response.status === 400) {
+                setErrors(err.response.data);   // 🔥 THIS LINE FIXES EVERYTHING
+            } else {
                 showAlert(
                     <>
                         <FaExclamationTriangle className="me-2 fs-2 text-warning" />
-                        {err.response.data || "An unexpected error occurred while sumbiting form"}
+                        {"An unexpected error occurred while submitting form"}
                     </>,
                     "danger"
                 );
             }
+
+            // if (err.response && err.response.data) {
+            //     // setErrors(err.response.data);
+            //     showAlert(
+            //         <>
+            //             <FaExclamationTriangle className="me-2 fs-2 text-warning" />
+            //             {err.response.data || "An unexpected error occurred while sumbiting form"}
+            //         </>,
+            //         "danger"
+            //     );
+            // }
         } finally {
             setLoading(false);
         }
     };
 
+    const validateEmail = (email) => {
+        const emailRegex =
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePhone = (phone) => {
+        const phoneRegex = /^\+?[0-9]{7,15}$/;
+        return phoneRegex.test(phone);
+    };
 
     // const handle_form_sumbit = async (e) => {
     //     e.preventDefault();
@@ -211,7 +233,7 @@ const Contact = () => {
                         </div>
                         <div className="col-xl-6">
                             <div className="overview-img">
-                                <img src="/beschaffungsmarkt_images/contact-DmV-QMLV.png" alt="overview-img" />
+                                <img src="/beschaffungsmarkt_images/contact-DmV-QMLV.png" alt="overview-img" loading="lazy" />
                             </div>
                         </div>
                     </div>

@@ -222,8 +222,8 @@ const Das_Profile = () => {
         <div className="d-flex flex-column align-items-start justify-content-start w-100">
             <h5 style={{ fontWeight: '700' }}>User Profile</h5>
             <div className="d-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-2">
-                <div className="d-flex flex-row w-100 align-items-start justify-content-start text-start">
-                    <div className="col-md-6 d-flex flex-column align-items-center justify-content-center">
+                <div className="d-flex flex-column flex-md-row w-100 align-items-start justify-content-start text-start">
+                    <div className="col-12 col-md-6 d-flex flex-column align-items-center justify-content-center">
                         <div className="image-div-das-general-form d-flex flex-column align-items-center justify-content-center w-100">
                             {selectedImage ? (
                                 <div className="d-flex flex-row align-item-end justify-content-end">
@@ -253,10 +253,10 @@ const Das_Profile = () => {
                         </div>
                     </div>
 
-                    <div className="col-md-6 d-flex flex-column align-items-start justify-content-end gap-3 ps-4">
+                    <div className="col-12 col-md-6 d-flex flex-column align-items-start justify-content-end gap-3 ps-0 ps-md-4">
                         {data.is_verified ? null : (
                             <>
-                                <div className="d-flex text-start dssh-profile-email-var w-100">
+                                <div className="d-flex text-start dssh-profile-email-var w-100 mt-3 mt-md-0">
                                     <p>Your email has not been verified yet. You need to check your email before you can do anything else.</p>
                                 </div>
 
@@ -268,8 +268,8 @@ const Das_Profile = () => {
                     </div>
                 </div>
 
-                <div className="d-flex flex-row w-100 align-items-start justify-content-start text-start">
-                    <div className="col-md-6 d-flex flex-column align-items-start justify-content-center gap-3 pe-4">
+                <div className="d-flex flex-column flex-md-row w-100 align-items-start justify-content-start text-start">
+                    <div className="col-12 col-md-6 d-flex flex-column align-items-start justify-content-center gap-3 pe-0 pe-md-4">
                         <div className="w-100">
                             <label for="website" className="das-form-label">First Name</label>
                             <input type="text" value={first_name} onChange={(e) => setFirst_name(e.target.value)} class={`form-control ${errors.firstName ? 'border-danger' : ''}`} id="Fax Number" aria-describedby="website" name="firstName" placeholder="First Name"></input>
@@ -293,7 +293,7 @@ const Das_Profile = () => {
                     </div>
 
 
-                    <div className="col-md-6 d-flex flex-column align-items-start justify-content-center gap-3 ps-4">
+                    <div className="col-12 col-md-6 d-flex flex-column align-items-start justify-content-center gap-3 ps-0 ps-md-4">
                         <div className="w-100">
                             <label for="website" className="das-form-label">Current Password</label>
                             <input type="password" value={current_password} onChange={(e) => setCurrent_password(e.target.value)} class={`form-control ${errors.currentPassword ? 'border-danger' : ''}`} id="Founded Year" aria-describedby="website" name="currentPassword" placeholder="Current Password"></input>

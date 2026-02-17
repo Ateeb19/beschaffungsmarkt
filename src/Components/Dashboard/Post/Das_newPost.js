@@ -352,7 +352,7 @@ const Das_newPost = () => {
             </div>
 
             {/* Buttons */}
-            <div className="text-end ">
+            <div className="text-end mt-4">
               <button type="submit" className="save-button das-button-end me-1" onClick={handleSubmit}>Submit</button>
               <button type="reset" className="cancel-button das-button-end ms-1">Cancel</button>
             </div>

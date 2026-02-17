@@ -227,6 +227,7 @@ const Register = () => {
                                 <img
                                     src="/beschaffungsmarkt_images/login-hh9Io-kp.png"
                                     alt="signup-img"
+                                    loading = "lazy"
                                 />
                             </div>
                         </div>

@@ -114,7 +114,7 @@ const Das_co_contact = () => {
 
             showAlert(response.data.msg, "success")
             navigate('/dashboard')
-            console.log("Contact Info updated successfully");
+            // console.log("Contact Info updated successfully");
         } catch (err) {
             setErrors(err.response.data.msg)
             // const errorData = err.response.data;
@@ -147,8 +147,8 @@ const Das_co_contact = () => {
         <div className="d-flex flex-column align-items-start justify-content-start w-100">
             <h5 style={{ fontWeight: '700' }}>Contact Settings</h5>
             <div className="d-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-2">
-                <div className="d-flex flex-row w-100 align-items-center justify-content-start text-start">
-                    <div className="col-md-6 d-flex flex-column align-items-center justify-content-center">
+                <div className="d-flex flex-column flex-md-row w-100 align-items-center justify-content-start text-start">
+                    <div className="col-12 col-md-6 d-flex flex-column align-items-center justify-content-center">
                         <div className="image-div-das-general-form d-flex flex-column align-items-center justify-content-center w-100">
                             {selectedImage ? (
                                 <div className="d-flex flex-row align-item-end justify-content-end">
@@ -178,7 +178,7 @@ const Das_co_contact = () => {
                         </div>
                     </div>
 
-                    <div className="col-md-6 d-flex flex-column align-items-start justify-content-center gap-3">
+                    <div className="col-12 col-md-6 mt-3 mt-md-0 d-flex flex-column align-items-start justify-content-center gap-3">
 
                         <div className="w-100">
                             <label for="website" className="das-form-label">First Name</label>

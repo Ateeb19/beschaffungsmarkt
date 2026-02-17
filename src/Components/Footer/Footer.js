@@ -11,12 +11,12 @@ const Footer = () => {
                 <div className="container">
                     <div className="footer-info-wrap text-start">
                         <div className="row gx-5 gy-4">
-                            <div className="col-xl-6">
+                            <div className="col-xl-6 col-md-12">
                                 <div className="newsletter-wrapper">
                                     <div className="newsletter-wrap text-start">
                                         <h3>Join Thousand of Happy Customers!</h3>
                                         <p>Subscribe our newsletter & get latest news and updation!</p>
-                                        <form action="#" className="d-flex">
+                                        <form action="#" className="d-flex flex-column flex-sm-row gap-2">
                                             <input type="email" className="news-email" id="email_newsletter" placeholder="Enter your email address" autoComplete="on"/>
                                                 <button type="submit" className="news-btn">Get Started Free</button>
                                         </form>
@@ -74,7 +74,7 @@ const Footer = () => {
                                 </div>
                             </div>
                             <div className="col-xl-6">
-                                <div className="social-media d-flex align-items-center justify-content-end">
+                                <div className="social-media d-flex justify-content-center justify-content-md-end gap-3 fs-5">
                                     <ul>
                                         <li><a href="#"><FaYoutube /></a></li>
                                         <li><a href="#"><FaFacebook/></a></li>

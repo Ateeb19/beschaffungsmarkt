@@ -70,7 +70,7 @@ const Forgot_password = () => {
                         {email_send ? (
                             <>
                                 <div className="d-flex align-items-center justify-content-center w-100 mb-3">
-                                    <img src="/Images/email_send.png" className="" />
+                                    <img src="/Images/email_send.png" loading = "lazy" className="" />
                                 </div>
 
                                 <h1>Email Verification</h1>

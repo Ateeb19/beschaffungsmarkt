@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserInfo } from "../../redux/userSlice";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useAlert } from "../alert/Alert_message"
+import Dashboard_layout_mobile from "./Dashboard_layout_mobile";
 
 const Dashboard_layout = () => {
     const navigate = useNavigate();
@@ -32,7 +33,7 @@ const Dashboard_layout = () => {
         showAlert("Token Expire Login Again");
         navigate('/login');
     }
-    
+
     useEffect(() => {
         const token = localStorage.getItem("procurement_token");
         console.log("this is token-:", token);
@@ -55,8 +56,8 @@ const Dashboard_layout = () => {
 
 
     return (
-        <>
-            <div className="container-fluid d-flex flex-row align-items-start justify-content-start w-100 p-0 dashboard">
+        <div>
+            <div className="container-fluid d-flex flex-row align-items-start justify-content-start w-100 p-0 dashboard  d-none d-md-block">
 
                 <div className="dashboar-left-div pt-4 dashboard-scroll">
                     <div className="d-flex flex-column align-items-center justify-content-center w-100">
@@ -69,7 +70,7 @@ const Dashboard_layout = () => {
 
                     <div className="dashboard-menue-list f-flex flex-column align-items-start justify-content-start w-100 mt-4">
                         <ul className="d-flex flex-column align-items-start justify-content-start w-100 p-0">
-                            <li className={`w-100 text-start ${list === 'home' ? 'das-li-bg' : ''}`} onClick={() => { navigate("/dashboard/home"); setList('home') }} ><IoHomeOutline className="fs-5 me-2" /> Home</li>
+                            <li className={`w-100 text-start ${list === 'home' ? 'das-li-bg' : ''}`} onClick={() => { navigate("/dashboard/home"); setList('home') }} ><IoHomeOutline className="fs-5 me-2" /> Dashboard</li>
                             <li className={`w-100 text-start ${list === 'message' ? 'das-li-bg' : ''}`} onClick={() => { navigate("/dashboard/message"); setList('message') }} ><FiMessageCircle className="fs-5 me-2" /> Messages</li>
                             <li className={`w-100 text-start d-flex flex-row justify-content-between ${list === 'company' ? 'das-li-bg' : ''}`} onClick={() => { setShow_company(!show_company); setList('company') }} ><div><FaRegBuilding className="fs-5 me-2" /> Company</div> <div>{show_company ? (< FaAngleUp />) : (<FaAngleDown />)} </div></li>
                             {show_company && (
@@ -83,7 +84,7 @@ const Dashboard_layout = () => {
                                 </div>
                             )}
 
-                            <li className={`w-100 text-start d-flex flex-row justify-content-between ${list === 'post' ? 'das-li-bg' : ''}`} onClick={() => { setShow_post(!show_post); setList('post') }} ><div><MdOutlinePostAdd className="fs-5 me-2" /> Post Center</div> <div> {show_post ? (< FaAngleUp />) : (<FaAngleDown />)}</div></li>
+                            <li className={`w-100 text-start d-flex flex-row justify-content-between ${list === 'post' ? 'das-li-bg' : ''}`} onClick={() => { setShow_post(!show_post); setList('post') }} ><div><MdOutlinePostAdd className="fs-5 me-2" /> Posts</div> <div> {show_post ? (< FaAngleUp />) : (<FaAngleDown />)}</div></li>
                             {show_post && (
                                 <div className="">
                                     <ul className="das-sub-menu-ul">
@@ -113,9 +114,13 @@ const Dashboard_layout = () => {
                     <Outlet />
                 </div>
             </div>
-        </>
+
+            <div className="w-100 d-block d-md-none">
+                <Dashboard_layout_mobile />
+            </div>
+        </div>
     )
 }
 
 
-export default Dashboard_layout;
+export default React.memo(Dashboard_layout);

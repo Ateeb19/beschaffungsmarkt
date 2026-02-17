@@ -191,9 +191,9 @@ const Das_co_certificates = () => {
             });
             showAlert(res.data.msg, "success")
             navigate('/dashboard/company/certificates')
-            console.log('submit response', res.data);
+            // console.log('submit response', res.data);
             handleClose();
-            userProduct();
+            userProduct(page);
             setSelectedFile_product('');
             setSelectedImage_product('');
         } catch (err) {
@@ -203,6 +203,7 @@ const Das_co_certificates = () => {
 
     const handle_edit_product = async () => {
         if (!product_title || !selectedFile_product) {
+            showAlert("Select an image to update", "warning")
             return
         }
 
@@ -227,7 +228,7 @@ const Das_co_certificates = () => {
             navigate('/dashboard/company/certificates')
             console.log('submit response', res.data);
             handleClose();
-            userProduct();
+            userProduct(page);
             setSelectedFile_product('');
             setSelectedImage_product('');
         } catch (err) {
@@ -259,7 +260,7 @@ const Das_co_certificates = () => {
             showAlert(res.data.msg, 'success');
             navigate('/dashboard/company/certificates');
             handle_product_delete_cancel();
-            userProduct();
+            userProduct(page);
         } catch (err) {
             console.log(err);
         }
@@ -440,7 +441,7 @@ const Das_co_certificates = () => {
                     </div>
                 )}
 
-                <div className="d-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-2">
+                <div className="d-none d-md-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-2">
 
                     <h6>Certificate Table</h6>
                     <table class="table">
@@ -494,6 +495,41 @@ const Das_co_certificates = () => {
                             </Stack>
                         </div>
                     )}
+                </div>
+
+                {/* Mobile Cards */}
+
+                <div className="d-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-4 d-md-none">
+                    {user_products.length >= 0 && (
+                        <>
+                            {user_products.map((pro, key) => (
+                                <>
+                                    <div className="das-mobile-card border border-gray-300 rounded-2 p-3 mb-3 w-100" key={key}>
+                                        <div className="d-flex flex-row mb-2 gap-2">
+                                            <span className="das-mobile-card-label">NO :</span>
+                                            <span className="fw-bold">{key + 1}</span>
+                                        </div>
+                                        <div className="d-flex flex-row mb-2 gap-2">
+                                            <span className="das-mobile-card-label">TITLE :</span>
+                                            <span className="fw-bold">{pro.title}</span>
+                                        </div>
+                                        <div className="d-flex gap-3 mt-2">
+                                            <button className="btn product_edit_btn" onClick={() => handle_product_edit(pro)}>Edit</button>
+                                            <button className="btn product_delete_btn" onClick={() => handle_product_delete(pro)}>Delete</button>
+                                        </div>
+                                        <>
+                                            <ConfirmationModal
+                                                show={show_confirm}
+                                                message={`Are you sure you want to delete this Certificate?`}
+                                                onConfirm={handle_product_delete_confirm}
+                                                onCancel={handle_product_delete_cancel}
+                                            />
+                                        </>
+                                    </div>
+                                </>
+                            ))}
+                        </>
+                    )}          
                 </div>
 
 

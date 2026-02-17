@@ -162,7 +162,17 @@ const Das_co_product = () => {
     console.log('product length-: ', user_products.length);
     const handle_product = async () => {
 
-        if (!product_title || !selectedFile_product) {
+        if (!product_title && !selectedFile_product) {
+             showAlert("Product Title and Image is required", 'warning')
+            return
+        }
+
+        if (!product_title) {
+            showAlert("Product Title is required", 'warning')
+            return
+        }
+        if (!selectedFile_product) {
+            showAlert("Product Image is required", 'warning')
             return
         }
 
@@ -188,17 +198,23 @@ const Das_co_product = () => {
                 withCredentials: true,
             });
             showAlert(res.data.msg, "success")
-            navigate('/dashboard/home')
-            console.log('submit response', res.data);
+            navigate('/dashboard/company/product-management')
+            // console.log('submit response', res.data);
+            userProduct(page);
+            setProduct_title('');
+            setSelectedFile_product('');
+            setSelectedImage_product('');
+            handleClose();
         } catch (err) {
             console.log(err);
         }
     }
 
     const handle_edit_product = async () => {
-        if (!product_title || !selectedFile_product) {
-            return
-        }
+        // if (!selectedFile_product || !product_title) {
+        //     showAlert("Select an image to update", "warning")
+        //     return
+        // }
 
         const formData = new FormData();
 
@@ -208,7 +224,7 @@ const Das_co_product = () => {
             if (selectedFile_product) {
                 formData.append("image", selectedFile_product);
             } else {
-                formData.append("image", "false");
+                // formData.append("image", "false");
             }
         }
 
@@ -219,7 +235,11 @@ const Das_co_product = () => {
             });
             showAlert(res.data.msg, "success")
             navigate('/dashboard/company/product-management')
-            console.log('submit response', res.data);
+            userProduct(page);
+            setProduct_title('');
+            setSelectedFile_product('');
+            setSelectedImage_product('');
+            // console.log('submit response', res.data);
             handleClose();
         } catch (err) {
             console.log(err);
@@ -250,6 +270,7 @@ const Das_co_product = () => {
             showAlert(res.data.msg, 'success');
             navigate('/dashboard/company/product-management');
             handle_product_delete_cancel();
+            userProduct(page);
         } catch (err) {
             console.log(err);
         }
@@ -408,7 +429,7 @@ const Das_co_product = () => {
                     </div>
                 )}
 
-                <div className="d-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-2">
+                <div className="d-none d-md-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-2">
 
                     <h6>Product Table</h6>
                     <table class="table">
@@ -461,6 +482,43 @@ const Das_co_product = () => {
                                 />
                             </Stack>
                         </div>
+                    )}
+                </div>
+
+                {/* {Mobile cards} */}
+                <div className="d-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-4 d-md-none">
+                    {user_products.length >= 0 && (
+                        <>
+                            {user_products.map((pro, key) => (
+                                <>
+                                    <div className="das-mobile-card border border-gray-300 rounded-2 p-3 mb-3 w-100" key={key}>
+                                        <div className="d-flex flex-row mb-2 gap-2">
+                                            <span className="das-mobile-card-label">NO :</span>
+                                            <span className="fw-bold">{key + 1}</span>
+                                        </div>
+                                        <div className="d-flex flex-row mb-2">
+                                            <span className="das-mobile-card-label">TITLE : </span>
+                                            <span className="fw-bold">{pro.title}</span>
+                                        </div>
+                                        <div className="d-flex flex-column">
+                                          
+                                            <div className="d-flex gap-3 mt-1">
+                                                <button className="btn product_edit_btn" onClick={() => handle_product_edit(pro)}>Edit</button>
+                                                <button className="btn product_delete_btn" onClick={() => handle_product_delete(pro)}>Delete</button>
+                                            </div>
+                                            <>
+                                                <ConfirmationModal
+                                                    show={show_confirm}
+                                                    message={`Are you sure you want to delete this product?`}
+                                                    onConfirm={handle_product_delete_confirm}
+                                                    onCancel={handle_product_delete_cancel}
+                                                />
+                                            </>
+                                        </div>
+                                    </div>
+                                </>
+                            ))}
+                        </>
                     )}
                 </div>
 

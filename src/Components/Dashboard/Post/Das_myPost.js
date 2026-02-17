@@ -88,7 +88,7 @@ const Das_myPost = () => {
                                 <button className="add-product-button"><MdAdd /> Add Product</button> */}
                 </div>
 
-                <div className="d-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-2">
+                <div className="d-none d-md-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-2">
 
                     <h6>My Posts Table</h6>
                     <table class="table">
@@ -198,6 +198,37 @@ const Das_myPost = () => {
                         onConfirm={handle_post_dlete}
                         onCancel={handle_post_cancel}
                     />
+                </div>
+
+                {/* Mobile cards */}
+                <div className="d-flex d-md-none flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-2">
+                    {post.length > 0 && (
+                        <>
+                            {post.map((p, key) => (
+                                <div className="das-mobile-card border border-gray-300 rounded-2 p-3 mb-3 w-100" key={key}>
+                                    <div className="d-flex flex-row mb-2 gap-2">
+                                        <span className="das-mobile-card-label">NO :</span>
+                                        <span className="fw-bold">{key + 1}</span>
+                                    </div>
+                                    <div className="d-flex flex-row mb-2 gap-2">
+                                        <span className="das-mobile-card-label">TYPE :</span>
+                                        <span>{p.type}</span>
+                                    </div>
+                                    <div className="d-flex flex-row mb-2 gap-2">
+                                        <span className="das-mobile-card-label">TITLE :</span>
+                                        <span>{p.title}</span>
+                                    </div>
+                                    <div className="d-flex flex-row mb-2 gap-2">
+                                        <span className="das-mobile-card-label">STATUS :</span>
+                                        <span><span className="post-live">Live</span></span>
+                                    </div>
+                                    <div className="d-flex flex-row mb-2 gap-2">
+                                        <button className="btn post-delete" onClick={() => handle_delete(p)}>Delete</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    )}  
                 </div>
             </div>
         </>

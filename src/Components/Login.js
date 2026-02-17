@@ -59,7 +59,7 @@ const Login = () => {
                 showAlert(res.data.msg, "success");
                 localStorage.setItem('procurement_token', res.data.token);
                 dispatch(fetchUserInfo());
-                navigate("/"); // redirect to homepage or dashboard
+                navigate("/dashboard"); // redirect to homepage or dashboard
                 
             } else {
                 showAlert(
@@ -111,7 +111,7 @@ const Login = () => {
                     <div className="row gx-5 gy-4">
                         <div className="col-xl-6 col-12 order-2 order-xl-1">
                             <div className="signup-img-wrap">
-                                <img src="/beschaffungsmarkt_images/login-hh9Io-kp.png" alt="signup-img" />
+                                <img src="/beschaffungsmarkt_images/login-hh9Io-kp.png" alt="signup-img" loading = "lazy"/>
                             </div>
                         </div>
                         <div className="col-xl-6 col-12 order-1 order-xl-2">

@@ -30,7 +30,7 @@ const Terms = () => {
                         </div>
                         <div className="col-xl-6">
                             <div className="overview-img">
-                                <img src="/beschaffungsmarkt_images/terms-C1bfpdZ9.png" alt="overview-img" />
+                                <img src="/beschaffungsmarkt_images/terms-C1bfpdZ9.png" alt="overview-img" loading = "lazy" />
                             </div>
                         </div>
                     </div>

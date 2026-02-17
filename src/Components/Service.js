@@ -30,7 +30,7 @@ const Service = () => {
                         </div>
                         <div className="col-xl-6">
                             <div className="overview-img">
-                                <img src="/beschaffungsmarkt_images/service-BxF0F7R8.png" alt="overview-img" />
+                                <img src="/beschaffungsmarkt_images/service-BxF0F7R8.png" alt="overview-img" loading = "lazy" />
                             </div>
                         </div>
                     </div>
@@ -137,7 +137,7 @@ const Service = () => {
                         </div>
                         <div className="col-xl-6">
                             <div className="service-desc-img">
-                                <img src="/beschaffungsmarkt_images/trustworthy business partners.png" alt="trustworthy business partners" />
+                                <img src="/beschaffungsmarkt_images/trustworthy business partners.png" alt="trustworthy business partners" loading = "lazy" />
                             </div>
                         </div>
                     </div>
@@ -146,7 +146,7 @@ const Service = () => {
                         <div className="row gy-4">
                             <div className="col-xl-6 col-12 order-2 order-xl-1">
                                 <div className="service-desc-img-2">
-                                    <img src="/beschaffungsmarkt_images/Present and discover products.png" alt="trustworthy business partners" />
+                                    <img src="/beschaffungsmarkt_images/Present and discover products.png" loading = "lazy" alt="trustworthy business partners" />
                                 </div>
                             </div>
                             <div className="col-xl-6 col-12 order-1 order-xl-2">
@@ -175,7 +175,7 @@ const Service = () => {
                     </div>
 
 
-                    <div className="row">
+                    <div className="row gy-4">
                         <div className="col-xl-6">
                             <div className="service-desc-wrap">
                                 <div className="d-flex flex-column align-items-start justify-content-start">
@@ -199,7 +199,7 @@ const Service = () => {
                         </div>
                         <div className="col-xl-6">
                             <div className="service-desc-img">
-                                <img src="/beschaffungsmarkt_images/Efficient communication with business partners.png" alt="trustworthy business partners" />
+                                <img src="/beschaffungsmarkt_images/Efficient communication with business partners.png" alt="trustworthy business partners" loading = "lazy" />
                             </div>
                         </div>
                     </div>

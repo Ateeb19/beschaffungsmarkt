@@ -5,7 +5,7 @@ const Das_Home = () => {
     return (
         <>
             <div className="d-flex flex-column text-start align-items-start justify-content-start w-100 py-4">
-                <h5> Home</h5>
+                <h5> Dashboard</h5>
             </div>
         </>
     )

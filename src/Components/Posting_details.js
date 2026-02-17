@@ -227,13 +227,13 @@ const Posting_details = () => {
                     </nav>
                 </div>
 
-                <div className="d-flex flex-row w-100">
-                    <div className="col-9">
+                <div className="d-flex flex-column flex-md-row w-100">
+                    <div className="col-12 col-md-9">
                         <div className="d-flex flex-column align-items-start justify-content-start w-100 detail-company-name gap-4 company-card">
-                            <div className="d-flex align-items-between justify-content-between w-100">
-                                <div className="d-flex align-items-start justify-content-start gap-3">
+                            <div className="d-flex align-items-start justify-content-between w-100">
+                                <div className="d-flex flex-column flex-md-row align-items-start justify-content-start gap-3">
                                     <div className="d-flex post-company">
-                                        <img src={post.postInfoData.user.country === 'Germany' ? "/Images/germany.png" : "/Images/turkey.png"} width="20px" className="me-2" />
+                                        <img src={post.postInfoData.user.country === 'Germany' ? "/Images/germany.png" : "/Images/turkey.png"} width="20px" className="me-2" loading = "lazy"/>
                                         <span>{post.postInfoData.user.country.charAt(0).toUpperCase() + post.postInfoData.user.country.slice(1)}</span>
                                     </div>
                                     <div className="d-flex post-company">
@@ -261,7 +261,7 @@ const Posting_details = () => {
                             {data && (
                                 <>
                                     {data.is_premium !== 0 ? (<>
-                                        <div className="d-flex gap-3 align-items-start justify-content-start">
+                                        <div className="d-flex flex-column flex-md-row gap-3 align-items-start justify-content-start w-100">
                                             <button className="post-contact-btn" onClick={handle_contact}>Contact Company <FiMessageSquare className="fs-4" /></button>
                                             <button className="post-company-btn" onClick={() => navigate(`/company/${post.postInfoData.user._id}`)}>Go To Company Detail Page</button>
                                         </div>
@@ -273,7 +273,7 @@ const Posting_details = () => {
                                                     <>
                                                         {post.postInfoData.file.map((f, index) => (
                                                             <div className="post-atach-file" onClick={() => setSelected_img(f)}>
-                                                                <img src={`${Backend_URL}/files/${f}`} alt={post.postInfoData.title} />
+                                                                <img src={`${Backend_URL}/files/${f}`} alt={post.postInfoData.title} loading = "lazy" />
                                                             </div>
                                                         ))}
                                                     </>
@@ -383,12 +383,12 @@ const Posting_details = () => {
                                             <></>
                                         )}
 
-                                        <div className="d-flex flex-row w-100">
-                                            <div className="col-6 d-flex flex-column align-items-start justify-content-start">
+                                        <div className="d-flex flex-column flex-md-row w-100">
+                                            <div className="col-12 col-md-6 d-flex flex-column align-items-start justify-content-start">
                                                 <span>Company Information</span>
-                                                <div className="d-flex flex-row w-100 mt-4">
-                                                    <div className="col-4 d-flex">
-                                                        <img src={post.postInfoData.user.company_logo ? `${Backend_URL}/files/${post.postInfoData.user.company_logo}` : '/Images/download23.jpeg'} alt={post.postInfoData.user.company_name}
+                                                <div className="d-flex flex-column flex-md-row w-100 mt-4">
+                                                    <div className="col-12 col-md-4 d-flex">
+                                                        <img src={post.postInfoData.user.company_logo ? `${Backend_URL}/files/${post.postInfoData.user.company_logo}` : '/Images/download23.jpeg'} alt={post.postInfoData.user.company_name} loading = "lazy"
                                                             style={{
                                                                 width: "120px",
                                                                 height: "120px",
@@ -397,20 +397,20 @@ const Posting_details = () => {
                                                             }}
                                                         />
                                                     </div>
-                                                    <div className="col-8 d-flex flex-column align-items-start justify-content-start gap-3">
+                                                    <div className="col-12 col-md-8 d-flex flex-column align-items-start justify-content-start gap-3">
                                                         <span>{post.postInfoData.user.company_name}</span>
                                                         <div className="d-flex post-company">
-                                                            <img src={post.postInfoData.user.country === 'Germany' ? "/Images/germany.png" : "/Images/turkey.png"} width="20px" className="me-2" />
+                                                            <img src={post.postInfoData.user.country === 'Germany' ? "/Images/germany.png" : "/Images/turkey.png"} width="20px" className="me-2" loading = "lazy"/>
                                                             <span>{post.postInfoData.user.country.charAt(0).toUpperCase() + post.postInfoData.user.country.slice(1)}</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div className="col-6 d-flex flex-column align-items-start justify-content-start">
+                                            <div className="col-12 col-md-6 d-flex flex-column align-items-start justify-content-start">
                                                 <span>Contact Information</span>
-                                                <div className="d-flex flex-row w-100 mt-4">
-                                                    <div className="col-4 d-flex">
+                                                <div className="d-flex flex-column flex-md-row w-100 mt-4 gap-3">
+                                                    <div className="col-12 col-md-4 d-flex">
                                                         <img src={post.postInfoData.user.company_logo ? `${Backend_URL}/files/${post.postInfoData.user.contact_img}` : ''} alt={post.postInfoData.user.contact_first_name}
                                                             style={{
                                                                 width: "120px",
@@ -418,9 +418,10 @@ const Posting_details = () => {
                                                                 borderRadius: "50%",
                                                                 objectFit: "cover",
                                                             }}
+                                                            loading = "lazy"
                                                         />
                                                     </div>
-                                                    <div className="col-8 d-flex flex-column align-items-start justify-content-start gap-1">
+                                                    <div className="col-12 col-md-8 d-flex flex-column align-items-start justify-content-start gap-2">
                                                         <div className="post-contact-person">{post.postInfoData.user.contact_first_name || ''}' {post.postInfoData.user.contact_last_name || ''}-{post.postInfoData.user.contact_first_name || ''} <span>{post.postInfoData.user.contact_position || ''}</span></div>
                                                         <div className="d-flex align-items-center justify-content-center gap-1">
                                                             <MdEmail className="fs-6 text-primary" /> <span>{post.postInfoData.user.contact_email || ''}</span>
@@ -437,7 +438,7 @@ const Posting_details = () => {
                                         </div>
                                         <div className="d-flex flex-column align-items-start justify-content-start w-100">
                                             <span>Categories</span>
-                                            <div className="d-flex flex-wrap w-100 gap-5">
+                                            <div className="d-flex flex-wrap w-100 gap-1">
 
                                                 {post?.postInfoData?.user?.company_category?.length > 0 && (
                                                     <>
@@ -505,6 +506,7 @@ const Posting_details = () => {
                                     <div className="d-flex align-items-center justify-content-center h-100 w-100 px-5 py-5">
                                         <img
                                             src={`${Backend_URL}/files/${selected_img}`}
+                                            loading = "lazy"
                                             alt="Image not available"
                                             style={{
                                                 maxWidth: "100%",
@@ -521,14 +523,14 @@ const Posting_details = () => {
                         </>
                     )}
 
-                    <div className="col-3 d-flex flex-column gap-3 ps-3">
+                    <div className="col-12 col-md-3 d-flex flex-column gap-4 ps-3">
                         <div className="d-flex align-items-center justify-content-center w-100 post-sponsor">
                             <span>SPONSORED</span>
                         </div>
                         {post.sponsorList.length > 0 && (
                             <>
                                 {post.sponsorList.map((c, index) => (
-                                    <div className="d-flex flex-column align-items-center justify-content-center w-100 detail-company-name gap-3 company-card-post" onClick={() => navigate(`/company/${c._id}`)}>
+                                    <div className="d-flex flex-column align-items-start justify-content-center w-100 detail-company-name gap-4 company-card-post" onClick={() => navigate(`/company/${c._id}`)}>
                                         {c.is_premium === 2 ? (
                                             <>
                                                 <div class="verified-badge">
@@ -561,7 +563,7 @@ const Posting_details = () => {
                                         )}
 
 
-                                        <div className="d-flex flex-row align-items-end justify-content-center gap-3">
+                                        <div className="d-flex flex-column align-items-start justify-content-center gap-3">
 
                                             <img
                                                 className="comapny-list-logo-post"

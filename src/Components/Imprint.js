@@ -30,7 +30,7 @@ const Imprint = () => {
                         </div>
                         <div className="col-xl-6">
                             <div className="overview-img">
-                                <img src="/beschaffungsmarkt_images/imprint-CHqusJqr.png" alt="overview-img" />
+                                <img src="/beschaffungsmarkt_images/imprint-CHqusJqr.png" alt="overview-img" loading = "lazy" />
                             </div>
                         </div>
                     </div>

@@ -305,7 +305,7 @@ const Companies = () => {
         <div className="companies-main-div">
             <section class="overview-wrapper">
                 <div class="container text-start">
-                    <div class="row">
+                    <div class="row gy-4">
                         <div class="col-xl-6">
                             <nav style={{
                                 "--bs-breadcrumb-divider": `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E")`,
@@ -325,7 +325,7 @@ const Companies = () => {
                         </div>
                         <div class="col-xl-6">
                             <div class="overview-img">
-                                <img src="/beschaffungsmarkt_images/company-DsbXqMCq.png" alt="overview-img" />
+                                <img src="/beschaffungsmarkt_images/company-DsbXqMCq.png" alt="overview-img" loading = "lazy" />
                             </div>
                         </div>
                     </div>
@@ -335,11 +335,11 @@ const Companies = () => {
 
             <section className="company-data">
                 <div className="container w-100 text-start">
-                    <div className="d-flex flex-row align-items-start justify-content-center w-100">
+                    <div className="row g-4">
                         <div className="col-md-3 company-filter d-flex flex-column align-items-start justify-content-start gap-4">
                             {currentMainCategory && currentMainCategory._id || value || selectedCountry ? (
                                 <>
-                                    <div className="d-flex flex-column align-items-start justify-content-end w-100 company-filter-div gap-3 mb-2">
+                                    <div className="col-12 col-md-3 company-filter d-flex flex-column align-items-start justify-content-start gap-4">
                                         <h5>Filter</h5>
                                         <div className="w-100">
                                             {value && (
@@ -394,7 +394,7 @@ const Companies = () => {
                                                 <>
                                                     <div className="w-100 text-start d-flex justify-content-between align-items-center " style={{ color: '#000' }}>
                                                         <span>
-                                                            <img src={selectedCountry === 'Turkey' ? '/Images/turkey.png' : '/Images/germany.png'} width="25px" className="me-2" />
+                                                            <img src={selectedCountry === 'Turkey' ? '/Images/turkey.png' : '/Images/germany.png'} width="25px" loading = "lazy" className="me-2" />
                                                             {/* <img src="/Images/germany.png" width="25px" className="me-2" /> */}
                                                             {/* <img src="/Images/turkey.png" width="25px" className="me-2" /> */}
                                                             {selectedCountry}</span>
@@ -409,7 +409,7 @@ const Companies = () => {
 
                             {value ? (null) : (
                                 <>
-                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword  mb-2">
                                         <h5>Keyword</h5>
                                         <div className="search-container w-100">
                                             <input
@@ -442,7 +442,7 @@ const Companies = () => {
                                 <>
                                 </>
                             ) : <>
-                                <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
+                                <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword mb-2">
                                     <h5>CATEGORIES</h5>
                                     <div className="search-container w-100">
                                         <input
@@ -521,15 +521,15 @@ const Companies = () => {
                                 <>
                                     <div className="d-flex flex-column align-items-start justify-content-start w-100 mt-2 gap-3 company-country">
                                         <h5>COUNTRIES</h5>
-                                        <div onClick={() => handleCountry('Germany')} className="d-flex-align-items-start text-start w-100 company-country-inner-div">  <img src="/Images/germany.png" width="25px" className="me-2" />Germany</div>
-                                        <div onClick={() => handleCountry('Turkey')} className="d-flex-align-items-start text-start w-100 company-country-inner-div">  <img src="/Images/turkey.png" width="25px" className="me-2" />Turkey</div>
+                                        <div onClick={() => handleCountry('Germany')} className="d-flex-align-items-start text-start w-100 company-country-inner-div">  <img src="/Images/germany.png" loading = "lazy" width="25px" className="me-2" />Germany</div>
+                                        <div onClick={() => handleCountry('Turkey')} className="d-flex-align-items-start text-start w-100 company-country-inner-div">  <img src="/Images/turkey.png" loading = "lazy" width="25px" className="me-2" />Turkey</div>
                                     </div>
                                 </>
                             )}
 
                         </div>
 
-                        <div className="col-md-9 company-pages">
+                        <div className="col-12 col-md-9 company-pages">
                             <div className="" >
                                 {companies ? (
                                     <>
@@ -591,12 +591,13 @@ const Companies = () => {
 
                                                     <div className="d-flex flex-row align-items-start justify-content-start gap-4 company-data-box">
                                                         {/* Company Logo + Info */}
-                                                        <div className="d-flex flex-row align-items-center justify-content-center gap-3 py-5">
+                                                        <div className="d-flex flex-column align-items-start flex-md-row align-items-md-center justify-content-center gap-3 py-2">
                                                             <img
                                                                 className="comapny-list-logo"
                                                                 src={c.company_logo ? (`${Backend_URL}/files/${c.company_logo}`) : ('/Images/download23.jpeg')}
                                                                 // src={c.company_logo ? (`http://localhost:5001/files/${c.company_logo}`) : ('/Images/download23.jpeg')}
                                                                 alt={c.company_name}
+                                                                loading = "lazy"
                                                             />
                                                             <div className="d-flex flex-column align-items-start justify-content-center text-start">
                                                                 <h2>{c.company_name}</h2>
@@ -626,6 +627,7 @@ const Companies = () => {
                                                                                     src={src}
                                                                                     className="rounded-lg"
                                                                                     alt={`Slide ${idx}`}
+                                                                                    loading = "lazy"
                                                                                 />
                                                                             </SwiperSlide>
                                                                         ))}
@@ -647,6 +649,7 @@ const Companies = () => {
                                                                                     src={src}
                                                                                     className="rounded-md cursor-pointer border"
                                                                                     alt={`Thumb ${idx}`}
+                                                                                    loading = "lazy"
                                                                                 />
                                                                             </SwiperSlide>
                                                                         ))}

@@ -528,8 +528,8 @@ const Das_co_general = () => {
                 <h5 style={{ fontWeight: '700' }}>General Settings</h5>
                 <div className="d-flex flex-column w-100 align-items-start justify-content-start text-start das-general-form mt-2">
 
-                    <div className="d-flex flex-row w-100 align-items-start justify-content-start text-start mb-4">
-                        <div className="col-md-6 d-flex flex-column align-items-start justify-content-center">
+                    <div className="d-flex flex-column flex-md-row w-100 align-items-start justify-content-start text-start mb-4 ">
+                        <div className="col-12 col-md-6 d-flex flex-column align-items-start justify-content-center">
                             <div className="image-div-das-general-form d-flex flex-column align-items-center justify-content-center w-100">
                                 {selectedImage ? (
                                     <div className="d-flex flex-row align-item-end justify-content-end">
@@ -559,7 +559,7 @@ const Das_co_general = () => {
                             </div>
                         </div>
 
-                        <div className="col-md-6 d-flex flex-column align-items-start justify-content-center">
+                        <div className="col-12 col-md-6 mt-3 mt-md-0 d-flex flex-column align-items-start justify-content-center">
                             <label for="company_name">Company Name <span style={{ color: '#dc2626' }}>*</span></label>
                             <input type="text" className={`form-control ${errors.companyName ? 'border-danger' : ''}`} name="companyName" id="company_name" aria-describedby="company_name" placeholder="Company Name" value={selected_company_name} onChange={(e) => setSelected_company_name(e.target.value)} />
                             {errors.companyName && <small className="text-danger">{errors.companyName}</small>}
@@ -576,8 +576,8 @@ const Das_co_general = () => {
                         </div>
                     </div>
 
-                    <div className="d-flex flex-row w-100 align-items-start justify-content-start text-start">
-                        <div className="col-md-6 d-flex flex-column align-items-start justify-content-center pe-4">
+                    <div className="d-flex flex-column flex-md-row w-100 align-items-start justify-content-start text-start">
+                        <div className="col-12 col-md-6 d-flex flex-column align-items-start justify-content-center pe-4">
                             <div className="image-div-das-general-form d-flex flex-column align-items-start justify-content-start text-start w-100 gap-3">
                                 <div className="w-100">
                                     <label for="c_type" className="mb-2">Company Type</label>
@@ -798,7 +798,7 @@ const Das_co_general = () => {
                             </div>
                         </div>
 
-                        <div className="col-md-6 d-flex flex-column align-items-start justify-content-center gap-3">
+                        <div className="col-12 col-md-6 mt-3 mt-md-0 d-flex flex-column align-items-start justify-content-center gap-3">
 
                             <div className="w-100">
                                 <label for="website">Taxpayer ID </label>

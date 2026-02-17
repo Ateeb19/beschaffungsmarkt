@@ -413,7 +413,7 @@ const Posting = () => {
         <div className="companies-main-div">
             <section class="overview-wrapper">
                 <div class="container text-start">
-                    <div class="row">
+                    <div class="row gy-4">
                         <div class="col-xl-6">
                             <nav style={{
                                 "--bs-breadcrumb-divider": `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E")`,
@@ -426,14 +426,14 @@ const Posting = () => {
                             </nav>
 
                             <div class="overview-head">
-                                <h2>Companies</h2>
+                                <h2>Postings</h2>
                                 <h3>Turkish export companies b2b trade directory</h3>
                                 <p>Verified Turkish companies Turkish export companies b2b trade directory that are manufacturers and exporters in Turkey</p>
                             </div>
                         </div>
                         <div class="col-xl-6">
                             <div class="overview-img">
-                                <img src="/beschaffungsmarkt_images/posting-W0guxR20.png" alt="overview-img" />
+                                <img src="/beschaffungsmarkt_images/posting-W0guxR20.png" alt="overview-img" loading = "lazy"/>
                             </div>
                         </div>
                     </div>
@@ -443,11 +443,11 @@ const Posting = () => {
 
             <section className="company-data">
                 <div className="container w-100 text-start">
-                    <div className="d-flex flex-row align-items-start justify-content-start w-100">
+                    <div className="row g-4">
                         <div className="col-md-3 company-filter d-flex flex-column align-items-start justify-content-start gap-4">
                             {currentMainCategory && currentMainCategory._id || value || selectedCountry || selectedPostType ? (
                                 <>
-                                    <div className="d-flex flex-column align-items-start justify-content-end w-100 company-filter-div gap-3 mb-2">
+                                    <div className="col-12 col-md-3 d-flex flex-column align-items-start justify-content-end w-100 company-filter-div gap-3 mb-2">
                                         <h5>Filter</h5>
                                         <div className="w-100">
                                             {value && (
@@ -531,7 +531,7 @@ const Posting = () => {
                                                 <>
                                                     <div className="w-100 text-start d-flex justify-content-between align-items-center " style={{ color: '#000' }}>
                                                         <span>
-                                                            <img src={selectedCountry === 'Turkey' ? '/Images/turkey.png' : '/Images/germany.png'} width="25px" className="me-2" />
+                                                            <img src={selectedCountry === 'Turkey' ? '/Images/turkey.png' : '/Images/germany.png'} width="25px" className="me-2" loading = "lazy"/>
                                                             {/* <img src="/Images/germany.png" width="25px" className="me-2" /> */}
                                                             {/* <img src="/Images/turkey.png" width="25px" className="me-2" /> */}
                                                             {selectedCountry}</span>
@@ -546,12 +546,12 @@ const Posting = () => {
 
                             {value ? (null) : (
                                 <>
-                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword  mb-2">
                                         <h5>Keyword</h5>
                                         <div className="search-container w-100">
                                             <input
                                                 type="text"
-                                                placeholder="Search for keyword!"
+                                                placeholder="Search for keyword"
                                                 className="search-input"
                                                 value={tempValue}
                                                 onChange={(e) => setTempValue(e.target.value)} // <- update tempValue
@@ -578,7 +578,7 @@ const Posting = () => {
 
                             {selectedPostType ? (null) : (
                                 <>
-                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
+                                    <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword">
                                         <h5>Post Type</h5>
                                     </div>
                                     <div className="d-flex flex-column align-items-start justify-content-start w-100 category-list gap-3">
@@ -609,12 +609,12 @@ const Posting = () => {
                                 <>
                                 </>
                             ) : <>
-                                <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword gap-3 mb-2">
+                                <div className="d-flex flex-column align-items-start justify-content-start w-100 company-filter-keyword mb-2">
                                     <h5>CATEGORIES</h5>
                                     <div className="search-container w-100">
                                         <input
                                             type="text"
-                                            placeholder="Search for category!"
+                                            placeholder="Search for category"
                                             className="search-input"
                                             value={categoryValue}
                                             onChange={(e) => setCategoryValue(e.target.value)}
@@ -693,7 +693,7 @@ const Posting = () => {
 
                         </div>
 
-                        <div className="col-md-9 company-pages">
+                        <div className="col-12 col-md-9 company-pages">
                             {companies.length > 0 ? (
                                 <>
                                     {companies.map((c) => {
@@ -702,11 +702,11 @@ const Posting = () => {
 
                                         return (
                                             <>
-                                                <div className="d-flex flex-column w-100 text-start align-items-start justify-content-start company-page-data" style={{ height: '15rem', padding: '1.5rem' }} onClick={() => handle_post_click(c._id)}>
+                                                <div className="d-flex flex-column w-100 text-start align-items-start justify-content-start company-page-data" style={{padding: '1.5rem' }} onClick={() => handle_post_click(c._id)}>
                                                     <div className="d-flex align-items-start justify-content-between w-100">
-                                                        <div className="d-flex align-items-start justify-content-start gap-3">
+                                                        <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-center gap-3">
                                                             <div className="posting-country d-flex aligm-items-center justify-content-center">
-                                                                <img src={c.user.country === 'Germany' ? "/Images/germany.png" : "/Images/turkey.png"} width="20px" className="me-2" />
+                                                                <img src={c.user.country === 'Germany' ? "/Images/germany.png" : "/Images/turkey.png"} width="20px" className="me-2" loading = "lazy"/>
                                                                 <span>{c.user.country.charAt(0).toUpperCase() + c.user.country.slice(1)}</span>
                                                             </div>
                                                             <div className="posting-country d-flex aligm-items-center justify-content-center">

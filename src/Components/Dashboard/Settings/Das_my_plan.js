@@ -20,51 +20,51 @@ const Das_my_plane = () => {
                 {data.is_premium === 2 ?
                     <>
                         <div className="pricing-dash-display d-flex flex-column align-items-start justify-content-start w-100 text-start">
-                            <h2>Premium +</h2>
+                            <h2>Current Plan: <b>Premium +</b></h2>
                             <p>Advanced features for pros who need more customization.</p>
-                            <ul>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Full Features for Company Website</li>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> 1st Priority + Sponsored for Listing</li>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Unlimited Messaging for Communication</li>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> 5 Main and 5 Subcategories</li>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> DE/TR/EN for Company Languages</li>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Full Access to Trade Platform</li>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Upload 20 Postings</li>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Upload 20 Products</li>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Upload 20 Certificates</li>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Upload 100 Keywords</li>
-                                <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Personal Agent</li>
+                            <ul classname='pricing-ul'>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Full Features for Company Website</li>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> 1st Priority + Sponsored for Listing</li>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Unlimited Messaging for Communication</li>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> 5 Main and 5 Subcategories</li>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> DE/TR/EN for Company Languages</li>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Full Access to Trade Platform</li>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Upload 20 Postings</li>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Upload 20 Products</li>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Upload 20 Certificates</li>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Upload 100 Keywords</li>
+                                <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Personal Agent</li>
                             </ul>
                         </div>
                     </> : data.is_premium === 1 ?
                         <>
                             <div className="pricing-dash-display d-flex flex-column align-items-start justify-content-start w-100 text-start">
-                                <h2>Premium</h2>
+                                <h2>Current Plan: <b>Premium </b></h2>
                                 <p>Better for growing businesses that want more customers.</p>
-                                <ul>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Full Features for Company Website</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> 2nd Priority for Listing</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Unlimited Messaging for Communication</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> 5 Main and 5 Subcategories</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> DE/TR/EN for Company Languages</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Full Access to Trade Platform</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Upload 10 Postings</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Upload 5 Products</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Upload 5 Certificates</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Upload 50 Keywords</li>
+                                <ul classname='pricing-ul'>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Full Features for Company Website</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> 2nd Priority for Listing</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Unlimited Messaging for Communication</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> 5 Main and 5 Subcategories</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> DE/TR/EN for Company Languages</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Full Access to Trade Platform</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Upload 10 Postings</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Upload 5 Products</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Upload 5 Certificates</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Upload 50 Keywords</li>
                                 </ul>
                             </div>
                         </> :
                         <>
                             <div className="pricing-dash-display d-flex flex-column align-items-start justify-content-start w-100 text-start">
-                                <h2>Free</h2>
+                                <h2>Current Plan: <b>Free</b></h2>
                                 <p>All the basics for businesses that are just getting started.</p>
-                                <ul>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Limited for Company Website</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> 3rd Priority for Listing</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> Limited Messaging for Communication</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> 1 Main and 1 Subcategory</li>
-                                    <li><FiCheckCircle className="fs-4" style={{ color: '#4097fb' }} /> EN for Company Language</li>
+                                <ul classname='pricing-ul'>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Limited for Company Website</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> 3rd Priority for Listing</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> Limited Messaging for Communication</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> 1 Main and 1 Subcategory</li>
+                                    <li><FiCheckCircle className="fs-4 pe-2" style={{ color: '#4097fb' }} /> EN for Company Language</li>
                                 </ul>
                             </div>
                         </>}
